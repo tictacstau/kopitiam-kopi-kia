@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kopitiam Kopi Kia - Mobile HTML5 Game</title>
+  <meta name="description" content="Kopitiam Kopi Kia - Authentic Singapore Coffee Stall Simulation Game with Realistic Web Audio and Glass Dynamic Visuals">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Main Mobile Viewport Wrapper -->
+  <main id="mobile-viewport" aria-label="Kopitiam Kopi Kia Game Viewport">
+    
+    <!-- Game Background Photo -->
+    <div id="game-background" style="background-image: url('clean_background.jpg');"></div>
+    <div id="background-vignette"></div>
+
+    <!-- Top Navigation & Stats Header -->
+    <header id="game-header">
+      <div id="brand-title">
+        <span class="title-kopitiam">Kopitiam</span>
+        <span class="title-kopikia">Kopi Kia</span>
+      </div>
+
+      <div id="game-stats">
+        <div class="stat-pill money-pill">
+          <span class="stat-icon">💰</span>
+          <span id="score-text">$0.00</span>
+        </div>
+        <button id="btn-sound-toggle" class="header-icon-btn" title="Toggle Sound" aria-label="Toggle Sound">
+          <span class="icon">🔊</span>
+        </button>
+        <button id="btn-recipe-modal" class="header-icon-btn" title="Recipe Guide" aria-label="Recipe Guide">
+          <span class="icon">📖</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Top Right Active Spotlight Order Card -->
+    <section id="active-order-spotlight" class="glass-card" aria-label="Active Order Spotlight">
+      <div class="spotlight-header">
+        <span class="spotlight-badge">ACTIVE ORDER</span>
+        <div class="spotlight-timer-badge">
+          <span class="timer-icon">⏳</span>
+          <span id="spotlight-timer">0:22</span>
+        </div>
+      </div>
+
+      <div class="spotlight-body">
+        <div class="spotlight-customer-avatar" id="spotlight-avatar">👵</div>
+        <div class="spotlight-order-details">
+          <div class="customer-name-row">
+            <span id="spotlight-customer-name">Mdm Tan:</span>
+          </div>
+          <div class="order-name-row">
+            <span id="spotlight-order-name">Kopi-C Siew Dai!</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cyan progress bar along bottom edge -->
+      <div class="spotlight-progress-track">
+        <div id="spotlight-progress-bar" style="width: 100%;"></div>
+      </div>
+    </section>
+
+    <!-- Second Row Customer Queue Bar -->
+    <section id="customer-queue-row" aria-label="Customer Queue">
+      <div class="queue-card glass-card active-queue" id="queue-card-0">
+        <span class="queue-avatar">👵</span>
+        <div class="queue-text">
+          <strong class="q-name">Mdm Tan:</strong>
+          <span class="q-drink">Kopi-C Siew Dai!</span>
+        </div>
+      </div>
+      <div class="queue-card glass-card" id="queue-card-1">
+        <span class="queue-avatar">👴</span>
+        <div class="queue-text">
+          <strong class="q-name">Uncle Lim:</strong>
+          <span class="q-drink">Teh Tarik!</span>
+        </div>
+      </div>
+      <div class="queue-card glass-card" id="queue-card-2">
+        <span class="queue-avatar">👩</span>
+        <div class="queue-text">
+          <strong class="q-name">Aunty Lee:</strong>
+          <span class="q-drink">Yuan Yang!</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Center Glass Mug Dynamic Visual Overlay -->
+    <section id="glass-mug-overlay" class="mug-unselected" aria-label="Center Glass Mug">
+      <!-- Mug Selection Glow Ring -->
+      <div class="mug-glow-ring"></div>
+
+      <!-- Glass Mug Contour Shape & Liquids -->
+      <div class="mug-glass-body" id="mug-glass-body">
+        <!-- Handle detail -->
+        <div class="mug-handle" id="mug-handle"></div>
+
+        <!-- Inner Liquid Tank -->
+        <div id="mug-liquid-container">
+          <!-- Stacked Dynamic CSS Liquid Fill Layers -->
+          <div id="liquid-condensed-milk" class="liquid-layer"></div>
+          <div id="liquid-evaporated-milk" class="liquid-layer"></div>
+          <div id="liquid-brew" class="liquid-layer"></div>
+          <div id="liquid-water" class="liquid-layer"></div>
+          <div id="sugar-indicator" class="sugar-layer"></div>
+          
+          <!-- Floating Ice Cubes Layer -->
+          <div id="liquid-ice-cubes" class="ice-layer hidden">
+            <span class="ice-cube c1">🧊</span>
+            <span class="ice-cube c2">🧊</span>
+            <span class="ice-cube c3">🧊</span>
+          </div>
+
+          <div class="liquid-foam-top"></div>
+        </div>
+
+        <!-- Glass Reflection & Highlights -->
+        <div class="glass-reflection-left"></div>
+        <div class="glass-reflection-right"></div>
+      </div>
+
+      <!-- Floating Steam Effects -->
+      <div id="mug-steam-container" class="hidden">
+        <span class="steam-particle s1">~</span>
+        <span class="steam-particle s2">~</span>
+        <span class="steam-particle s3">~</span>
+      </div>
+
+      <!-- Mug Status Badge -->
+      <div id="mug-status-badge">
+        <span id="mug-status-text">Tap "Fresh Mug" to start</span>
+      </div>
+    </section>
+
+    <!-- Floating Earnings Animation Container -->
+    <div id="floating-score-container"></div>
+
+    <!-- Bottom Action Toolbar & Station Tabs -->
+    <footer id="bottom-action-bar" aria-label="Action Toolbar">
+      
+      <!-- Station Category Tabs Header -->
+      <div id="station-tab-bar">
+        <button class="station-tab active-tab" data-tab="brew">☕ BREW STALL</button>
+        <button class="station-tab" data-tab="cans">🥫 CANNED FRIDGE</button>
+        <button class="station-tab" data-tab="dispenser">🧃 DISPENSERS</button>
+      </div>
+
+      <!-- Station 1: Brew Stall Toolbar Panel -->
+      <div class="station-panel" id="panel-brew">
+        <div class="action-grid grid-8">
+          <button id="btn-grab-mug" class="action-btn btn-cyan" data-action="grab">
+            <span class="btn-icon">🍺</span>
+            <span class="btn-label">Fresh Mug</span>
+          </button>
+
+          <button id="btn-kopi" class="action-btn btn-pink" data-action="kopi">
+            <span class="btn-icon">☕</span>
+            <span class="btn-label">Kopi</span>
+          </button>
+
+          <button id="btn-teh" class="action-btn btn-green" data-action="teh">
+            <span class="btn-icon">🍵</span>
+            <span class="btn-label">Teh</span>
+          </button>
+
+          <button id="btn-water" class="action-btn btn-blue" data-action="water">
+            <span class="btn-icon">🔥</span>
+            <span class="btn-label">Hot Water</span>
+          </button>
+
+          <button id="btn-condensed" class="action-btn btn-amber" data-action="condensed">
+            <span class="btn-icon">🥛</span>
+            <span class="btn-label">Condensed</span>
+          </button>
+
+          <button id="btn-evap" class="action-btn btn-iceblue" data-action="evap">
+            <span class="btn-icon">🥛</span>
+            <span class="btn-label">Evap Milk</span>
+          </button>
+
+          <button id="btn-sugar" class="action-btn btn-white" data-action="sugar">
+            <span class="btn-icon">🍬</span>
+            <span class="btn-label" id="label-sugar">Sugar</span>
+          </button>
+
+          <button id="btn-ice" class="action-btn btn-cyan" data-action="ice">
+            <span class="btn-icon">🧊</span>
+            <span class="btn-label" id="label-ice">Ice Bin</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Station 2: Canned Fridge Toolbar Panel -->
+      <div class="station-panel hidden" id="panel-cans">
+        <div class="action-grid grid-4">
+          <button id="btn-grab-cup-can" class="action-btn btn-cyan" data-action="grab_cup">
+            <span class="btn-icon">🥤</span>
+            <span class="btn-label">Ice Cup</span>
+          </button>
+
+          <button id="btn-coke" class="action-btn btn-red" data-action="coke">
+            <span class="btn-icon">🔴</span>
+            <span class="btn-label">Coke</span>
+          </button>
+
+          <button id="btn-sprite" class="action-btn btn-green" data-action="sprite">
+            <span class="btn-icon">🟢</span>
+            <span class="btn-label">Sprite</span>
+          </button>
+
+          <button id="btn-hundred" class="action-btn btn-blue" data-action="hundred">
+            <span class="btn-icon">🔵</span>
+            <span class="btn-label">100 Plus</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Station 3: Dispensers Toolbar Panel -->
+      <div class="station-panel hidden" id="panel-dispenser">
+        <div class="action-grid grid-3">
+          <button id="btn-grab-cup-disp" class="action-btn btn-cyan" data-action="grab_cup">
+            <span class="btn-icon">🥤</span>
+            <span class="btn-label">Ice Cup</span>
+          </button>
+
+          <button id="btn-bandung" class="action-btn btn-pink" data-action="bandung">
+            <span class="btn-icon">🌸</span>
+            <span class="btn-label">Bandung</span>
+          </button>
+
+          <button id="btn-lime" class="action-btn btn-lime" data-action="lime">
+            <span class="btn-icon">🍋</span>
+            <span class="btn-label">Lime Juice</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Fixed Bottom Serve Button -->
+      <div class="serve-row">
+        <button id="btn-serve" class="action-btn btn-emerald" data-action="serve">
+          <span class="btn-icon">🛎️</span>
+          <span class="btn-label">Serving Tray</span>
+        </button>
+      </div>
+    </footer>
+
+    <!-- Toast Notification Overlay -->
+    <div id="toast-container" aria-live="polite"></div>
+
+    <!-- Kopitiam Recipe Cheat Sheet Modal -->
+    <div id="recipe-modal" class="modal-overlay hidden" aria-hidden="true">
+      <div class="modal-card glass-card">
+        <div class="modal-header">
+          <h2>📖 Kopitiam Complete Recipe Guide</h2>
+          <button id="btn-close-modal" class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <ul class="recipe-list">
+            <li><strong>Kopi:</strong> Kopi + Condensed Milk + Hot Water</li>
+            <li><strong>Kopi-O:</strong> Kopi + Sugar + Hot Water (No Milk)</li>
+            <li><strong>Kopi-C:</strong> Kopi + Evap Milk + Sugar + Hot Water</li>
+            <li><strong>Kopi-C Siew Dai:</strong> Kopi + Evap Milk + Less Sugar + Hot Water</li>
+            <li><strong>Kopi Kosong:</strong> Kopi + Hot Water (No Milk, No Sugar)</li>
+            <li><strong>Kopi Peng:</strong> Kopi + Condensed Milk + Hot Water + Ice</li>
+            <li><strong>Teh:</strong> Teh + Condensed Milk + Hot Water</li>
+            <li><strong>Teh-O:</strong> Teh + Sugar + Hot Water (No Milk)</li>
+            <li><strong>Teh-C:</strong> Teh + Evap Milk + Sugar + Hot Water</li>
+            <li><strong>Teh Peng:</strong> Teh + Condensed Milk + Hot Water + Ice</li>
+            <li><strong>Yuan Yang:</strong> Kopi + Teh + Condensed Milk + Hot Water</li>
+            <li><strong>Iced Coke / Sprite / 100 Plus:</strong> Ice Cup + Ice + Chosen Can</li>
+            <li><strong>Iced Bandung:</strong> Ice Cup + Ice + Bandung Syrup Dispenser</li>
+            <li><strong>Iced Lime Juice:</strong> Ice Cup + Ice + Lime Juice Dispenser</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- JavaScript Modules -->
+  <script src="js/audio.js"></script>
+  <script src="js/recipes.js"></script>
+  <script src="js/game.js"></script>
+
+</body>
+</html>
