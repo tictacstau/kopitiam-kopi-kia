@@ -1,12 +1,19 @@
 /**
  * Kopitiam Kopi Kia - Web Audio API Sound Generator Engine
- * Synthesizes all game audio dynamically (No external media assets needed)
+ * Synthesizes all game audio dynamically (SFX + Kopitiam Ambient Background)
  */
 
 class SoundEngine {
   constructor() {
     this.ctx = null;
     this.isMuted = false;
+
+    // Ambient Kopitiam Background Audio Nodes
+    this.ambientGain = null;
+    this.ambientFilter = null;
+    this.ambientSource = null;
+    this.ambientTimer = null;
+    this.isAmbientPlaying = false;
   }
 
   init() {
@@ -17,11 +24,111 @@ class SoundEngine {
     if (this.ctx.state === 'suspended') {
       this.ctx.resume();
     }
+
+    if (!this.isAmbientPlaying && !this.isMuted) {
+      this.startKopitiamAmbient();
+    }
   }
 
   toggleMute() {
     this.isMuted = !this.isMuted;
+    if (this.isMuted) {
+      this.stopKopitiamAmbient();
+    } else {
+      this.init();
+      this.startKopitiamAmbient();
+    }
     return this.isMuted;
+  }
+
+  /**
+   * Start Synthesized Kopitiam Ambient Background Sound Loop
+   * Simulates coffee shop room acoustics, distant chatter, and cup clinks
+   */
+  startKopitiamAmbient() {
+    if (this.isAmbientPlaying || this.isMuted) return;
+    this.isAmbientPlaying = true;
+
+    const sampleRate = this.ctx.sampleRate;
+    const bufferSize = sampleRate * 4; // 4 second loop
+    const buffer = this.ctx.createBuffer(1, bufferSize, sampleRate);
+    const data = buffer.getChannelData(0);
+
+    let lastOut = 0.0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      data[i] = (lastOut + 0.015 * white) / 1.015;
+      lastOut = data[i];
+    }
+
+    this.ambientSource = this.ctx.createBufferSource();
+    this.ambientSource.buffer = buffer;
+    this.ambientSource.loop = true;
+
+    // Lowpass filter for warm indoor coffee stall acoustic room hum
+    this.ambientFilter = this.ctx.createBiquadFilter();
+    this.ambientFilter.type = 'lowpass';
+    this.ambientFilter.frequency.setValueAtTime(550, this.ctx.currentTime);
+
+    this.ambientGain = this.ctx.createGain();
+    this.ambientGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
+    this.ambientGain.gain.linearRampToValueAtTime(0.08, this.ctx.currentTime + 1.5); // Subtle background hum
+
+    this.ambientSource.connect(this.ambientFilter);
+    this.ambientFilter.connect(this.ambientGain);
+    this.ambientGain.connect(this.ctx.destination);
+
+    this.ambientSource.start();
+
+    // Schedule random ambient cup/saucer clinks every 3-7 seconds
+    this.scheduleRandomAmbience();
+  }
+
+  stopKopitiamAmbient() {
+    this.isAmbientPlaying = false;
+    if (this.ambientGain) {
+      this.ambientGain.gain.linearRampToValueAtTime(0.001, this.ctx.currentTime + 0.5);
+    }
+    if (this.ambientTimer) {
+      clearTimeout(this.ambientTimer);
+    }
+  }
+
+  scheduleRandomAmbience() {
+    if (!this.isAmbientPlaying || this.isMuted) return;
+
+    const delay = Math.floor(Math.random() * 4000) + 3000;
+    this.ambientTimer = setTimeout(() => {
+      if (this.isAmbientPlaying && !this.isMuted) {
+        this.playDistantCupClink();
+        this.scheduleRandomAmbience();
+      }
+    }, delay);
+  }
+
+  /**
+   * Distant Kopitiam Ceramic Cup/Saucer Clink
+   */
+  playDistantCupClink() {
+    if (this.isMuted || !this.ctx) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    const randomPitch = 1800 + Math.random() * 800;
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(randomPitch, now);
+    osc.frequency.exponentialRampToValueAtTime(randomPitch * 0.85, now + 0.15);
+
+    gain.gain.setValueAtTime(0.04, now); // Very soft distant clink
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.15);
   }
 
   /**
@@ -66,9 +173,6 @@ class SoundEngine {
     noise.stop(this.ctx.currentTime + duration);
   }
 
-  /**
-   * Synthesize Ice Cubes Clink
-   */
   playIceSound() {
     if (this.isMuted) return;
     this.init();
@@ -95,16 +199,11 @@ class SoundEngine {
     });
   }
 
-  /**
-   * Synthesize Can Pop Ring Pull & Fizzy Pour
-   */
   playCanPopSound() {
     if (this.isMuted) return;
     this.init();
 
     const now = this.ctx.currentTime;
-
-    // Metal pop click
     const pop = this.ctx.createOscillator();
     const popGain = this.ctx.createGain();
     pop.type = 'triangle';
@@ -119,23 +218,15 @@ class SoundEngine {
     pop.start(now);
     pop.stop(now + 0.06);
 
-    // Carbonated fizzy hiss
     this.playPourSound(0.5);
   }
 
-  /**
-   * Synthesize Dispenser Pour Sound
-   */
   playDispenserSound() {
     if (this.isMuted) return;
     this.init();
-
     this.playPourSound(0.7);
   }
 
-  /**
-   * Synthesize "Ka-Ching!" Money Cash Register Sound
-   */
   playKaChing() {
     if (this.isMuted) return;
     this.init();
@@ -175,9 +266,6 @@ class SoundEngine {
     clickOsc.stop(now + 0.05);
   }
 
-  /**
-   * Synthesize Error Buzz sound
-   */
   playErrorSound() {
     if (this.isMuted) return;
     this.init();
@@ -205,9 +293,6 @@ class SoundEngine {
     osc2.stop(now + 0.35);
   }
 
-  /**
-   * Synthesize Glass Clink (Mug grab / placement)
-   */
   playMugGrab() {
     if (this.isMuted) return;
     this.init();
@@ -230,9 +315,6 @@ class SoundEngine {
     osc.stop(now + 0.12);
   }
 
-  /**
-   * Synthesize Sugar scoop clink
-   */
   playSugarSound() {
     if (this.isMuted) return;
     this.init();
