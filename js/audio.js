@@ -1,6 +1,6 @@
 /**
- * Kopitiam Kopi Kia - Web Audio API Sound Generator Engine
- * Synthesizes all game audio dynamically (SFX + Kopitiam Ambient Background)
+ * Kopitiam Kopi Kia - Web Audio API & Custom Audio Sound Generator Engine
+ * Plays custom Kopitiam Hawker Background Ambience MP3 + Synthesized SFX
  */
 
 class SoundEngine {
@@ -8,12 +8,11 @@ class SoundEngine {
     this.ctx = null;
     this.isMuted = false;
 
-    // Ambient Kopitiam Background Audio Nodes
-    this.ambientGain = null;
-    this.ambientFilter = null;
-    this.ambientSource = null;
-    this.ambientTimer = null;
-    this.isAmbientPlaying = false;
+    // Custom Background Ambient Audio Track
+    this.bgAudio = new Audio('audio/kopitiam_ambient.mp3');
+    this.bgAudio.loop = true;
+    this.bgAudio.volume = 0.35; // Comfortable ambient level
+    this.isBgPlaying = false;
   }
 
   init() {
@@ -25,7 +24,7 @@ class SoundEngine {
       this.ctx.resume();
     }
 
-    if (!this.isAmbientPlaying && !this.isMuted) {
+    if (!this.isBgPlaying && !this.isMuted) {
       this.startKopitiamAmbient();
     }
   }
@@ -42,93 +41,21 @@ class SoundEngine {
   }
 
   /**
-   * Start Synthesized Kopitiam Ambient Background Sound Loop
-   * Simulates coffee shop room acoustics, distant chatter, and cup clinks
+   * Start Custom Kopitiam Hawker Food Court Ambience MP3 Loop
    */
   startKopitiamAmbient() {
-    if (this.isAmbientPlaying || this.isMuted) return;
-    this.isAmbientPlaying = true;
+    if (this.isMuted) return;
 
-    const sampleRate = this.ctx.sampleRate;
-    const bufferSize = sampleRate * 4; // 4 second loop
-    const buffer = this.ctx.createBuffer(1, bufferSize, sampleRate);
-    const data = buffer.getChannelData(0);
-
-    let lastOut = 0.0;
-    for (let i = 0; i < bufferSize; i++) {
-      const white = Math.random() * 2 - 1;
-      data[i] = (lastOut + 0.015 * white) / 1.015;
-      lastOut = data[i];
-    }
-
-    this.ambientSource = this.ctx.createBufferSource();
-    this.ambientSource.buffer = buffer;
-    this.ambientSource.loop = true;
-
-    // Lowpass filter for warm indoor coffee stall acoustic room hum
-    this.ambientFilter = this.ctx.createBiquadFilter();
-    this.ambientFilter.type = 'lowpass';
-    this.ambientFilter.frequency.setValueAtTime(550, this.ctx.currentTime);
-
-    this.ambientGain = this.ctx.createGain();
-    this.ambientGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
-    this.ambientGain.gain.linearRampToValueAtTime(0.08, this.ctx.currentTime + 1.5); // Subtle background hum
-
-    this.ambientSource.connect(this.ambientFilter);
-    this.ambientFilter.connect(this.ambientGain);
-    this.ambientGain.connect(this.ctx.destination);
-
-    this.ambientSource.start();
-
-    // Schedule random ambient cup/saucer clinks every 3-7 seconds
-    this.scheduleRandomAmbience();
+    this.bgAudio.play().then(() => {
+      this.isBgPlaying = true;
+    }).catch(err => {
+      console.log('Audio autoplay waiting for user interaction:', err);
+    });
   }
 
   stopKopitiamAmbient() {
-    this.isAmbientPlaying = false;
-    if (this.ambientGain) {
-      this.ambientGain.gain.linearRampToValueAtTime(0.001, this.ctx.currentTime + 0.5);
-    }
-    if (this.ambientTimer) {
-      clearTimeout(this.ambientTimer);
-    }
-  }
-
-  scheduleRandomAmbience() {
-    if (!this.isAmbientPlaying || this.isMuted) return;
-
-    const delay = Math.floor(Math.random() * 4000) + 3000;
-    this.ambientTimer = setTimeout(() => {
-      if (this.isAmbientPlaying && !this.isMuted) {
-        this.playDistantCupClink();
-        this.scheduleRandomAmbience();
-      }
-    }, delay);
-  }
-
-  /**
-   * Distant Kopitiam Ceramic Cup/Saucer Clink
-   */
-  playDistantCupClink() {
-    if (this.isMuted || !this.ctx) return;
-
-    const now = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-
-    const randomPitch = 1800 + Math.random() * 800;
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(randomPitch, now);
-    osc.frequency.exponentialRampToValueAtTime(randomPitch * 0.85, now + 0.15);
-
-    gain.gain.setValueAtTime(0.04, now); // Very soft distant clink
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
-
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-
-    osc.start(now);
-    osc.stop(now + 0.15);
+    this.bgAudio.pause();
+    this.isBgPlaying = false;
   }
 
   /**
