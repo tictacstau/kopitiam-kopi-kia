@@ -1,14 +1,17 @@
 /* ==========================================================================
-   KOPITIAM KOPI KIA - VINTAGE NANYANG POSTER DESIGN SYSTEM & STYLES
+   KOPITIAM KOPI KIA - VINTAGE NANYANG POSTER DESIGN SYSTEM & STYLES (BRIGHT LIGHT THEME)
    ========================================================================== */
 
 :root {
   --primary-gold: #f59e0b;
-  --nanyang-blue: #1b365d;
-  --nanyang-darkblue: #0f2342;
+  --nanyang-blue: #0f386b;
+  --nanyang-darkblue: #092142;
   --vintage-red: #c23b22;
-  --parchment-bg: #f7f4e9;
-  --gold-glow: rgba(245, 158, 11, 0.7);
+  --parchment-bg: #fdfbf7;
+  --parchment-card: #ffffff;
+  --text-dark: #331800;
+
+  --gold-glow: rgba(245, 158, 11, 0.5);
   --cyan-glow: #06b6d4;
   --pink-glow: #ec4899;
   --green-glow: #22c55e;
@@ -19,7 +22,7 @@
 
   --glass-bg: rgba(15, 23, 42, 0.88);
   --glass-border: rgba(255, 255, 255, 0.18);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.55);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
 
   --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: 'Playfair Display', serif;
@@ -46,7 +49,7 @@
 }
 
 body {
-  background: #060911;
+  background: #0f172a;
   font-family: var(--font-family);
   color: #ffffff;
   min-height: 100vh;
@@ -119,7 +122,7 @@ body {
 }
 
 /* ==========================================================================
-   2. MAIN MENU SCREEN (Vintage Nanyang Poster Theme)
+   2. MAIN MENU SCREEN (BRIGHT & WARM LIGHT VINTAGE THEME)
    ========================================================================== */
 .screen-overlay {
   position: absolute;
@@ -137,13 +140,14 @@ body {
   background-position: center;
 }
 
+/* Bright Warm Lighting Overlay (Replaces dark vignette) */
 .poster-vignette-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, rgba(12, 9, 6, 0.4) 0%, rgba(12, 9, 6, 0.85) 100%);
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, rgba(253, 251, 247, 0.55) 100%);
   z-index: 1;
   pointer-events: none;
 }
@@ -160,17 +164,17 @@ body {
   gap: 12px;
 }
 
-/* Vintage Singapore Pill Badge */
+/* Vintage Singapore Pill Badge (Bright Parchment & Deep Nanyang Blue) */
 .vintage-pill {
-  background: rgba(247, 244, 233, 0.92);
+  background: #ffffff;
   border: 2px solid var(--nanyang-blue);
-  padding: 5px 16px;
+  padding: 6px 18px;
   border-radius: 20px;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 2px;
   color: var(--nanyang-blue);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   text-transform: uppercase;
 }
 
@@ -192,7 +196,7 @@ body {
   font-weight: 900;
   letter-spacing: 3px;
   color: var(--nanyang-blue);
-  text-shadow: 2px 2px 0px #ffffff, 4px 4px 10px rgba(0, 0, 0, 0.7);
+  text-shadow: 2px 2px 0px #ffffff, 0 4px 12px rgba(255, 255, 255, 0.8);
 }
 
 .chinese-calligraphy {
@@ -200,7 +204,7 @@ body {
   font-size: 2.2rem;
   font-weight: 900;
   color: var(--vintage-red);
-  text-shadow: 2px 2px 0px #fffbeb, 0 0 15px rgba(194, 59, 34, 0.6);
+  text-shadow: 2px 2px 0px #ffffff, 0 0 10px rgba(194, 59, 34, 0.4);
   letter-spacing: 4px;
   margin: 2px 0;
 }
@@ -211,19 +215,19 @@ body {
   font-weight: 900;
   letter-spacing: 2px;
   color: var(--nanyang-blue);
-  text-shadow: 2px 2px 0px #ffffff, 4px 4px 10px rgba(0, 0, 0, 0.7);
+  text-shadow: 2px 2px 0px #ffffff, 0 4px 12px rgba(255, 255, 255, 0.8);
 }
 
-/* Subtitle Tagline */
+/* Subtitle Tagline (Dark Coffee Brown for Crisp Readability) */
 .vintage-tagline {
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: #f7f4e9;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--text-dark);
   line-height: 1.45;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
 }
 
-/* Player Stats Bar */
+/* Player Stats Bar (Bright Ivory Cards) */
 .vintage-stats-bar {
   display: flex;
   gap: 8px;
@@ -231,34 +235,34 @@ body {
 }
 
 .vintage-stat-pill {
-  background: rgba(15, 23, 42, 0.88);
+  background: #ffffff;
   border: 1.5px solid var(--primary-gold);
   padding: 6px 12px;
   border-radius: 20px;
   display: flex;
   align-items: center;
   gap: 6px;
-  font-weight: 800;
+  font-weight: 900;
   font-size: 0.85rem;
-  color: #fde047;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  color: var(--nanyang-darkblue);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .stat-icon {
   font-size: 0.95rem;
 }
 
-/* Primary CTA Button (Start Campaign) */
+/* Primary CTA Button (Bright Glowing Amber Gold) */
 .vintage-cta-btn {
   appearance: none;
   -webkit-appearance: none;
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   border-radius: 22px;
-  border: 2px solid #fffbeb;
-  background: linear-gradient(135deg, #fde047 0%, #f59e0b 50%, #d97706 100%);
+  border: 2px solid #ffffff;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
   color: #1a0d03;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 900;
   display: flex;
   align-items: center;
@@ -266,21 +270,21 @@ body {
   gap: 10px;
   cursor: pointer;
   box-shadow: 
-    0 0 25px rgba(245, 158, 11, 0.7),
-    0 8px 20px rgba(0, 0, 0, 0.6);
+    0 0 25px rgba(245, 158, 11, 0.5),
+    0 8px 18px rgba(0, 0, 0, 0.2);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .vintage-cta-btn:hover {
   transform: scale(1.03);
-  box-shadow: 0 0 35px rgba(245, 158, 11, 0.9);
+  box-shadow: 0 0 35px rgba(245, 158, 11, 0.8);
 }
 
 .vintage-cta-btn:active {
   transform: scale(0.97);
 }
 
-/* Secondary 2x2 Action Grid */
+/* Secondary 2x2 Action Grid (Bright Ivory Glass Cards) */
 .vintage-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -291,34 +295,34 @@ body {
 .vintage-grid-btn {
   appearance: none;
   -webkit-appearance: none;
-  background: rgba(247, 244, 233, 0.92);
+  background: rgba(255, 255, 255, 0.95);
   border: 2px solid var(--nanyang-blue);
-  padding: 10px 14px;
+  padding: 12px 14px;
   border-radius: 16px;
-  color: var(--nanyang-darkblue);
-  font-size: 0.9rem;
+  color: var(--nanyang-blue);
+  font-size: 0.92rem;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   transition: all 0.2s ease;
 }
 
 .vintage-grid-btn:hover {
   background: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 .vintage-footer {
   margin-top: 6px;
-  font-size: 0.7rem;
-  color: #e2e8f0;
-  font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+  font-size: 0.72rem;
+  color: var(--text-dark);
+  font-weight: 800;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
 }
 
 /* ==========================================================================
