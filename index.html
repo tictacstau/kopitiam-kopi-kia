@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Kopitiam Kopi Kia - Mobile HTML5 Game</title>
-  <meta name="description" content="Kopitiam Kopi Kia - Authentic Singapore Coffee Stall Simulation Game with Campaign Mode, Upgrade Shop & Real-Time Audio Synthesis">
+  <meta name="description" content="Kopitiam Kopi Kia - Authentic Singapore Coffee Stall Simulation Game with Vintage Nanyang Poster Aesthetic">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@1,800;1,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@1,800;1,900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,71 +20,77 @@
     <div id="background-vignette"></div>
 
     <!-- ==========================================================================
-         MAIN MENU SCREEN (Matching Reference Screenshot)
+         MAIN MENU SCREEN (Vintage Nanyang Kopitiam Poster Artwork Style)
          ========================================================================== -->
-    <section id="main-menu-screen" class="screen-overlay">
-      <div class="menu-content">
-        <!-- Singapore Pill Badge -->
-        <div class="singapore-pill">
-          <span>新加坡 · SINGAPORE</span>
+    <section id="main-menu-screen" class="screen-overlay vintage-poster-theme" style="background-image: url('vintage_kopitiam_poster.jpg');">
+      <div class="poster-vignette-overlay"></div>
+      
+      <div class="menu-content vintage-content">
+        <!-- Vintage Singapore Pill Badge -->
+        <div class="singapore-pill vintage-pill">
+          <span>南洋咖啡 · SINGAPORE NOSTALGIA</span>
         </div>
 
-        <!-- Glowing Logo Title -->
-        <div class="menu-brand-title">
-          <h1 class="glowing-script-logo">Kopitiam<br><span class="logo-sub">Kopi Kia</span></h1>
+        <!-- Vintage Nanyang Title Logo -->
+        <div class="menu-brand-title vintage-brand-title">
+          <h1 class="vintage-poster-logo">
+            <span class="nanyang-header">KOPITIAM</span>
+            <span class="chinese-calligraphy">隨意咖啡店</span>
+            <span class="kopikia-header">KOPI KIA</span>
+          </h1>
         </div>
 
         <!-- Subtitle Tagline -->
-        <p class="menu-tagline">
-          Serve the uncles & aunties.<br>
-          Master every kopi order.
+        <p class="menu-tagline vintage-tagline">
+          傳統早餐 · 南洋風味<br>
+          Serve the uncles & aunties. Master every kopi order.
         </p>
 
         <!-- Player Stats Bar -->
-        <div class="player-stats-bar">
-          <div class="menu-stat-pill">
+        <div class="player-stats-bar vintage-stats-bar">
+          <div class="menu-stat-pill vintage-stat-pill">
             <span class="stat-icon">⭐</span>
             <span id="menu-player-level">Lv 1</span>
           </div>
-          <div class="menu-stat-pill">
+          <div class="menu-stat-pill vintage-stat-pill">
             <span class="stat-icon">💰</span>
             <span id="menu-player-money">$0.00</span>
           </div>
-          <div class="menu-stat-pill">
+          <div class="menu-stat-pill vintage-stat-pill">
             <span class="stat-icon">🔥</span>
             <span id="menu-player-streak">0</span>
           </div>
         </div>
 
         <!-- Primary Call to Action Button -->
-        <button id="btn-start-campaign" class="primary-cta-btn">
+        <button id="btn-start-campaign" class="primary-cta-btn vintage-cta-btn">
           <span class="btn-icon">☕</span>
           <span class="cta-text">Start Campaign</span>
         </button>
 
         <!-- Secondary 2x2 Action Grid -->
-        <div class="menu-action-grid">
-          <button id="btn-menu-recipes" class="menu-grid-btn">
+        <div class="menu-action-grid vintage-grid">
+          <button id="btn-menu-recipes" class="menu-grid-btn vintage-grid-btn">
             <span class="grid-icon">📖</span>
             <span>Recipes</span>
           </button>
-          <button id="btn-menu-board" class="menu-grid-btn">
+          <button id="btn-menu-board" class="menu-grid-btn vintage-grid-btn">
             <span class="grid-icon">🏆</span>
             <span>Board</span>
           </button>
-          <button id="btn-menu-shop" class="menu-grid-btn">
+          <button id="btn-menu-shop" class="menu-grid-btn vintage-grid-btn">
             <span class="grid-icon">🛒</span>
             <span>Shop</span>
           </button>
-          <button id="btn-menu-howto" class="menu-grid-btn">
+          <button id="btn-menu-howto" class="menu-grid-btn vintage-grid-btn">
             <span class="grid-icon">❓</span>
             <span>How To</span>
           </button>
         </div>
 
         <!-- Footer -->
-        <footer class="menu-footer">
-          <span>Kopi Kia © Local Kopitiam Games</span>
+        <footer class="menu-footer vintage-footer">
+          <span>Kopi Kia © Local Kopitiam Games · EST. 1956</span>
         </footer>
       </div>
     </section>
@@ -313,9 +319,7 @@
     <!-- Toast Notification Overlay -->
     <div id="toast-container" aria-live="polite"></div>
 
-    <!-- ==========================================================================
-         CAMPAIGN SAGA MAP MODAL (Candy Crush Style Winding Level Path)
-         ========================================================================== -->
+    <!-- CAMPAIGN SAGA MAP MODAL -->
     <div id="saga-map-modal" class="modal-overlay hidden" aria-hidden="true">
       <div class="modal-card glass-card map-card">
         <div class="modal-header">
@@ -323,16 +327,12 @@
           <button class="close-btn btn-close-saga">&times;</button>
         </div>
         <div class="modal-body">
-          <div class="saga-path-container" id="saga-nodes-container">
-            <!-- Dynamically populated 10 Level Nodes with ⭐ ⭐ ⭐ stars -->
-          </div>
+          <div class="saga-path-container" id="saga-nodes-container"></div>
         </div>
       </div>
     </div>
 
-    <!-- ==========================================================================
-         KOPITIAM UPGRADE SHOP MODAL
-         ========================================================================== -->
+    <!-- KOPITIAM UPGRADE SHOP MODAL -->
     <div id="shop-modal" class="modal-overlay hidden" aria-hidden="true">
       <div class="modal-card glass-card shop-card-container">
         <div class="modal-header">
@@ -344,16 +344,12 @@
             <span>Career Money:</span>
             <strong id="shop-balance-text">$0.00</strong>
           </div>
-          <div class="shop-grid" id="shop-items-container">
-            <!-- Dynamically populated Shop Equipment Cards -->
-          </div>
+          <div class="shop-grid" id="shop-items-container"></div>
         </div>
       </div>
     </div>
 
-    <!-- ==========================================================================
-         LEADERBOARD / BOARD MODAL
-         ========================================================================== -->
+    <!-- LEADERBOARD / BOARD MODAL -->
     <div id="board-modal" class="modal-overlay hidden" aria-hidden="true">
       <div class="modal-card glass-card">
         <div class="modal-header">
@@ -376,9 +372,7 @@
       </div>
     </div>
 
-    <!-- ==========================================================================
-         HOW TO / TUTORIAL MODAL
-         ========================================================================== -->
+    <!-- HOW TO MODAL -->
     <div id="howto-modal" class="modal-overlay hidden" aria-hidden="true">
       <div class="modal-card glass-card">
         <div class="modal-header">
@@ -402,9 +396,7 @@
       </div>
     </div>
 
-    <!-- ==========================================================================
-         LEVEL RESULT SHIFT DIALOG (Victory / Defeat)
-         ========================================================================== -->
+    <!-- LEVEL RESULT SHIFT DIALOG -->
     <div id="level-result-modal" class="modal-overlay hidden" aria-hidden="true">
       <div class="modal-card glass-card result-card">
         <div class="result-header">

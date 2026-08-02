@@ -1,9 +1,13 @@
 /* ==========================================================================
-   KOPITIAM KOPI KIA - DESIGN SYSTEM & UI OVERLAY STYLES
+   KOPITIAM KOPI KIA - VINTAGE NANYANG POSTER DESIGN SYSTEM & STYLES
    ========================================================================== */
 
 :root {
   --primary-gold: #f59e0b;
+  --nanyang-blue: #1b365d;
+  --nanyang-darkblue: #0f2342;
+  --vintage-red: #c23b22;
+  --parchment-bg: #f7f4e9;
   --gold-glow: rgba(245, 158, 11, 0.7);
   --cyan-glow: #06b6d4;
   --pink-glow: #ec4899;
@@ -12,9 +16,6 @@
   --blue-glow: #3b82f6;
   --white-glow: #e2e8f0;
   --emerald-glow: #10b981;
-  --amber-glow: #f59e0b;
-  --red-glow: #ef4444;
-  --lime-glow: #84cc16;
 
   --glass-bg: rgba(15, 23, 42, 0.88);
   --glass-border: rgba(255, 255, 255, 0.18);
@@ -22,6 +23,7 @@
 
   --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: 'Playfair Display', serif;
+  --font-chinese: 'Noto Serif TC', serif;
 }
 
 * {
@@ -117,7 +119,7 @@ body {
 }
 
 /* ==========================================================================
-   2. MAIN MENU SCREEN (Matching Reference Screenshot)
+   2. MAIN MENU SCREEN (Vintage Nanyang Poster Theme)
    ========================================================================== */
 .screen-overlay {
   position: absolute;
@@ -126,107 +128,137 @@ body {
   width: 100%;
   height: 100%;
   z-index: 150;
-  background: rgba(10, 8, 7, 0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 24px;
+  padding: 20px;
+  background-size: cover;
+  background-position: center;
 }
 
-.menu-content {
+.poster-vignette-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(12, 9, 6, 0.4) 0%, rgba(12, 9, 6, 0.85) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.vintage-content {
+  position: relative;
+  z-index: 2;
   width: 100%;
   max-width: 380px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 16px;
+  gap: 12px;
 }
 
-/* Singapore Pill Badge */
-.singapore-pill {
-  background: rgba(35, 26, 15, 0.8);
-  border: 1.5px solid rgba(245, 158, 11, 0.5);
-  padding: 6px 18px;
+/* Vintage Singapore Pill Badge */
+.vintage-pill {
+  background: rgba(247, 244, 233, 0.92);
+  border: 2px solid var(--nanyang-blue);
+  padding: 5px 16px;
   border-radius: 20px;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 2.5px;
-  color: #fde047;
-  box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--nanyang-blue);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   text-transform: uppercase;
 }
 
-/* Glowing Script Logo Title */
-.menu-brand-title {
-  margin: 4px 0;
+/* Vintage Nanyang Poster Logo Title */
+.vintage-brand-title {
+  margin: 2px 0;
 }
 
-.glowing-script-logo {
+.vintage-poster-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.nanyang-header {
   font-family: var(--font-display);
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   font-weight: 900;
-  font-style: italic;
-  line-height: 0.95;
-  background: linear-gradient(135deg, #fffbeb 0%, #fde047 40%, #f59e0b 80%, #d97706 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 18px rgba(245, 158, 11, 0.75));
-  letter-spacing: -1px;
+  letter-spacing: 3px;
+  color: var(--nanyang-blue);
+  text-shadow: 2px 2px 0px #ffffff, 4px 4px 10px rgba(0, 0, 0, 0.7);
 }
 
-.logo-sub {
-  font-size: 2.4rem;
+.chinese-calligraphy {
+  font-family: var(--font-chinese);
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--vintage-red);
+  text-shadow: 2px 2px 0px #fffbeb, 0 0 15px rgba(194, 59, 34, 0.6);
+  letter-spacing: 4px;
+  margin: 2px 0;
+}
+
+.kopikia-header {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--nanyang-blue);
+  text-shadow: 2px 2px 0px #ffffff, 4px 4px 10px rgba(0, 0, 0, 0.7);
 }
 
 /* Subtitle Tagline */
-.menu-tagline {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #cbd5e1;
+.vintage-tagline {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #f7f4e9;
   line-height: 1.45;
-  opacity: 0.9;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
 }
 
 /* Player Stats Bar */
-.player-stats-bar {
+.vintage-stats-bar {
   display: flex;
-  gap: 10px;
-  margin: 6px 0;
+  gap: 8px;
+  margin: 4px 0;
 }
 
-.menu-stat-pill {
-  background: rgba(30, 22, 14, 0.85);
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  padding: 8px 14px;
-  border-radius: 22px;
+.vintage-stat-pill {
+  background: rgba(15, 23, 42, 0.88);
+  border: 1.5px solid var(--primary-gold);
+  padding: 6px 12px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   gap: 6px;
   font-weight: 800;
-  font-size: 0.9rem;
-  color: #fbbf24;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  font-size: 0.85rem;
+  color: #fde047;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 .stat-icon {
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
 /* Primary CTA Button (Start Campaign) */
-.primary-cta-btn {
+.vintage-cta-btn {
   appearance: none;
   -webkit-appearance: none;
   width: 100%;
-  padding: 16px;
-  border-radius: 24px;
-  border: none;
+  padding: 15px;
+  border-radius: 22px;
+  border: 2px solid #fffbeb;
   background: linear-gradient(135deg, #fde047 0%, #f59e0b 50%, #d97706 100%);
-  color: #1c1005;
-  font-size: 1.25rem;
+  color: #1a0d03;
+  font-size: 1.2rem;
   font-weight: 900;
   display: flex;
   align-items: center;
@@ -234,57 +266,59 @@ body {
   gap: 10px;
   cursor: pointer;
   box-shadow: 
-    0 0 25px rgba(245, 158, 11, 0.6),
-    0 8px 20px rgba(0, 0, 0, 0.5);
+    0 0 25px rgba(245, 158, 11, 0.7),
+    0 8px 20px rgba(0, 0, 0, 0.6);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.primary-cta-btn:hover {
+.vintage-cta-btn:hover {
   transform: scale(1.03);
   box-shadow: 0 0 35px rgba(245, 158, 11, 0.9);
 }
 
-.primary-cta-btn:active {
+.vintage-cta-btn:active {
   transform: scale(0.97);
 }
 
 /* Secondary 2x2 Action Grid */
-.menu-action-grid {
+.vintage-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
 }
 
-.menu-grid-btn {
+.vintage-grid-btn {
   appearance: none;
   -webkit-appearance: none;
-  background: rgba(30, 24, 18, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 12px 16px;
+  background: rgba(247, 244, 233, 0.92);
+  border: 2px solid var(--nanyang-blue);
+  padding: 10px 14px;
   border-radius: 16px;
-  color: #ffffff;
-  font-size: 0.95rem;
-  font-weight: 700;
+  color: var(--nanyang-darkblue);
+  font-size: 0.9rem;
+  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   transition: all 0.2s ease;
 }
 
-.menu-grid-btn:hover {
-  background: rgba(45, 34, 25, 0.9);
-  border-color: rgba(245, 158, 11, 0.4);
+.vintage-grid-btn:hover {
+  background: #ffffff;
   transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
 }
 
-.menu-footer {
-  margin-top: 10px;
-  font-size: 0.72rem;
-  color: #64748b;
-  font-weight: 600;
+.vintage-footer {
+  margin-top: 6px;
+  font-size: 0.7rem;
+  color: #e2e8f0;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
 }
 
 /* ==========================================================================
@@ -353,7 +387,6 @@ body {
   cursor: pointer;
 }
 
-/* Shift HUD */
 #shift-hud {
   position: relative;
   z-index: 10;
@@ -381,15 +414,8 @@ body {
   font-size: 0.68rem;
 }
 
-#hud-goal-text {
-  color: #4ade80;
-  font-weight: 800;
-}
-
-#shift-timer-text {
-  color: #f87171;
-  font-weight: 800;
-}
+#hud-goal-text { color: #4ade80; font-weight: 800; }
+#shift-timer-text { color: #f87171; font-weight: 800; }
 
 /* ==========================================================================
    4. ACTIVE SPOTLIGHT & QUEUE BAR
@@ -456,18 +482,8 @@ body {
   flex-direction: column;
 }
 
-.customer-name-row {
-  font-size: 0.8rem;
-  color: #94a3b8;
-  font-weight: 600;
-}
-
-.order-name-row {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #ffffff;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-}
+.customer-name-row { font-size: 0.8rem; color: #94a3b8; font-weight: 600; }
+.order-name-row { font-size: 1.05rem; font-weight: 800; color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
 
 .spotlight-progress-track {
   position: absolute;
@@ -485,9 +501,7 @@ body {
   transition: width 0.2s linear;
 }
 
-.shake-card {
-  animation: shake 0.4s ease-in-out;
-}
+.shake-card { animation: shake 0.4s ease-in-out; }
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
@@ -505,9 +519,7 @@ body {
   scrollbar-width: none;
 }
 
-#customer-queue-row::-webkit-scrollbar {
-  display: none;
-}
+#customer-queue-row::-webkit-scrollbar { display: none; }
 
 .queue-card {
   flex: 1;
@@ -526,31 +538,10 @@ body {
   background: rgba(6, 182, 212, 0.15);
 }
 
-.queue-avatar {
-  font-size: 1.2rem;
-}
-
-.queue-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.1;
-  overflow: hidden;
-}
-
-.q-name {
-  font-size: 0.7rem;
-  color: #cbd5e1;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.q-drink {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #38bdf8;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
+.queue-avatar { font-size: 1.2rem; }
+.queue-text { display: flex; flex-direction: column; line-height: 1.1; overflow: hidden; }
+.q-name { font-size: 0.7rem; color: #cbd5e1; white-space: nowrap; text-overflow: ellipsis; }
+.q-drink { font-size: 0.75rem; font-weight: 700; color: #38bdf8; white-space: nowrap; text-overflow: ellipsis; }
 
 /* ==========================================================================
    5. CENTER GLASS MUG OVERLAY (#glass-mug-overlay)
@@ -603,9 +594,7 @@ body {
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(4px);
   overflow: hidden;
-  box-shadow: 
-    inset 0 0 15px rgba(255, 255, 255, 0.4),
-    0 12px 25px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.4), 0 12px 25px rgba(0, 0, 0, 0.5);
 }
 
 .mug-glass-body.gold-skin {
@@ -908,12 +897,7 @@ body {
 .modal-header h2 { font-size: 1.15rem; color: #fde047; }
 .close-btn { background: none; border: none; color: #94a3b8; font-size: 1.6rem; cursor: pointer; }
 
-/* Saga Path Container */
-.saga-path-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+.saga-path-container { display: flex; flex-direction: column; gap: 12px; }
 
 .saga-node-card {
   background: rgba(30, 41, 59, 0.7);
@@ -927,22 +911,13 @@ body {
   transition: all 0.2s ease;
 }
 
-.saga-node-card.node-unlocked {
-  border-color: var(--primary-gold);
-  background: rgba(245, 158, 11, 0.15);
-}
-
-.saga-node-card.node-locked {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
+.saga-node-card.node-unlocked { border-color: var(--primary-gold); background: rgba(245, 158, 11, 0.15); }
+.saga-node-card.node-locked { opacity: 0.45; cursor: not-allowed; }
 
 .node-info h4 { font-size: 0.95rem; color: #ffffff; }
 .node-info p { font-size: 0.75rem; color: #94a3b8; }
-
 .star-row { font-size: 1rem; }
 
-/* Shop Items Grid */
 .shop-balance-bar {
   background: rgba(245, 158, 11, 0.2);
   border: 1px solid var(--primary-gold);
@@ -955,11 +930,7 @@ body {
   color: #fde047;
 }
 
-.shop-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+.shop-grid { display: flex; flex-direction: column; gap: 10px; }
 
 .shop-item-card {
   background: rgba(30, 41, 59, 0.75);
@@ -996,44 +967,22 @@ body {
   cursor: default;
 }
 
-/* Result Screen */
-.result-card {
-  text-align: center;
-  padding: 24px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
+.result-card { text-align: center; padding: 24px 20px; display: flex; flex-direction: column; gap: 16px; }
 .result-header h2 { font-size: 1.4rem; color: #fde047; }
 .result-header p { font-size: 0.85rem; color: #cbd5e1; }
-
 .stars-display-row { font-size: 2.2rem; display: flex; justify-content: center; gap: 8px; }
-
-.result-breakdown {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 0.85rem;
-}
-
+.result-breakdown { background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; }
 .r-row { display: flex; justify-content: space-between; color: #cbd5e1; }
-
 .result-btn-row { display: flex; gap: 10px; }
 .result-btn { flex: 1; padding: 12px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; }
 .secondary-btn { background: rgba(255, 255, 255, 0.1); color: white; }
 .primary-result-btn { background: linear-gradient(135deg, #fde047, #f59e0b); color: #1e1005; }
 
-/* How To Step Box */
 .howto-body { display: flex; flex-direction: column; gap: 10px; }
 .step-box { background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 10px; border-left: 3px solid var(--cyan-glow); }
 .step-box h4 { font-size: 0.85rem; color: #38bdf8; margin-bottom: 4px; }
 .step-box p { font-size: 0.78rem; color: #cbd5e1; }
 
-/* Board Stats */
 .board-stats-summary { background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; }
 .b-stat { display: flex; justify-content: space-between; color: #cbd5e1; }
 .board-sub-title { font-size: 0.9rem; color: #fde047; margin-bottom: 8px; }
