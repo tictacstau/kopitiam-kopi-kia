@@ -1,5 +1,5 @@
 /* ==========================================================================
-   KOPITIAM KOPI KIA - VINTAGE NANYANG POSTER DESIGN SYSTEM & STYLES (BRIGHT LIGHT THEME)
+   KOPITIAM KOPI KIA - VINTAGE NANYANG POSTER DESIGN SYSTEM & STYLES (UNIFIED THEME)
    ========================================================================== */
 
 :root {
@@ -9,6 +9,7 @@
   --vintage-red: #c23b22;
   --parchment-bg: #fdfbf7;
   --parchment-card: #ffffff;
+  --parchment-glass: rgba(253, 251, 247, 0.96);
   --text-dark: #331800;
 
   --gold-glow: rgba(245, 158, 11, 0.5);
@@ -22,7 +23,7 @@
 
   --glass-bg: rgba(15, 23, 42, 0.88);
   --glass-border: rgba(255, 255, 255, 0.18);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
 
   --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: 'Playfair Display', serif;
@@ -122,7 +123,7 @@ body {
 }
 
 /* ==========================================================================
-   2. MAIN MENU SCREEN (BRIGHT VINTAGE THEME + SOFT PARCHMENT BACKPLATE)
+   2. MAIN MENU SCREEN (BRIGHT VINTAGE THEME)
    ========================================================================== */
 .screen-overlay {
   position: absolute;
@@ -176,7 +177,6 @@ body {
   text-transform: uppercase;
 }
 
-/* Option 1: Soft Parchment Glass Backplate */
 .vintage-brand-title {
   margin: 4px 0;
   padding: 12px 20px;
@@ -858,7 +858,7 @@ body {
 .btn-emerald { border-color: var(--emerald-glow); background: rgba(16, 185, 129, 0.2); }
 
 /* ==========================================================================
-   7. CAMPAIGN SAGA MAP, SHOP & MODALS
+   7. CAMPAIGN SAGA MAP, SHOP & MODALS (UNIFIED BRIGHT PARCHMENT THEME)
    ========================================================================== */
 .modal-overlay {
   position: absolute;
@@ -866,8 +866,9 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(6, 9, 17, 0.92);
+  background: rgba(15, 23, 42, 0.65);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 200;
   display: flex;
   align-items: center;
@@ -881,112 +882,139 @@ body {
   width: 100%;
   max-height: 84vh;
   overflow-y: auto;
-  padding: 16px;
+  padding: 18px;
+  background: var(--parchment-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 2.5px solid var(--nanyang-blue);
+  border-radius: 24px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+  color: var(--text-dark);
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
-  border-bottom: 1px solid var(--glass-border);
-  padding-bottom: 8px;
+  margin-bottom: 14px;
+  border-bottom: 2px solid rgba(15, 56, 107, 0.2);
+  padding-bottom: 10px;
 }
 
-.modal-header h2 { font-size: 1.15rem; color: #fde047; }
-.close-btn { background: none; border: none; color: #94a3b8; font-size: 1.6rem; cursor: pointer; }
+.modal-header h2 { font-size: 1.25rem; color: var(--nanyang-blue); font-weight: 900; }
+.close-btn { background: none; border: none; color: var(--nanyang-blue); font-size: 1.8rem; font-weight: 900; cursor: pointer; }
 
+/* Saga Path Container */
 .saga-path-container { display: flex; flex-direction: column; gap: 12px; }
 
 .saga-node-card {
-  background: rgba(30, 41, 59, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
-  padding: 12px 16px;
+  background: #ffffff;
+  border: 2px solid var(--nanyang-blue);
+  border-radius: 18px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: all 0.2s ease;
 }
 
-.saga-node-card.node-unlocked { border-color: var(--primary-gold); background: rgba(245, 158, 11, 0.15); }
-.saga-node-card.node-locked { opacity: 0.45; cursor: not-allowed; }
+.saga-node-card.node-unlocked {
+  border-color: var(--primary-gold);
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.25);
+}
 
-.node-info h4 { font-size: 0.95rem; color: #ffffff; }
-.node-info p { font-size: 0.75rem; color: #94a3b8; }
-.star-row { font-size: 1rem; }
+.saga-node-card.node-locked {
+  background: rgba(247, 244, 233, 0.6);
+  border-color: #cbd5e1;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
+.node-info h4 { font-size: 1rem; color: var(--nanyang-darkblue); font-weight: 800; }
+.node-info p { font-size: 0.78rem; color: #475569; font-weight: 600; }
+.star-row { font-size: 1.1rem; }
+
+/* Shop Items Grid */
 .shop-balance-bar {
-  background: rgba(245, 158, 11, 0.2);
-  border: 1px solid var(--primary-gold);
-  padding: 8px 14px;
-  border-radius: 12px;
+  background: #ffffff;
+  border: 2px solid var(--primary-gold);
+  padding: 10px 16px;
+  border-radius: 16px;
   margin-bottom: 14px;
   display: flex;
   justify-content: space-between;
-  font-size: 0.9rem;
-  color: #fde047;
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: var(--nanyang-darkblue);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .shop-grid { display: flex; flex-direction: column; gap: 10px; }
 
 .shop-item-card {
-  background: rgba(30, 41, 59, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 14px;
-  padding: 10px 14px;
+  background: #ffffff;
+  border: 2px solid var(--nanyang-blue);
+  border-radius: 16px;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .shop-item-left { display: flex; align-items: center; gap: 12px; }
-.shop-icon { font-size: 1.8rem; }
-.shop-item-details h4 { font-size: 0.9rem; color: #ffffff; }
-.shop-item-details p { font-size: 0.72rem; color: #94a3b8; }
+.shop-icon { font-size: 1.9rem; }
+.shop-item-details h4 { font-size: 0.95rem; color: var(--nanyang-darkblue); font-weight: 800; }
+.shop-item-details p { font-size: 0.75rem; color: #475569; font-weight: 600; }
 
 .buy-btn {
-  background: linear-gradient(135deg, #fde047, #f59e0b);
-  border: none;
-  color: #1e1005;
-  font-weight: 800;
-  font-size: 0.8rem;
-  padding: 8px 12px;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: 1.5px solid #ffffff;
+  color: #1c1005;
+  font-weight: 900;
+  font-size: 0.85rem;
+  padding: 8px 14px;
+  border-radius: 12px;
   cursor: pointer;
   white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
 }
 
 .buy-btn.bought {
-  background: rgba(34, 197, 94, 0.2);
-  border: 1px solid #22c55e;
-  color: #4ade80;
+  background: rgba(34, 197, 94, 0.15);
+  border: 2px solid #22c55e;
+  color: #15803d;
+  box-shadow: none;
   cursor: default;
 }
 
+/* Result Screen */
 .result-card { text-align: center; padding: 24px 20px; display: flex; flex-direction: column; gap: 16px; }
-.result-header h2 { font-size: 1.4rem; color: #fde047; }
-.result-header p { font-size: 0.85rem; color: #cbd5e1; }
+.result-header h2 { font-size: 1.4rem; color: var(--nanyang-blue); font-weight: 900; }
+.result-header p { font-size: 0.88rem; color: #475569; font-weight: 700; }
 .stars-display-row { font-size: 2.2rem; display: flex; justify-content: center; gap: 8px; }
-.result-breakdown { background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; }
-.r-row { display: flex; justify-content: space-between; color: #cbd5e1; }
+.result-breakdown { background: #ffffff; border: 1.5px solid var(--nanyang-blue); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; }
+.r-row { display: flex; justify-content: space-between; color: var(--text-dark); font-weight: 700; }
+
 .result-btn-row { display: flex; gap: 10px; }
-.result-btn { flex: 1; padding: 12px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; }
-.secondary-btn { background: rgba(255, 255, 255, 0.1); color: white; }
-.primary-result-btn { background: linear-gradient(135deg, #fde047, #f59e0b); color: #1e1005; }
+.result-btn { flex: 1; padding: 14px; border-radius: 14px; font-weight: 900; border: none; cursor: pointer; font-size: 0.95rem; }
+.secondary-btn { background: #ffffff; border: 2px solid var(--nanyang-blue); color: var(--nanyang-blue); }
+.primary-result-btn { background: linear-gradient(135deg, #fbbf24, #f59e0b); border: 2px solid #ffffff; color: #1c1005; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); }
 
 .howto-body { display: flex; flex-direction: column; gap: 10px; }
-.step-box { background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 10px; border-left: 3px solid var(--cyan-glow); }
-.step-box h4 { font-size: 0.85rem; color: #38bdf8; margin-bottom: 4px; }
-.step-box p { font-size: 0.78rem; color: #cbd5e1; }
+.step-box { background: #ffffff; border: 1.5px solid var(--nanyang-blue); padding: 12px; border-radius: 14px; border-left: 5px solid var(--nanyang-blue); }
+.step-box h4 { font-size: 0.9rem; color: var(--nanyang-blue); margin-bottom: 4px; font-weight: 800; }
+.step-box p { font-size: 0.8rem; color: #334155; font-weight: 600; }
 
-.board-stats-summary { background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; }
-.b-stat { display: flex; justify-content: space-between; color: #cbd5e1; }
-.board-sub-title { font-size: 0.9rem; color: #fde047; margin-bottom: 8px; }
-.board-list { list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem; }
-.board-list li { background: rgba(255, 255, 255, 0.04); padding: 8px 10px; border-radius: 8px; display: flex; justify-content: space-between; color: #cbd5e1; }
+.board-stats-summary { background: #ffffff; border: 1.5px solid var(--nanyang-blue); padding: 14px; border-radius: 14px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; }
+.b-stat { display: flex; justify-content: space-between; color: var(--text-dark); font-weight: 700; }
+.board-sub-title { font-size: 0.95rem; color: var(--nanyang-blue); margin-bottom: 8px; font-weight: 900; }
+.board-list { list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; }
+.board-list li { background: #ffffff; border: 1px solid #cbd5e1; padding: 8px 12px; border-radius: 10px; display: flex; justify-content: space-between; color: var(--text-dark); font-weight: 700; }
 
 #toast-container {
   position: absolute;
