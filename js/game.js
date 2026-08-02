@@ -9,7 +9,7 @@ class GameEngine {
 
     this.shiftScore = 0.00;
     this.shiftServedCount = 0;
-    this.currentLevelIndex = 0; // 0-indexed for CAMPAIGN_LEVELS
+    this.currentLevelIndex = 0;
     this.shiftTimeRemaining = 45;
     this.shiftTimerInterval = null;
 
@@ -398,14 +398,12 @@ class GameEngine {
     this.shiftServedCount = 0;
     this.shiftTimeRemaining = currentLvlConfig.shiftSeconds;
 
-    // Apply Golden Mug Skin
     if (this.hasUpgrade('gold_skin')) {
       this.elGlassBody.classList.add('gold-skin');
     } else {
       this.elGlassBody.classList.remove('gold-skin');
     }
 
-    // Hide Main Menu, Show Gameplay HUD
     this.elMainMenuScreen.classList.add('hidden');
     this.elGameHeader.classList.remove('hidden');
     this.elShiftHud.classList.remove('hidden');
@@ -492,13 +490,11 @@ class GameEngine {
     const currentLvlConfig = CAMPAIGN_LEVELS[this.currentLevelIndex];
     const isVictory = this.shiftScore >= currentLvlConfig.targetScore;
 
-    // Calculate Stars Earned (1-3)
     let starsEarned = 0;
     if (this.shiftScore >= currentLvlConfig.starThresholds[2]) starsEarned = 3;
     else if (this.shiftScore >= currentLvlConfig.starThresholds[1]) starsEarned = 2;
     else if (this.shiftScore >= currentLvlConfig.starThresholds[0]) starsEarned = 1;
 
-    // Save Career Progress
     this.saveData.careerMoney += this.shiftScore;
     if (this.shiftScore > this.saveData.bestShiftScore) {
       this.saveData.bestShiftScore = this.shiftScore;
@@ -516,7 +512,6 @@ class GameEngine {
 
     this.saveGameData();
 
-    // Render Result Dialog
     this.elResultTitle.textContent = isVictory ? '🎉 Shift Victory!' : '💔 Shift Ended!';
     this.elResultLevelName.textContent = `Level ${currentLvlConfig.level}: ${currentLvlConfig.name}`;
     
@@ -588,11 +583,11 @@ class GameEngine {
     window.soundEngine.init();
     if (!this.activeMug.isEquipped) {
       this.autoEquipContainer(this.activeTab);
-      this.showToast('🍺 Container Ready! Select ingredients.', true);
+      this.showToast('🍺 Mug Ready! Select ingredients.', true);
     } else {
       this.resetMugState();
       window.soundEngine.playMugGrab();
-      this.showToast('🧹 Container emptied & rinsed clean.', true);
+      this.showToast('🧹 Mug emptied & rinsed clean.', true);
     }
   }
 
@@ -768,7 +763,7 @@ class GameEngine {
     if (this.activeMug.hasIce) ingredients.push('ICE');
 
     if (ingredients.length > 0) this.elMugStatusText.textContent = ingredients.join(' + ');
-    else this.elMugStatusText.textContent = 'Container Ready! Select ingredients';
+    else this.elMugStatusText.textContent = 'Mug Ready! Select ingredients';
   }
 
   resetMugState() {
@@ -795,7 +790,7 @@ class GameEngine {
 
     if (!this.activeMug.isEquipped) {
       window.soundEngine.playErrorSound();
-      this.showToast('⚠️ Equip a container and prepare drink first!');
+      this.showToast('⚠️ Equip a mug and prepare drink first!');
       return;
     }
 
@@ -807,7 +802,6 @@ class GameEngine {
 
       let earned = activeOrder.recipe.price;
 
-      // Apply Upgrade Perk Multipliers
       if (this.activeMug.kopiCount > 0 && this.hasUpgrade('coffee_boost')) {
         earned *= 1.25;
       }
@@ -815,7 +809,7 @@ class GameEngine {
         earned += 0.40;
       }
       if (this.hasUpgrade('gold_skin')) {
-        earned *= 1.50; // +50% Tip bonus
+        earned *= 1.50;
       }
 
       this.shiftScore += earned;
