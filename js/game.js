@@ -1,49 +1,116 @@
 /**
- * Kopitiam Kopi Kia - Main Gameplay Engine (Expanded Edition)
- * Supports Hot Brews, Iced Drinks, Canned Drinks, and Dispensers
+ * Kopitiam Kopi Kia - Main Gameplay & Campaign Saga Engine
+ * Supports Main Menu, Campaign Levels, Upgrade Shop, and LocalStorage Persistence
  */
 
 class GameEngine {
   constructor() {
-    this.score = 0.00;
-    this.servedCount = 0;
-    this.activeTab = 'brew';
+    this.saveData = this.loadSaveData();
 
+    this.shiftScore = 0.00;
+    this.shiftServedCount = 0;
+    this.currentLevelIndex = 0; // 0-indexed for CAMPAIGN_LEVELS
+    this.shiftTimeRemaining = 45;
+    this.shiftTimerInterval = null;
+
+    this.activeTab = 'brew';
     this.activeMug = {
       isEquipped: false,
-      type: 'brew', // 'brew' | 'can' | 'dispenser'
+      type: 'brew',
       kopiCount: 0,
       tehCount: 0,
-      milk: 'none', // 'none' | 'condensed' | 'evaporated'
+      milk: 'none',
       hasWater: false,
       hasIce: false,
-      sugar: 'kosong', // 'kosong' | 'siew_dai' | 'normal' | 'ga_dai'
-      canBrand: null, // 'coke' | 'sprite' | 'hundred_plus'
-      dispenserFlavor: null // 'bandung' | 'lime_juice'
+      sugar: 'kosong',
+      canBrand: null,
+      dispenserFlavor: null
     };
 
     this.queue = [];
-    this.timerInterval = null;
-    this.timeRemaining = 22;
-    this.maxTime = 22;
+    this.orderTimerInterval = null;
+    this.orderTimeRemaining = 22;
 
     this.initElements();
     this.bindEvents();
-    this.startNewGame();
+    this.updateMainMenuDisplay();
   }
 
+  /* ==========================================================================
+     LOCAL STORAGE PERSISTENCE
+     ========================================================================== */
+  loadSaveData() {
+    const defaultData = {
+      careerMoney: 0.00,
+      unlockedLevel: 1,
+      levelStars: { 1: 0 },
+      streak: 0,
+      upgrades: [],
+      bestShiftScore: 0.00
+    };
+
+    try {
+      const saved = localStorage.getItem('kopitiam_kopi_kia_save');
+      return saved ? Object.assign(defaultData, JSON.parse(saved)) : defaultData;
+    } catch (e) {
+      return defaultData;
+    }
+  }
+
+  saveGameData() {
+    try {
+      localStorage.setItem('kopitiam_kopi_kia_save', JSON.stringify(this.saveData));
+    } catch (e) {
+      console.warn('LocalStorage save error:', e);
+    }
+    this.updateMainMenuDisplay();
+  }
+
+  hasUpgrade(perkId) {
+    return this.saveData.upgrades.includes(perkId);
+  }
+
+  /* ==========================================================================
+     ELEMENT BINDINGS & UI INITIALIZATION
+     ========================================================================== */
   initElements() {
+    // Screens
+    this.elMainMenuScreen = document.getElementById('main-menu-screen');
+    this.elGameHeader = document.getElementById('game-header');
+    this.elShiftHud = document.getElementById('shift-hud');
+    this.elSpotlightCard = document.getElementById('active-order-spotlight');
+    this.elCustomerQueueRow = document.getElementById('customer-queue-row');
+    this.elGlassMugOverlay = document.getElementById('glass-mug-overlay');
+    this.elBottomActionBar = document.getElementById('bottom-action-bar');
+
+    // Main Menu Displays
+    this.elMenuLevel = document.getElementById('menu-player-level');
+    this.elMenuMoney = document.getElementById('menu-player-money');
+    this.elMenuStreak = document.getElementById('menu-player-streak');
+    this.elBtnStartCampaign = document.getElementById('btn-start-campaign');
+
+    // Main Menu Action Grid Buttons
+    this.elBtnMenuRecipes = document.getElementById('btn-menu-recipes');
+    this.elBtnMenuBoard = document.getElementById('btn-menu-board');
+    this.elBtnMenuShop = document.getElementById('btn-menu-shop');
+    this.elBtnMenuHowTo = document.getElementById('btn-menu-howto');
+    this.elBtnBackMenu = document.getElementById('btn-back-menu');
+
+    // Shift HUD
+    this.elShiftLevelName = document.getElementById('shift-level-name');
+    this.elHudGoalText = document.getElementById('hud-goal-text');
+    this.elShiftTimerText = document.getElementById('shift-timer-text');
+
+    // Gameplay Header & Spotlight
     this.elScoreText = document.getElementById('score-text');
     this.elSpotlightTimer = document.getElementById('spotlight-timer');
     this.elSpotlightProgressBar = document.getElementById('spotlight-progress-bar');
     this.elSpotlightAvatar = document.getElementById('spotlight-avatar');
     this.elSpotlightCustomerName = document.getElementById('spotlight-customer-name');
     this.elSpotlightOrderName = document.getElementById('spotlight-order-name');
-    this.elSpotlightCard = document.getElementById('active-order-spotlight');
 
-    this.elMugOverlay = document.getElementById('glass-mug-overlay');
+    // Mug Layers
     this.elGlassBody = document.getElementById('mug-glass-body');
-    this.elGlassHandle = document.getElementById('mug-handle');
     this.elLiquidCondensed = document.getElementById('liquid-condensed-milk');
     this.elLiquidEvaporated = document.getElementById('liquid-evaporated-milk');
     this.elLiquidBrew = document.getElementById('liquid-brew');
@@ -53,7 +120,7 @@ class GameEngine {
     this.elSteamContainer = document.getElementById('mug-steam-container');
     this.elMugStatusText = document.getElementById('mug-status-text');
 
-    // Tabs & Panels
+    // Toolbar Buttons
     this.stationTabs = document.querySelectorAll('.station-tab');
     this.stationPanels = {
       brew: document.getElementById('panel-brew'),
@@ -61,11 +128,10 @@ class GameEngine {
       dispenser: document.getElementById('panel-dispenser')
     };
 
-    // Toolbar Buttons
     this.elBtnGrabMug = document.getElementById('btn-grab-mug');
     this.elBtnGrabCupCan = document.getElementById('btn-grab-cup-can');
     this.elBtnGrabCupDisp = document.getElementById('btn-grab-cup-disp');
-    
+
     this.elBtnKopi = document.getElementById('btn-kopi');
     this.elBtnTeh = document.getElementById('btn-teh');
     this.elBtnWater = document.getElementById('btn-water');
@@ -74,20 +140,39 @@ class GameEngine {
     this.elBtnSugar = document.getElementById('btn-sugar');
     this.elBtnIce = document.getElementById('btn-ice');
 
-    // Cans & Dispensers
     this.elBtnCoke = document.getElementById('btn-coke');
     this.elBtnSprite = document.getElementById('btn-sprite');
     this.elBtnHundred = document.getElementById('btn-hundred');
     this.elBtnBandung = document.getElementById('btn-bandung');
     this.elBtnLime = document.getElementById('btn-lime');
-
     this.elBtnServe = document.getElementById('btn-serve');
 
     this.elLabelSugar = document.getElementById('label-sugar');
     this.elLabelIce = document.getElementById('label-ice');
 
-    this.elToastContainer = document.getElementById('toast-container');
+    // Modals
+    this.elSagaMapModal = document.getElementById('saga-map-modal');
+    this.elSagaNodesContainer = document.getElementById('saga-nodes-container');
+    this.elShopModal = document.getElementById('shop-modal');
+    this.elShopBalanceText = document.getElementById('shop-balance-text');
+    this.elShopItemsContainer = document.getElementById('shop-items-container');
+    this.elBoardModal = document.getElementById('board-modal');
+    this.elHowToModal = document.getElementById('howto-modal');
     this.elRecipeModal = document.getElementById('recipe-modal');
+    this.elLevelResultModal = document.getElementById('level-result-modal');
+
+    // Result Screen Elements
+    this.elResultTitle = document.getElementById('result-title');
+    this.elResultLevelName = document.getElementById('result-level-name');
+    this.elResultStarsRow = document.getElementById('result-stars-row');
+    this.elResShiftScore = document.getElementById('res-shift-score');
+    this.elResShiftGoal = document.getElementById('res-shift-goal');
+    this.elResCustomersCount = document.getElementById('res-customers-count');
+    this.elBtnRetryLevel = document.getElementById('btn-retry-level');
+    this.elBtnNextLevel = document.getElementById('btn-next-level');
+
+    // Global Containers
+    this.elToastContainer = document.getElementById('toast-container');
     this.elBtnRecipeModal = document.getElementById('btn-recipe-modal');
     this.elBtnCloseModal = document.getElementById('btn-close-modal');
     this.elBtnSoundToggle = document.getElementById('btn-sound-toggle');
@@ -95,21 +180,75 @@ class GameEngine {
   }
 
   bindEvents() {
-    // Station Tab Switching
+    // Main Menu Buttons
+    this.elBtnStartCampaign.addEventListener('click', () => {
+      window.soundEngine.playMenuClick();
+      this.openSagaMap();
+    });
+
+    this.elBtnMenuRecipes.addEventListener('click', () => {
+      window.soundEngine.playMenuClick();
+      this.elRecipeModal.classList.remove('hidden');
+    });
+
+    this.elBtnMenuBoard.addEventListener('click', () => {
+      window.soundEngine.playMenuClick();
+      this.openBoardModal();
+    });
+
+    this.elBtnMenuShop.addEventListener('click', () => {
+      window.soundEngine.playMenuClick();
+      this.openShopModal();
+    });
+
+    this.elBtnMenuHowTo.addEventListener('click', () => {
+      window.soundEngine.playMenuClick();
+      this.elHowToModal.classList.remove('hidden');
+    });
+
+    this.elBtnBackMenu.addEventListener('click', () => {
+      window.soundEngine.playMenuClick();
+      this.exitToMainMenu();
+    });
+
+    // Close Modals
+    document.querySelector('.btn-close-saga').addEventListener('click', () => this.elSagaMapModal.classList.add('hidden'));
+    document.querySelector('.btn-close-shop').addEventListener('click', () => this.elShopModal.classList.add('hidden'));
+    document.querySelector('.btn-close-board').addEventListener('click', () => this.elBoardModal.classList.add('hidden'));
+    document.querySelector('.btn-close-howto').addEventListener('click', () => this.elHowToModal.classList.add('hidden'));
+    this.elBtnCloseModal.addEventListener('click', () => this.elRecipeModal.classList.add('hidden'));
+
+    // Result Buttons
+    this.elBtnRetryLevel.addEventListener('click', () => {
+      window.soundEngine.playMenuClick();
+      this.elLevelResultModal.classList.add('hidden');
+      this.startLevelShift(this.currentLevelIndex);
+    });
+
+    this.elBtnNextLevel.addEventListener('click', () => {
+      window.soundEngine.playMenuClick();
+      this.elLevelResultModal.classList.add('hidden');
+      if (this.currentLevelIndex < CAMPAIGN_LEVELS.length - 1) {
+        this.startLevelShift(this.currentLevelIndex + 1);
+      } else {
+        this.openSagaMap();
+      }
+    });
+
+    // Station Tabs
     this.stationTabs.forEach(tab => {
       tab.addEventListener('click', (e) => {
-        const targetTab = e.target.getAttribute('data-tab');
-        this.switchTab(targetTab);
+        this.switchTab(e.target.getAttribute('data-tab'));
       });
     });
 
-    // Mug & Cup Grabs
+    // Container Grabs
     const grabHandler = () => this.handleGrabContainer();
     this.elBtnGrabMug.addEventListener('click', grabHandler);
     this.elBtnGrabCupCan.addEventListener('click', grabHandler);
     this.elBtnGrabCupDisp.addEventListener('click', grabHandler);
 
-    // Brew Station Actions
+    // Ingredient Buttons
     this.elBtnKopi.addEventListener('click', () => this.handleAddKopi());
     this.elBtnTeh.addEventListener('click', () => this.handleAddTeh());
     this.elBtnWater.addEventListener('click', () => this.handleToggleWater());
@@ -118,26 +257,14 @@ class GameEngine {
     this.elBtnSugar.addEventListener('click', () => this.handleCycleSugar());
     this.elBtnIce.addEventListener('click', () => this.handleToggleIce());
 
-    // Cans Station Actions
     this.elBtnCoke.addEventListener('click', () => this.handleSelectCan('coke'));
     this.elBtnSprite.addEventListener('click', () => this.handleSelectCan('sprite'));
     this.elBtnHundred.addEventListener('click', () => this.handleSelectCan('hundred_plus'));
 
-    // Dispenser Station Actions
     this.elBtnBandung.addEventListener('click', () => this.handleSelectDispenser('bandung'));
     this.elBtnLime.addEventListener('click', () => this.handleSelectDispenser('lime_juice'));
 
-    // Serve Tray
     this.elBtnServe.addEventListener('click', () => this.handleServeTray());
-
-    // Recipe Guide Modal & Sound
-    this.elBtnRecipeModal.addEventListener('click', () => {
-      window.soundEngine.init();
-      this.elRecipeModal.classList.remove('hidden');
-    });
-    this.elBtnCloseModal.addEventListener('click', () => {
-      this.elRecipeModal.classList.add('hidden');
-    });
 
     this.elBtnSoundToggle.addEventListener('click', () => {
       const isMuted = window.soundEngine.toggleMute();
@@ -145,85 +272,269 @@ class GameEngine {
     });
   }
 
-  switchTab(tabName) {
-    window.soundEngine.init();
-    this.activeTab = tabName;
-
-    this.stationTabs.forEach(t => {
-      if (t.getAttribute('data-tab') === tabName) {
-        t.classList.add('active-tab');
-      } else {
-        t.classList.remove('active-tab');
-      }
-    });
-
-    Object.keys(this.stationPanels).forEach(key => {
-      if (key === tabName) {
-        this.stationPanels[key].classList.remove('hidden');
-      } else {
-        this.stationPanels[key].classList.add('hidden');
-      }
-    });
+  updateMainMenuDisplay() {
+    this.elMenuLevel.textContent = `Lv ${this.saveData.unlockedLevel}`;
+    this.elMenuMoney.textContent = `$${this.saveData.careerMoney.toFixed(2)}`;
+    this.elMenuStreak.textContent = `${this.saveData.streak}`;
   }
 
-  startNewGame() {
-    this.score = 0.00;
-    this.servedCount = 0;
-    this.updateScoreDisplay();
+  exitToMainMenu() {
+    clearInterval(this.shiftTimerInterval);
+    clearInterval(this.orderTimerInterval);
+
+    this.elGameHeader.classList.add('hidden');
+    this.elShiftHud.classList.add('hidden');
+    this.elSpotlightCard.classList.add('hidden');
+    this.elCustomerQueueRow.classList.add('hidden');
+    this.elGlassMugOverlay.classList.add('hidden');
+    this.elBottomActionBar.classList.add('hidden');
+
+    this.elMainMenuScreen.classList.remove('hidden');
+    this.updateMainMenuDisplay();
+  }
+
+  /* ==========================================================================
+     CAMPAIGN SAGA MAP & UPGRADE SHOP
+     ========================================================================== */
+  openSagaMap() {
+    this.elSagaNodesContainer.innerHTML = '';
+
+    CAMPAIGN_LEVELS.forEach((lvl, idx) => {
+      const isUnlocked = lvl.level <= this.saveData.unlockedLevel;
+      const starsEarned = this.saveData.levelStars[lvl.level] || 0;
+
+      const nodeCard = document.createElement('div');
+      nodeCard.className = `saga-node-card ${isUnlocked ? 'node-unlocked' : 'node-locked'}`;
+
+      let starsHtml = '';
+      for (let s = 1; s <= 3; s++) {
+        starsHtml += s <= starsEarned ? '⭐' : '☆';
+      }
+
+      nodeCard.innerHTML = `
+        <div class="node-info">
+          <h4>Level ${lvl.level}: ${lvl.name}</h4>
+          <p>Target Goal: $${lvl.targetScore.toFixed(2)} (${lvl.shiftSeconds}s)</p>
+        </div>
+        <div class="star-row">${isUnlocked ? starsHtml : '🔒'}</div>
+      `;
+
+      if (isUnlocked) {
+        nodeCard.addEventListener('click', () => {
+          window.soundEngine.playMenuClick();
+          this.elSagaMapModal.classList.add('hidden');
+          this.startLevelShift(idx);
+        });
+      }
+
+      this.elSagaNodesContainer.appendChild(nodeCard);
+    });
+
+    this.elSagaMapModal.classList.remove('hidden');
+  }
+
+  openShopModal() {
+    this.elShopBalanceText.textContent = `$${this.saveData.careerMoney.toFixed(2)}`;
+    this.elShopItemsContainer.innerHTML = '';
+
+    SHOP_UPGRADES.forEach(upg => {
+      const isBought = this.hasUpgrade(upg.perk);
+
+      const card = document.createElement('div');
+      card.className = 'shop-item-card';
+      card.innerHTML = `
+        <div class="shop-item-left">
+          <span class="shop-icon">${upg.icon}</span>
+          <div class="shop-item-details">
+            <h4>${upg.name}</h4>
+            <p>${upg.desc}</p>
+          </div>
+        </div>
+        <button class="buy-btn ${isBought ? 'bought' : ''}" data-id="${upg.id}">
+          ${isBought ? 'OWNED' : `$${upg.price.toFixed(2)}`}
+        </button>
+      `;
+
+      if (!isBought) {
+        const btn = card.querySelector('.buy-btn');
+        btn.addEventListener('click', () => {
+          if (this.saveData.careerMoney >= upg.price) {
+            this.saveData.careerMoney -= upg.price;
+            this.saveData.upgrades.push(upg.perk);
+            this.saveGameData();
+            window.soundEngine.playShopBuy();
+            this.showToast(`🎉 Purchased ${upg.name}!`, true);
+            this.openShopModal();
+          } else {
+            window.soundEngine.playErrorSound();
+            this.showToast('⚠️ Not enough career money!');
+          }
+        });
+      }
+
+      this.elShopItemsContainer.appendChild(card);
+    });
+
+    this.elShopModal.classList.remove('hidden');
+  }
+
+  openBoardModal() {
+    document.getElementById('board-high-level').textContent = `Lv ${this.saveData.unlockedLevel}`;
+    document.getElementById('board-career-money').textContent = `$${this.saveData.careerMoney.toFixed(2)}`;
+    document.getElementById('board-max-streak').textContent = `${this.saveData.streak}`;
+    document.getElementById('board-your-best').textContent = `$${this.saveData.bestShiftScore.toFixed(2)}`;
+
+    this.elBoardModal.classList.remove('hidden');
+  }
+
+  /* ==========================================================================
+     GAMEPLAY SHIFT ENGINE
+     ========================================================================== */
+  startLevelShift(levelIdx) {
+    this.currentLevelIndex = levelIdx;
+    const currentLvlConfig = CAMPAIGN_LEVELS[levelIdx];
+
+    this.shiftScore = 0.00;
+    this.shiftServedCount = 0;
+    this.shiftTimeRemaining = currentLvlConfig.shiftSeconds;
+
+    // Apply Golden Mug Skin
+    if (this.hasUpgrade('gold_skin')) {
+      this.elGlassBody.classList.add('gold-skin');
+    } else {
+      this.elGlassBody.classList.remove('gold-skin');
+    }
+
+    // Hide Main Menu, Show Gameplay HUD
+    this.elMainMenuScreen.classList.add('hidden');
+    this.elGameHeader.classList.remove('hidden');
+    this.elShiftHud.classList.remove('hidden');
+    this.elSpotlightCard.classList.remove('hidden');
+    this.elCustomerQueueRow.classList.remove('hidden');
+    this.elGlassMugOverlay.classList.remove('hidden');
+    this.elBottomActionBar.classList.remove('hidden');
+
+    this.elShiftLevelName.textContent = `Level ${currentLvlConfig.level}: ${currentLvlConfig.name}`;
+    this.updateShiftHudDisplay();
 
     this.queue = [
-      OrderManager.getRandomOrder(),
-      OrderManager.getRandomOrder(),
-      OrderManager.getRandomOrder()
+      OrderManager.getRandomOrder(currentLvlConfig.level),
+      OrderManager.getRandomOrder(currentLvlConfig.level),
+      OrderManager.getRandomOrder(currentLvlConfig.level)
     ];
 
     this.resetMugState();
     this.renderQueue();
-    this.startTimer();
+    this.startShiftTimer();
+    this.startOrderTimer();
   }
 
-  startTimer() {
-    clearInterval(this.timerInterval);
-    this.timeRemaining = 22;
-    this.maxTime = 22;
-    this.updateTimerDisplay();
+  startShiftTimer() {
+    clearInterval(this.shiftTimerInterval);
 
-    this.timerInterval = setInterval(() => {
-      this.timeRemaining--;
-      this.updateTimerDisplay();
+    this.shiftTimerInterval = setInterval(() => {
+      this.shiftTimeRemaining--;
+      this.elShiftTimerText.textContent = `${this.shiftTimeRemaining}s`;
 
-      if (this.timeRemaining <= 0) {
-        clearInterval(this.timerInterval);
+      if (this.shiftTimeRemaining <= 0) {
+        clearInterval(this.shiftTimerInterval);
+        clearInterval(this.orderTimerInterval);
+        this.endLevelShift();
+      }
+    }, 1000);
+  }
+
+  startOrderTimer() {
+    clearInterval(this.orderTimerInterval);
+    const baseTimer = 22;
+    const timerBonus = this.hasUpgrade('timer_boost') ? 5 : 0;
+    this.orderTimeRemaining = baseTimer + timerBonus;
+    
+    this.updateOrderTimerDisplay();
+
+    this.orderTimerInterval = setInterval(() => {
+      this.orderTimeRemaining--;
+      this.updateOrderTimerDisplay();
+
+      if (this.orderTimeRemaining <= 0) {
+        clearInterval(this.orderTimerInterval);
         this.handleOrderTimeout();
       }
     }, 1000);
   }
 
-  updateTimerDisplay() {
-    const formatted = `0:${this.timeRemaining < 10 ? '0' : ''}${this.timeRemaining}`;
+  updateOrderTimerDisplay() {
+    const formatted = `0:${this.orderTimeRemaining < 10 ? '0' : ''}${this.orderTimeRemaining}`;
     this.elSpotlightTimer.textContent = formatted;
 
-    const pct = Math.max(0, (this.timeRemaining / this.maxTime) * 100);
+    const maxT = 22 + (this.hasUpgrade('timer_boost') ? 5 : 0);
+    const pct = Math.max(0, (this.orderTimeRemaining / maxT) * 100);
     this.elSpotlightProgressBar.style.width = `${pct}%`;
-
-    if (this.timeRemaining <= 5) {
-      this.elSpotlightProgressBar.style.background = 'linear-gradient(90deg, #ef4444, #f87171)';
-    } else {
-      this.elSpotlightProgressBar.style.background = 'linear-gradient(90deg, #06b6d4, #22d3ee)';
-    }
   }
 
   handleOrderTimeout() {
     window.soundEngine.playErrorSound();
     const currentCustomer = this.queue[0];
     this.showToast(`⌛ Time out! ${currentCustomer.customerName} left without their drink!`);
+    this.saveData.streak = 0;
+    this.saveGameData();
     this.shakeSpotlightCard();
     this.advanceQueue();
   }
 
+  updateShiftHudDisplay() {
+    const currentLvlConfig = CAMPAIGN_LEVELS[this.currentLevelIndex];
+    this.elScoreText.textContent = `$${this.shiftScore.toFixed(2)}`;
+    this.elHudGoalText.textContent = `$${this.shiftScore.toFixed(2)} / $${currentLvlConfig.targetScore.toFixed(2)} Goal`;
+  }
+
+  endLevelShift() {
+    const currentLvlConfig = CAMPAIGN_LEVELS[this.currentLevelIndex];
+    const isVictory = this.shiftScore >= currentLvlConfig.targetScore;
+
+    // Calculate Stars Earned (1-3)
+    let starsEarned = 0;
+    if (this.shiftScore >= currentLvlConfig.starThresholds[2]) starsEarned = 3;
+    else if (this.shiftScore >= currentLvlConfig.starThresholds[1]) starsEarned = 2;
+    else if (this.shiftScore >= currentLvlConfig.starThresholds[0]) starsEarned = 1;
+
+    // Save Career Progress
+    this.saveData.careerMoney += this.shiftScore;
+    if (this.shiftScore > this.saveData.bestShiftScore) {
+      this.saveData.bestShiftScore = this.shiftScore;
+    }
+
+    if (starsEarned >= 1) {
+      this.saveData.levelStars[currentLvlConfig.level] = Math.max(this.saveData.levelStars[currentLvlConfig.level] || 0, starsEarned);
+      if (currentLvlConfig.level === this.saveData.unlockedLevel && this.saveData.unlockedLevel < CAMPAIGN_LEVELS.length) {
+        this.saveData.unlockedLevel++;
+      }
+      window.soundEngine.playVictoryFanfare();
+    } else {
+      window.soundEngine.playErrorSound();
+    }
+
+    this.saveGameData();
+
+    // Render Result Dialog
+    this.elResultTitle.textContent = isVictory ? '🎉 Shift Victory!' : '💔 Shift Ended!';
+    this.elResultLevelName.textContent = `Level ${currentLvlConfig.level}: ${currentLvlConfig.name}`;
+    
+    let starsHtml = '';
+    for (let s = 1; s <= 3; s++) {
+      starsHtml += s <= starsEarned ? '<span class="star-big">⭐</span>' : '<span class="star-big" style="opacity: 0.3;">☆</span>';
+    }
+    this.elResultStarsRow.innerHTML = starsHtml;
+
+    this.elResShiftScore.textContent = `$${this.shiftScore.toFixed(2)}`;
+    this.elResShiftGoal.textContent = `$${currentLvlConfig.targetScore.toFixed(2)}`;
+    this.elResCustomersCount.textContent = `${this.shiftServedCount}`;
+
+    this.elLevelResultModal.classList.remove('hidden');
+  }
+
   renderQueue() {
     const activeOrder = this.queue[0];
-
     this.elSpotlightAvatar.textContent = activeOrder.customerAvatar;
     this.elSpotlightCustomerName.textContent = `${activeOrder.customerName}:`;
     this.elSpotlightOrderName.textContent = `${activeOrder.recipe.name}!`;
@@ -240,20 +551,35 @@ class GameEngine {
 
   advanceQueue() {
     this.queue.shift();
-    this.queue.push(OrderManager.getRandomOrder());
+    this.queue.push(OrderManager.getRandomOrder(CAMPAIGN_LEVELS[this.currentLevelIndex].level));
     this.renderQueue();
-    this.startTimer();
+    this.startOrderTimer();
     this.resetMugState();
   }
 
+  switchTab(tabName) {
+    window.soundEngine.init();
+    this.activeTab = tabName;
+
+    this.stationTabs.forEach(t => {
+      if (t.getAttribute('data-tab') === tabName) t.classList.add('active-tab');
+      else t.classList.remove('active-tab');
+    });
+
+    Object.keys(this.stationPanels).forEach(key => {
+      if (key === tabName) this.stationPanels[key].classList.remove('hidden');
+      else this.stationPanels[key].classList.add('hidden');
+    });
+  }
+
   /* ==========================================================================
-     CONTAINER & INGREDIENT ACTIONS
+     MUG & INGREDIENTS
      ========================================================================== */
   autoEquipContainer(type = 'brew') {
     if (!this.activeMug.isEquipped) {
       this.activeMug.isEquipped = true;
       this.activeMug.type = type;
-      this.elMugOverlay.classList.add('mug-active');
+      this.elGlassMugOverlay.classList.add('mug-active');
       window.soundEngine.playMugGrab();
     }
   }
@@ -273,7 +599,8 @@ class GameEngine {
   handleAddKopi() {
     this.autoEquipContainer('brew');
     this.activeMug.type = 'brew';
-    window.soundEngine.playPourSound(0.5);
+    const fillDuration = this.hasUpgrade('fast_pour') ? 0.25 : 0.5;
+    window.soundEngine.playPourSound(fillDuration);
 
     this.activeMug.kopiCount = this.activeMug.kopiCount === 0 ? 1 : 0;
     this.renderMugVisuals();
@@ -282,7 +609,8 @@ class GameEngine {
   handleAddTeh() {
     this.autoEquipContainer('brew');
     this.activeMug.type = 'brew';
-    window.soundEngine.playPourSound(0.5);
+    const fillDuration = this.hasUpgrade('fast_pour') ? 0.25 : 0.5;
+    window.soundEngine.playPourSound(fillDuration);
 
     this.activeMug.tehCount = this.activeMug.tehCount === 0 ? 1 : 0;
     this.renderMugVisuals();
@@ -352,7 +680,6 @@ class GameEngine {
   }
 
   renderMugVisuals() {
-    // Ice Cubes
     if (this.activeMug.hasIce) {
       this.elIceCubes.classList.remove('hidden');
       this.elLabelIce.textContent = 'Ice (Added)';
@@ -361,9 +688,7 @@ class GameEngine {
       this.elLabelIce.textContent = 'Ice Bin';
     }
 
-    // BREW RENDER
     if (this.activeMug.type === 'brew') {
-      // Milk
       if (this.activeMug.milk === 'condensed') {
         this.elLiquidCondensed.style.height = '22%';
         this.elLiquidEvaporated.style.height = '0%';
@@ -375,7 +700,6 @@ class GameEngine {
         this.elLiquidEvaporated.style.height = '0%';
       }
 
-      // Brew
       if (this.activeMug.kopiCount > 0 && this.activeMug.tehCount > 0) {
         this.elLiquidBrew.style.height = '42%';
         this.elLiquidBrew.className = 'liquid-layer yuanyang-color';
@@ -389,27 +713,19 @@ class GameEngine {
         this.elLiquidBrew.style.height = '0%';
       }
 
-      // Water & Steam
       if (this.activeMug.hasWater) {
         this.elLiquidWater.style.height = '28%';
-        if (!this.activeMug.hasIce) {
-          this.elSteamContainer.classList.remove('hidden');
-        } else {
-          this.elSteamContainer.classList.add('hidden');
-        }
+        if (!this.activeMug.hasIce) this.elSteamContainer.classList.remove('hidden');
+        else this.elSteamContainer.classList.add('hidden');
       } else {
         this.elLiquidWater.style.height = '0%';
         this.elSteamContainer.classList.add('hidden');
       }
 
-      // Sugar
       const sugarHeights = { kosong: '0px', siew_dai: '6px', normal: '12px', ga_dai: '18px' };
       this.elSugarIndicator.style.height = sugarHeights[this.activeMug.sugar];
       this.elLabelSugar.textContent = `Sugar (${this.activeMug.sugar.replace('_', ' ')})`;
-    }
-
-    // CANNED RENDER
-    else if (this.activeMug.type === 'can') {
+    } else if (this.activeMug.type === 'can') {
       this.elLiquidCondensed.style.height = '0%';
       this.elLiquidEvaporated.style.height = '0%';
       this.elLiquidWater.style.height = '0%';
@@ -420,10 +736,7 @@ class GameEngine {
       if (this.activeMug.canBrand === 'coke') this.elLiquidBrew.className = 'liquid-layer coke-color';
       else if (this.activeMug.canBrand === 'sprite') this.elLiquidBrew.className = 'liquid-layer sprite-color';
       else if (this.activeMug.canBrand === 'hundred_plus') this.elLiquidBrew.className = 'liquid-layer hundred-color';
-    }
-
-    // DISPENSER RENDER
-    else if (this.activeMug.type === 'dispenser') {
+    } else if (this.activeMug.type === 'dispenser') {
       this.elLiquidCondensed.style.height = '0%';
       this.elLiquidEvaporated.style.height = '0%';
       this.elLiquidWater.style.height = '0%';
@@ -435,7 +748,6 @@ class GameEngine {
       else if (this.activeMug.dispenserFlavor === 'lime_juice') this.elLiquidBrew.className = 'liquid-layer lime-color';
     }
 
-    // Dynamic Mug Status Text
     const ingredients = [];
     if (this.activeMug.type === 'can') {
       if (this.activeMug.canBrand) ingredients.push(this.activeMug.canBrand.replace('_', ' ').toUpperCase());
@@ -455,11 +767,8 @@ class GameEngine {
 
     if (this.activeMug.hasIce) ingredients.push('ICE');
 
-    if (ingredients.length > 0) {
-      this.elMugStatusText.textContent = ingredients.join(' + ');
-    } else {
-      this.elMugStatusText.textContent = 'Container Ready! Select ingredients';
-    }
+    if (ingredients.length > 0) this.elMugStatusText.textContent = ingredients.join(' + ');
+    else this.elMugStatusText.textContent = 'Container Ready! Select ingredients';
   }
 
   resetMugState() {
@@ -476,14 +785,11 @@ class GameEngine {
       dispenserFlavor: null
     };
 
-    this.elMugOverlay.classList.remove('mug-active');
+    this.elGlassMugOverlay.classList.remove('mug-active');
     this.elMugStatusText.textContent = 'Tap "Fresh Mug" to start';
     this.renderMugVisuals();
   }
 
-  /* ==========================================================================
-     SERVE & VALIDATION LOGIC
-     ========================================================================== */
   handleServeTray() {
     window.soundEngine.init();
 
@@ -499,24 +805,36 @@ class GameEngine {
     if (validation.isValid) {
       window.soundEngine.playKaChing();
 
-      const earned = activeOrder.recipe.price;
-      this.score += earned;
-      this.servedCount++;
-      this.updateScoreDisplay();
+      let earned = activeOrder.recipe.price;
 
+      // Apply Upgrade Perk Multipliers
+      if (this.activeMug.kopiCount > 0 && this.hasUpgrade('coffee_boost')) {
+        earned *= 1.25;
+      }
+      if (this.activeMug.hasIce && this.hasUpgrade('ice_boost')) {
+        earned += 0.40;
+      }
+      if (this.hasUpgrade('gold_skin')) {
+        earned *= 1.50; // +50% Tip bonus
+      }
+
+      this.shiftScore += earned;
+      this.shiftServedCount++;
+      this.saveData.streak++;
+      this.saveGameData();
+
+      this.updateShiftHudDisplay();
       this.showFloatingEarnings(`+$${earned.toFixed(2)}`);
       this.showToast(`✨ Ka-Ching! Served ${activeOrder.recipe.name} to ${activeOrder.customerName}! (+$${earned.toFixed(2)})`, true);
       this.advanceQueue();
     } else {
       window.soundEngine.playErrorSound();
+      this.saveData.streak = 0;
+      this.saveGameData();
       this.shakeSpotlightCard();
       const firstError = validation.errors[0] || 'Incorrect recipe!';
       this.showToast(`❌ Wrong Drink for ${activeOrder.customerName}! ${firstError}`);
     }
-  }
-
-  updateScoreDisplay() {
-    this.elScoreText.textContent = `$${this.score.toFixed(2)}`;
   }
 
   showFloatingEarnings(text) {

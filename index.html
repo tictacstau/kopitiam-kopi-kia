@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Kopitiam Kopi Kia - Mobile HTML5 Game</title>
-  <meta name="description" content="Kopitiam Kopi Kia - Authentic Singapore Coffee Stall Simulation Game with Realistic Web Audio and Glass Dynamic Visuals">
+  <meta name="description" content="Kopitiam Kopi Kia - Authentic Singapore Coffee Stall Simulation Game with Campaign Mode, Upgrade Shop & Real-Time Audio Synthesis">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@1,800;1,900&display=swap" rel="stylesheet">
@@ -19,11 +19,83 @@
     <div id="game-background" style="background-image: url('clean_background.jpg');"></div>
     <div id="background-vignette"></div>
 
-    <!-- Top Navigation & Stats Header -->
-    <header id="game-header">
+    <!-- ==========================================================================
+         MAIN MENU SCREEN (Matching Reference Screenshot)
+         ========================================================================== -->
+    <section id="main-menu-screen" class="screen-overlay">
+      <div class="menu-content">
+        <!-- Singapore Pill Badge -->
+        <div class="singapore-pill">
+          <span>新加坡 · SINGAPORE</span>
+        </div>
+
+        <!-- Glowing Logo Title -->
+        <div class="menu-brand-title">
+          <h1 class="glowing-script-logo">Kopitiam<br><span class="logo-sub">Kopi Kia</span></h1>
+        </div>
+
+        <!-- Subtitle Tagline -->
+        <p class="menu-tagline">
+          Serve the uncles & aunties.<br>
+          Master every kopi order.
+        </p>
+
+        <!-- Player Stats Bar -->
+        <div class="player-stats-bar">
+          <div class="menu-stat-pill">
+            <span class="stat-icon">⭐</span>
+            <span id="menu-player-level">Lv 1</span>
+          </div>
+          <div class="menu-stat-pill">
+            <span class="stat-icon">💰</span>
+            <span id="menu-player-money">$0.00</span>
+          </div>
+          <div class="menu-stat-pill">
+            <span class="stat-icon">🔥</span>
+            <span id="menu-player-streak">0</span>
+          </div>
+        </div>
+
+        <!-- Primary Call to Action Button -->
+        <button id="btn-start-campaign" class="primary-cta-btn">
+          <span class="btn-icon">☕</span>
+          <span class="cta-text">Start Campaign</span>
+        </button>
+
+        <!-- Secondary 2x2 Action Grid -->
+        <div class="menu-action-grid">
+          <button id="btn-menu-recipes" class="menu-grid-btn">
+            <span class="grid-icon">📖</span>
+            <span>Recipes</span>
+          </button>
+          <button id="btn-menu-board" class="menu-grid-btn">
+            <span class="grid-icon">🏆</span>
+            <span>Board</span>
+          </button>
+          <button id="btn-menu-shop" class="menu-grid-btn">
+            <span class="grid-icon">🛒</span>
+            <span>Shop</span>
+          </button>
+          <button id="btn-menu-howto" class="menu-grid-btn">
+            <span class="grid-icon">❓</span>
+            <span>How To</span>
+          </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="menu-footer">
+          <span>Kopi Kia © Local Kopitiam Games</span>
+        </footer>
+      </div>
+    </section>
+
+    <!-- Top Navigation & Stats Header (Inside Gameplay) -->
+    <header id="game-header" class="hidden">
       <div id="brand-title">
-        <span class="title-kopitiam">Kopitiam</span>
-        <span class="title-kopikia">Kopi Kia</span>
+        <button id="btn-back-menu" class="header-back-btn" title="Main Menu">🏠</button>
+        <div class="header-level-badge">
+          <span id="shift-level-name">Level 1</span>
+        </div>
       </div>
 
       <div id="game-stats">
@@ -31,17 +103,31 @@
           <span class="stat-icon">💰</span>
           <span id="score-text">$0.00</span>
         </div>
-        <button id="btn-sound-toggle" class="header-icon-btn" title="Toggle Sound" aria-label="Toggle Sound">
+        <button id="btn-sound-toggle" class="header-icon-btn" title="Toggle Sound">
           <span class="icon">🔊</span>
         </button>
-        <button id="btn-recipe-modal" class="header-icon-btn" title="Recipe Guide" aria-label="Recipe Guide">
+        <button id="btn-recipe-modal" class="header-icon-btn" title="Recipe Guide">
           <span class="icon">📖</span>
         </button>
       </div>
     </header>
 
+    <!-- Campaign Shift Target HUD Bar (Inside Gameplay) -->
+    <section id="shift-hud" class="hidden">
+      <div class="hud-card glass-card">
+        <div class="hud-target-row">
+          <span class="hud-label">SHIFT GOAL:</span>
+          <strong id="hud-goal-text">$0.00 / $6.00 Goal</strong>
+        </div>
+        <div class="hud-timer-row">
+          <span class="hud-label">SHIFT TIME:</span>
+          <span id="shift-timer-text">45s</span>
+        </div>
+      </div>
+    </section>
+
     <!-- Top Right Active Spotlight Order Card -->
-    <section id="active-order-spotlight" class="glass-card" aria-label="Active Order Spotlight">
+    <section id="active-order-spotlight" class="glass-card hidden" aria-label="Active Order Spotlight">
       <div class="spotlight-header">
         <span class="spotlight-badge">ACTIVE ORDER</span>
         <div class="spotlight-timer-badge">
@@ -62,14 +148,13 @@
         </div>
       </div>
 
-      <!-- Cyan progress bar along bottom edge -->
       <div class="spotlight-progress-track">
         <div id="spotlight-progress-bar" style="width: 100%;"></div>
       </div>
     </section>
 
     <!-- Second Row Customer Queue Bar -->
-    <section id="customer-queue-row" aria-label="Customer Queue">
+    <section id="customer-queue-row" class="hidden" aria-label="Customer Queue">
       <div class="queue-card glass-card active-queue" id="queue-card-0">
         <span class="queue-avatar">👵</span>
         <div class="queue-text">
@@ -94,25 +179,19 @@
     </section>
 
     <!-- Center Glass Mug Dynamic Visual Overlay -->
-    <section id="glass-mug-overlay" class="mug-unselected" aria-label="Center Glass Mug">
-      <!-- Mug Selection Glow Ring -->
+    <section id="glass-mug-overlay" class="mug-unselected hidden" aria-label="Center Glass Mug">
       <div class="mug-glow-ring"></div>
 
-      <!-- Glass Mug Contour Shape & Liquids -->
       <div class="mug-glass-body" id="mug-glass-body">
-        <!-- Handle detail -->
         <div class="mug-handle" id="mug-handle"></div>
 
-        <!-- Inner Liquid Tank -->
         <div id="mug-liquid-container">
-          <!-- Stacked Dynamic CSS Liquid Fill Layers -->
           <div id="liquid-condensed-milk" class="liquid-layer"></div>
           <div id="liquid-evaporated-milk" class="liquid-layer"></div>
           <div id="liquid-brew" class="liquid-layer"></div>
           <div id="liquid-water" class="liquid-layer"></div>
           <div id="sugar-indicator" class="sugar-layer"></div>
           
-          <!-- Floating Ice Cubes Layer -->
           <div id="liquid-ice-cubes" class="ice-layer hidden">
             <span class="ice-cube c1">🧊</span>
             <span class="ice-cube c2">🧊</span>
@@ -122,19 +201,16 @@
           <div class="liquid-foam-top"></div>
         </div>
 
-        <!-- Glass Reflection & Highlights -->
         <div class="glass-reflection-left"></div>
         <div class="glass-reflection-right"></div>
       </div>
 
-      <!-- Floating Steam Effects -->
       <div id="mug-steam-container" class="hidden">
         <span class="steam-particle s1">~</span>
         <span class="steam-particle s2">~</span>
         <span class="steam-particle s3">~</span>
       </div>
 
-      <!-- Mug Status Badge -->
       <div id="mug-status-badge">
         <span id="mug-status-text">Tap "Fresh Mug" to start</span>
       </div>
@@ -144,53 +220,43 @@
     <div id="floating-score-container"></div>
 
     <!-- Bottom Action Toolbar & Station Tabs -->
-    <footer id="bottom-action-bar" aria-label="Action Toolbar">
-      
-      <!-- Station Category Tabs Header -->
+    <footer id="bottom-action-bar" class="hidden" aria-label="Action Toolbar">
       <div id="station-tab-bar">
         <button class="station-tab active-tab" data-tab="brew">☕ BREW STALL</button>
         <button class="station-tab" data-tab="cans">🥫 CANNED FRIDGE</button>
         <button class="station-tab" data-tab="dispenser">🧃 DISPENSERS</button>
       </div>
 
-      <!-- Station 1: Brew Stall Toolbar Panel -->
       <div class="station-panel" id="panel-brew">
         <div class="action-grid grid-8">
           <button id="btn-grab-mug" class="action-btn btn-cyan" data-action="grab">
             <span class="btn-icon">🍺</span>
             <span class="btn-label">Fresh Mug</span>
           </button>
-
           <button id="btn-kopi" class="action-btn btn-pink" data-action="kopi">
             <span class="btn-icon">☕</span>
             <span class="btn-label">Kopi</span>
           </button>
-
           <button id="btn-teh" class="action-btn btn-green" data-action="teh">
             <span class="btn-icon">🍵</span>
             <span class="btn-label">Teh</span>
           </button>
-
           <button id="btn-water" class="action-btn btn-blue" data-action="water">
             <span class="btn-icon">🔥</span>
             <span class="btn-label">Hot Water</span>
           </button>
-
           <button id="btn-condensed" class="action-btn btn-amber" data-action="condensed">
             <span class="btn-icon">🥛</span>
             <span class="btn-label">Condensed</span>
           </button>
-
           <button id="btn-evap" class="action-btn btn-iceblue" data-action="evap">
             <span class="btn-icon">🥛</span>
             <span class="btn-label">Evap Milk</span>
           </button>
-
           <button id="btn-sugar" class="action-btn btn-white" data-action="sugar">
             <span class="btn-icon">🍬</span>
             <span class="btn-label" id="label-sugar">Sugar</span>
           </button>
-
           <button id="btn-ice" class="action-btn btn-cyan" data-action="ice">
             <span class="btn-icon">🧊</span>
             <span class="btn-label" id="label-ice">Ice Bin</span>
@@ -198,24 +264,20 @@
         </div>
       </div>
 
-      <!-- Station 2: Canned Fridge Toolbar Panel -->
       <div class="station-panel hidden" id="panel-cans">
         <div class="action-grid grid-4">
           <button id="btn-grab-cup-can" class="action-btn btn-cyan" data-action="grab_cup">
             <span class="btn-icon">🥤</span>
             <span class="btn-label">Ice Cup</span>
           </button>
-
           <button id="btn-coke" class="action-btn btn-red" data-action="coke">
             <span class="btn-icon">🔴</span>
             <span class="btn-label">Coke</span>
           </button>
-
           <button id="btn-sprite" class="action-btn btn-green" data-action="sprite">
             <span class="btn-icon">🟢</span>
             <span class="btn-label">Sprite</span>
           </button>
-
           <button id="btn-hundred" class="action-btn btn-blue" data-action="hundred">
             <span class="btn-icon">🔵</span>
             <span class="btn-label">100 Plus</span>
@@ -223,19 +285,16 @@
         </div>
       </div>
 
-      <!-- Station 3: Dispensers Toolbar Panel -->
       <div class="station-panel hidden" id="panel-dispenser">
         <div class="action-grid grid-3">
           <button id="btn-grab-cup-disp" class="action-btn btn-cyan" data-action="grab_cup">
             <span class="btn-icon">🥤</span>
             <span class="btn-label">Ice Cup</span>
           </button>
-
           <button id="btn-bandung" class="action-btn btn-pink" data-action="bandung">
             <span class="btn-icon">🌸</span>
             <span class="btn-label">Bandung</span>
           </button>
-
           <button id="btn-lime" class="action-btn btn-lime" data-action="lime">
             <span class="btn-icon">🍋</span>
             <span class="btn-label">Lime Juice</span>
@@ -243,7 +302,6 @@
         </div>
       </div>
 
-      <!-- Fixed Bottom Serve Button -->
       <div class="serve-row">
         <button id="btn-serve" class="action-btn btn-emerald" data-action="serve">
           <span class="btn-icon">🛎️</span>
@@ -255,7 +313,125 @@
     <!-- Toast Notification Overlay -->
     <div id="toast-container" aria-live="polite"></div>
 
-    <!-- Kopitiam Recipe Cheat Sheet Modal -->
+    <!-- ==========================================================================
+         CAMPAIGN SAGA MAP MODAL (Candy Crush Style Winding Level Path)
+         ========================================================================== -->
+    <div id="saga-map-modal" class="modal-overlay hidden" aria-hidden="true">
+      <div class="modal-card glass-card map-card">
+        <div class="modal-header">
+          <h2>🗺️ Campaign Saga Path</h2>
+          <button class="close-btn btn-close-saga">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="saga-path-container" id="saga-nodes-container">
+            <!-- Dynamically populated 10 Level Nodes with ⭐ ⭐ ⭐ stars -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         KOPITIAM UPGRADE SHOP MODAL
+         ========================================================================== -->
+    <div id="shop-modal" class="modal-overlay hidden" aria-hidden="true">
+      <div class="modal-card glass-card shop-card-container">
+        <div class="modal-header">
+          <h2>🛒 Kopitiam Equipment Shop</h2>
+          <button class="close-btn btn-close-shop">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="shop-balance-bar">
+            <span>Career Money:</span>
+            <strong id="shop-balance-text">$0.00</strong>
+          </div>
+          <div class="shop-grid" id="shop-items-container">
+            <!-- Dynamically populated Shop Equipment Cards -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         LEADERBOARD / BOARD MODAL
+         ========================================================================== -->
+    <div id="board-modal" class="modal-overlay hidden" aria-hidden="true">
+      <div class="modal-card glass-card">
+        <div class="modal-header">
+          <h2>🏆 Kopitiam Hall of Fame</h2>
+          <button class="close-btn btn-close-board">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="board-stats-summary">
+            <div class="b-stat"><span>Highest Level:</span> <strong id="board-high-level">Lv 1</strong></div>
+            <div class="b-stat"><span>Career Earnings:</span> <strong id="board-career-money">$0.00</strong></div>
+            <div class="b-stat"><span>Max Streak:</span> <strong id="board-max-streak">0</strong></div>
+          </div>
+          <h3 class="board-sub-title">Recent High Score Shifts</h3>
+          <ul class="board-list" id="board-scores-list">
+            <li><span>1. Master Kopi Kia</span> <strong>$88.50</strong></li>
+            <li><span>2. Uncle Ah Seng</span> <strong>$45.00</strong></li>
+            <li><span>3. You (Best Shift)</span> <strong id="board-your-best">$0.00</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         HOW TO / TUTORIAL MODAL
+         ========================================================================== -->
+    <div id="howto-modal" class="modal-overlay hidden" aria-hidden="true">
+      <div class="modal-card glass-card">
+        <div class="modal-header">
+          <h2>❓ How to Play Kopitiam Kopi Kia</h2>
+          <button class="close-btn btn-close-howto">&times;</button>
+        </div>
+        <div class="modal-body howto-body">
+          <div class="step-box">
+            <h4>1. Check Active Customer Spotlight Order</h4>
+            <p>Look at the top-right card to see customer order (e.g. <code>Kopi-C Siew Dai</code>).</p>
+          </div>
+          <div class="step-box">
+            <h4>2. Grab Container & Add Ingredients</h4>
+            <p>Tap <strong>Fresh Mug</strong> or <strong>Ice Cup</strong>, then tap requested liquids & sugar.</p>
+          </div>
+          <div class="step-box">
+            <h4>3. Serve & Earn Cash!</h4>
+            <p>Tap <strong>Serving Tray</strong> to collect payout. Beat the target goal to earn 3 Stars ⭐ ⭐ ⭐!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         LEVEL RESULT SHIFT DIALOG (Victory / Defeat)
+         ========================================================================== -->
+    <div id="level-result-modal" class="modal-overlay hidden" aria-hidden="true">
+      <div class="modal-card glass-card result-card">
+        <div class="result-header">
+          <h2 id="result-title">🎉 Shift Complete!</h2>
+          <p id="result-level-name">Level 1: Tiong Bahru Corner</p>
+        </div>
+
+        <div class="stars-display-row" id="result-stars-row">
+          <span class="star-big">⭐</span>
+          <span class="star-big">⭐</span>
+          <span class="star-big">⭐</span>
+        </div>
+
+        <div class="result-breakdown">
+          <div class="r-row"><span>Shift Earnings:</span> <strong id="res-shift-score">$0.00</strong></div>
+          <div class="r-row"><span>Shift Goal:</span> <strong id="res-shift-goal">$6.00</strong></div>
+          <div class="r-row"><span>Customers Served:</span> <strong id="res-customers-count">0</strong></div>
+        </div>
+
+        <div class="result-btn-row">
+          <button id="btn-retry-level" class="result-btn secondary-btn">🔄 Retry Shift</button>
+          <button id="btn-next-level" class="result-btn primary-result-btn">▶️ Next Level</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recipe Cheat Sheet Modal -->
     <div id="recipe-modal" class="modal-overlay hidden" aria-hidden="true">
       <div class="modal-card glass-card">
         <div class="modal-header">

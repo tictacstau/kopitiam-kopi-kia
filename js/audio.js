@@ -1,6 +1,6 @@
 /**
  * Kopitiam Kopi Kia - Web Audio API & Custom Audio Sound Generator Engine
- * Plays custom Kopitiam Hawker Background Ambience MP3 + Synthesized SFX
+ * Plays custom Kopitiam Hawker Background Ambience MP3 + Synthesized SFX & UI Fanfares
  */
 
 class SoundEngine {
@@ -11,7 +11,7 @@ class SoundEngine {
     // Custom Background Ambient Audio Track
     this.bgAudio = new Audio('audio/kopitiam_ambient.mp3');
     this.bgAudio.loop = true;
-    this.bgAudio.volume = 0.35; // Comfortable ambient level
+    this.bgAudio.volume = 0.35;
     this.isBgPlaying = false;
   }
 
@@ -40,9 +40,6 @@ class SoundEngine {
     return this.isMuted;
   }
 
-  /**
-   * Start Custom Kopitiam Hawker Food Court Ambience MP3 Loop
-   */
   startKopitiamAmbient() {
     if (this.isMuted) return;
 
@@ -56,6 +53,89 @@ class SoundEngine {
   stopKopitiamAmbient() {
     this.bgAudio.pause();
     this.isBgPlaying = false;
+  }
+
+  /**
+   * UI Menu Click Sound
+   */
+  playMenuClick() {
+    if (this.isMuted) return;
+    this.init();
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, now);
+    osc.frequency.exponentialRampToValueAtTime(1600, now + 0.05);
+
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.05);
+  }
+
+  /**
+   * Shop Purchase Chime
+   */
+  playShopBuy() {
+    if (this.isMuted) return;
+    this.init();
+
+    const now = this.ctx.currentTime;
+    const freqs = [523.25, 659.25, 783.99, 1046.50]; // C5 -> E5 -> G5 -> C6
+
+    freqs.forEach((freq, i) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now + i * 0.05);
+
+      gain.gain.setValueAtTime(0, now + i * 0.05);
+      gain.gain.linearRampToValueAtTime(0.25, now + i * 0.05 + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.05 + 0.25);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now + i * 0.05);
+      osc.stop(now + i * 0.05 + 0.25);
+    });
+  }
+
+  /**
+   * Level Victory Fanfare
+   */
+  playVictoryFanfare() {
+    if (this.isMuted) return;
+    this.init();
+
+    const now = this.ctx.currentTime;
+    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C major arpeggio
+
+    notes.forEach((freq, i) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + i * 0.08);
+
+      gain.gain.setValueAtTime(0, now + i * 0.08);
+      gain.gain.linearRampToValueAtTime(0.3, now + i * 0.08 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.08 + 0.5);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now + i * 0.08);
+      osc.stop(now + i * 0.08 + 0.5);
+    });
   }
 
   /**
