@@ -20,7 +20,7 @@ const DRINK_RECIPES = [
   { id: 'yuan_yang', name: 'Yuan Yang', type: 'brew', kopi: 1, teh: 1, milk: 'condensed', water: true, sugar: 'kosong', price: 2.00, hot: true },
 
   // CANNED FRIDGE RECIPES
-  { id: 'coke_iced', name: 'Iced Crimson Ribbon (Can)', type: 'can', canBrand: 'coke', price: 2.00, iced: true },
+  { id: 'coke_iced', name: 'Iced Coke (Can)', type: 'can', canBrand: 'coke', price: 2.00, iced: true },
   { id: 'sprite_iced', name: 'Iced Sprite (Can)', type: 'can', canBrand: 'sprite', price: 2.00, iced: true },
   { id: 'hundred_plus_iced', name: 'Iced 100 Plus (Can)', type: 'can', canBrand: 'hundred_plus', price: 2.00, iced: true },
 
