@@ -745,7 +745,8 @@ class GameEngine {
 
     const ingredients = [];
     if (this.activeMug.type === 'can') {
-      if (this.activeMug.canBrand) ingredients.push(this.activeMug.canBrand.replace('_', ' ').toUpperCase());
+      if (this.activeMug.canBrand === 'coke') ingredients.push('CRIMSON RIBBON');
+      else if (this.activeMug.canBrand) ingredients.push(this.activeMug.canBrand.replace('_', ' ').toUpperCase());
     } else if (this.activeMug.type === 'dispenser') {
       if (this.activeMug.dispenserFlavor) ingredients.push(this.activeMug.dispenserFlavor.replace('_', ' ').toUpperCase());
     } else {

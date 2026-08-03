@@ -238,7 +238,7 @@ body {
 
 .vintage-stat-pill {
   background: #ffffff;
-  border: 1.5.px solid var(--primary-gold);
+  border: 1.5px solid var(--primary-gold);
   padding: 6px 12px;
   border-radius: 20px;
   display: flex;
@@ -863,8 +863,18 @@ body {
 
 .action-btn:active { transform: scale(0.94); }
 
-.btn-icon { font-size: 1.2rem; }
+.btn-icon { font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
 .btn-label { font-size: 0.68rem; font-weight: 800; color: var(--nanyang-darkblue); text-align: center; }
+
+/* Custom Soda Can Icon styling */
+.soda-can-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--nanyang-blue);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
 
 .btn-cyan { border-color: var(--cyan-glow); }
 .btn-pink { border-color: var(--pink-glow); }
