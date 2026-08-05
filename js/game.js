@@ -854,12 +854,17 @@ class GameEngine {
   }
 
   showToast(message, isSuccess = false) {
+    // Prevent layout shift during rapid button spamming by capping toasts
+    while (this.elToastContainer.children.length >= 2) {
+      this.elToastContainer.removeChild(this.elToastContainer.firstChild);
+    }
+
     const toast = document.createElement('div');
     toast.className = `toast ${isSuccess ? 'toast-success' : ''}`;
     toast.textContent = message;
     this.elToastContainer.appendChild(toast);
 
-    setTimeout(() => toast.remove(), 3000);
+    setTimeout(() => toast.remove(), 2200);
   }
 }
 
