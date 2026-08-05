@@ -187,9 +187,12 @@
       </div>
     </section>
 
-    <!-- Center Glass Mug Dynamic Visual Overlay -->
+    <!-- Center Glass Mug Dynamic Visual Overlay (Supports 2D Vintage & 3D WebGL) -->
     <section id="glass-mug-overlay" class="mug-unselected hidden" aria-label="Center Glass Mug">
       <div class="mug-glow-ring"></div>
+
+      <!-- 3D Three.js WebGL Glass Viewport -->
+      <div id="three-canvas-container"></div>
 
       <div class="mug-glass-body" id="mug-glass-body">
         <div class="mug-handle" id="mug-handle"></div>
@@ -456,11 +459,13 @@
 
   </main>
 
-  <!-- JavaScript Modules -->
+  <!-- JavaScript Modules & 3D WebGL Engine -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/recipes.js"></script>
   <script src="js/game.js"></script>
   <script src="js/ux_agent.js"></script>
+  <script src="js/three_mug.js"></script>
 
 </body>
 </html>

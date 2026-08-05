@@ -576,6 +576,21 @@ body {
   pointer-events: auto;
 }
 
+#three-canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 150px;
+  height: 180px;
+  z-index: 15;
+  pointer-events: auto;
+  cursor: grab;
+}
+
+#three-canvas-container:active {
+  cursor: grabbing;
+}
+
 .mug-glow-ring {
   position: absolute;
   top: -10px;

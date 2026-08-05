@@ -769,6 +769,9 @@ class GameEngine {
 
     if (ingredients.length > 0) this.elMugStatusText.textContent = ingredients.join(' + ');
     else this.elMugStatusText.textContent = 'Mug Ready! Select ingredients';
+
+    // Sync 3D WebGL Glass Mug Engine
+    window.threeMugRenderer?.updateMugState(this.activeMug);
   }
 
   resetMugState() {
