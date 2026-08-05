@@ -850,21 +850,22 @@ body {
   background: #ffffff;
   border: 2px solid var(--nanyang-blue);
   border-radius: 12px;
-  padding: 8px 4px;
+  padding: clamp(6px, 1.5vh, 10px) 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 2px;
   cursor: pointer;
   outline: none;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.action-btn:active { transform: scale(0.94); }
+.action-btn:active { transform: scale(0.93); }
 
-.btn-icon { font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
-.btn-label { font-size: 0.68rem; font-weight: 800; color: var(--nanyang-darkblue); text-align: center; }
+.btn-icon { font-size: clamp(1rem, 2.5vh, 1.25rem); display: flex; align-items: center; justify-content: center; }
+.btn-label { font-size: clamp(0.6rem, 1.4vh, 0.7rem); font-weight: 800; color: var(--nanyang-darkblue); text-align: center; white-space: nowrap; }
 
 .soda-can-icon {
   width: 24px;

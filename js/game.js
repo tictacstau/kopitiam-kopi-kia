@@ -391,6 +391,10 @@ class GameEngine {
      GAMEPLAY SHIFT ENGINE
      ========================================================================== */
   startLevelShift(levelIdx) {
+    // Purge any active timers to prevent memory leaks and interval stacking
+    clearInterval(this.shiftTimerInterval);
+    clearInterval(this.orderTimerInterval);
+
     this.currentLevelIndex = levelIdx;
     const currentLvlConfig = CAMPAIGN_LEVELS[levelIdx];
 
