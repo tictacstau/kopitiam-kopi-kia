@@ -36,6 +36,45 @@ class GameEngine {
     this.initElements();
     this.bindEvents();
     this.updateMainMenuDisplay();
+    this.runBootSplashSequence();
+  }
+
+  runBootSplashSequence() {
+    const splashOverlay = document.getElementById('splash-screen-overlay');
+    const studioStep = document.getElementById('splash-studio-screen');
+    const coverStep = document.getElementById('splash-cover-screen');
+    if (!splashOverlay || !studioStep || !coverStep) return;
+
+    // Step 1: Studio logo fades in and holds for 1.8s
+    setTimeout(() => {
+      studioStep.classList.add('splash-fade-out');
+      setTimeout(() => {
+        studioStep.classList.add('hidden');
+        coverStep.classList.remove('hidden');
+        coverStep.classList.add('splash-fade-in');
+      }, 500);
+    }, 1800);
+
+    // Step 2: Tap anywhere on cover screen to start game
+    const handleStartTap = (e) => {
+      e.stopPropagation();
+      try {
+        if (window.soundEngine) {
+          window.soundEngine.init();
+          window.soundEngine.playSwooshSound();
+        }
+      } catch (err) {}
+
+      splashOverlay.classList.add('splash-fade-out');
+      setTimeout(() => {
+        splashOverlay.classList.add('hidden');
+        splashOverlay.removeEventListener('click', handleStartTap);
+        splashOverlay.removeEventListener('touchstart', handleStartTap);
+      }, 500);
+    };
+
+    splashOverlay.addEventListener('click', handleStartTap);
+    splashOverlay.addEventListener('touchstart', handleStartTap);
   }
 
   /* ==========================================================================

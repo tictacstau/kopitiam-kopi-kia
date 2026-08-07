@@ -1305,4 +1305,102 @@ body.ux-mode-contrast .chinese-calligraphy {
 }
 
 .toast-success { border-color: rgba(34, 197, 94, 0.6); color: #bbf7d0; }
+
+/* ==========================================================================
+   9. CINEMATIC BOOT SPLASH SEQUENCE (TICTACS SOFTWARE & COVER ART)
+   ========================================================================== */
+.splash-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #f7f6f0;
+  z-index: 100000 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 0.5s ease-out;
+}
+
+.splash-step {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.studio-logo-img {
+  width: 70%;
+  max-width: 240px;
+  height: auto;
+  animation: splashPulse 1.8s ease-in-out infinite alternate;
+}
+
+.splash-cover-art {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.85);
+}
+
+.splash-cover-content {
+  position: absolute;
+  bottom: 12%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 2;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
+}
+
+.splash-game-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 2px;
+}
+
+.splash-tap-prompt {
+  font-family: var(--font-family);
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  font-weight: 900;
+  color: var(--primary-gold);
+  letter-spacing: 3px;
+  background: rgba(15, 33, 66, 0.85);
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 2px solid var(--primary-gold);
+  animation: promptPulse 1.2s ease-in-out infinite alternate;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.splash-fade-out { opacity: 0; }
+.splash-fade-in { opacity: 1; }
+
+@keyframes splashPulse {
+  0% { transform: scale(0.96); opacity: 0.85; }
+  100% { transform: scale(1.02); opacity: 1; }
+}
+
+@keyframes promptPulse {
+  0% { opacity: 0.7; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1.04); }
+}
+
 .hidden { display: none !important; }

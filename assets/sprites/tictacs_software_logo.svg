@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 320" width="300" height="320">
+  <defs>
+    <filter id="studio-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Vertical Layout Container -->
+  <!-- 1. Icon Container Box -->
+  <g transform="translate(90, 20)" filter="url(#studio-shadow)">
+    <rect x="0" y="0" width="120" height="120" rx="28" fill="#f4f3ec"/>
+    
+    <!-- 3x3 Grid of Rounded Squares -->
+    <!-- Row 1 -->
+    <rect x="22" y="22" width="22" height="22" rx="6" fill="#1f1f33"/>
+    <rect x="49" y="22" width="22" height="22" rx="6" fill="#1f1f33"/>
+    <rect x="76" y="22" width="22" height="22" rx="6" fill="#1f1f33"/>
+
+    <!-- Row 2 -->
+    <rect x="22" y="49" width="22" height="22" rx="6" fill="#1f1f33"/>
+    <rect x="49" y="49" width="22" height="22" rx="6" fill="#1f1f33"/>
+    <rect x="76" y="49" width="22" height="22" rx="6" fill="#e55335"/> <!-- Orange Highlighted Square -->
+
+    <!-- Row 3 -->
+    <rect x="22" y="76" width="22" height="22" rx="6" fill="#1f1f33"/>
+    <rect x="49" y="76" width="22" height="22" rx="6" fill="#1f1f33"/>
+    <rect x="76" y="76" width="22" height="22" rx="6" fill="#1f1f33"/>
+  </g>
+
+  <!-- 2. Studio Title Text (Vertical Stacked under Icon) -->
+  <text x="150" y="195" font-family="'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" font-weight="800" font-size="28" fill="#1f1f33" text-anchor="middle" letter-spacing="-0.5">Tictacs Software</text>
+
+  <!-- 3. Subtitle -->
+  <text x="150" y="235" font-family="'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" font-weight="900" font-size="13" fill="#e55335" text-anchor="middle" letter-spacing="4">PRESENTS</text>
+</svg>
