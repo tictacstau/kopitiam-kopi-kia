@@ -30,11 +30,11 @@ const DRINK_RECIPES = [
 ];
 
 const CUSTOMERS = [
-  { name: 'Mdm Tan', avatar: '👵', preferred: ['kopi_c_siew_dai', 'teh_c', 'kopi_kosong'] },
-  { name: 'Uncle Lim', avatar: '👴', preferred: ['kopi', 'teh', 'kopi_o'] },
-  { name: 'Aunty Lee', avatar: '👩', preferred: ['yuan_yang', 'teh_peng', 'bandung_iced'] },
-  { name: 'Brother Ah Seng', avatar: '👨', preferred: ['coke_iced', 'kopi_peng', 'hundred_plus_iced'] },
-  { name: 'Student Kenneth', avatar: '👦', preferred: ['sprite_iced', 'lime_juice_iced', 'kopi_peng'] }
+  { name: 'Mdm Tan', avatar: 'assets/sprites/char_mdm_tan.svg', preferred: ['kopi_c_siew_dai', 'teh_c', 'kopi_kosong'] },
+  { name: 'Uncle Lim', avatar: 'assets/sprites/char_uncle_lim.svg', preferred: ['kopi', 'teh', 'kopi_o'] },
+  { name: 'Aunty Lee', avatar: 'assets/sprites/char_aunty_lee.svg', preferred: ['yuan_yang', 'teh_peng', 'bandung_iced'] },
+  { name: 'Brother Ah Seng', avatar: 'assets/sprites/char_ah_seng.svg', preferred: ['coke_iced', 'kopi_peng', 'hundred_plus_iced'] },
+  { name: 'Student Kenneth', avatar: 'assets/sprites/char_student_kenneth.svg', preferred: ['sprite_iced', 'lime_juice_iced', 'kopi_peng'] }
 ];
 
 const CAMPAIGN_LEVELS = [
@@ -60,10 +60,21 @@ const SHOP_UPGRADES = [
 
 class OrderManager {
   static getRandomOrder(unlockedLevel = 1) {
-    let availableRecipes = DRINK_RECIPES.filter(r => r.type === 'brew');
+    let availableRecipes = [];
 
-    if (unlockedLevel >= 2) {
-      availableRecipes = DRINK_RECIPES;
+    if (unlockedLevel < 2) {
+      // Level 1: Focus on teaching Kopi & Teh brewing basics
+      availableRecipes = DRINK_RECIPES.filter(r => r.type === 'brew');
+    } else {
+      // Level 2+: Balanced category weighting (50% Brew, 25% Cans, 25% Dispensers)
+      const randCat = Math.random();
+      if (randCat < 0.50) {
+        availableRecipes = DRINK_RECIPES.filter(r => r.type === 'brew');
+      } else if (randCat < 0.75) {
+        availableRecipes = DRINK_RECIPES.filter(r => r.type === 'can');
+      } else {
+        availableRecipes = DRINK_RECIPES.filter(r => r.type === 'dispenser');
+      }
     }
 
     const recipe = availableRecipes[Math.floor(Math.random() * availableRecipes.length)];
@@ -139,4 +150,11 @@ class OrderManager {
       errors
     };
   }
+}
+
+if (typeof window !== 'undefined') {
+  window.DRINK_RECIPES = DRINK_RECIPES;
+  window.CUSTOMERS = CUSTOMERS;
+  window.CAMPAIGN_LEVELS = CAMPAIGN_LEVELS;
+  window.OrderManager = OrderManager;
 }

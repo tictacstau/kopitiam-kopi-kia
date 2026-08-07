@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <radialGradient id="bg-grad-ken" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f0f9ff"/>
+      <stop offset="100%" stop-color="#bae6fd"/>
+    </radialGradient>
+  </defs>
+  <!-- Background Badge -->
+  <circle cx="128" cy="128" r="120" fill="url(#bg-grad-ken)" stroke="#0f386b" stroke-width="6"/>
+  <circle cx="128" cy="128" r="112" fill="none" stroke="#0284c7" stroke-width="3" stroke-dasharray="8 6"/>
+
+  <!-- Body / School Uniform -->
+  <path d="M 60 230 C 60 176, 84 158, 128 158 C 172 158, 196 176, 196 230 Z" fill="#ffffff" stroke="#0f386b" stroke-width="3"/>
+  <!-- School Collar & Trim -->
+  <path d="M 98 158 L 128 186 L 158 158" fill="#0f386b"/>
+  
+  <!-- Lanyard & Student Badge -->
+  <path d="M 112 158 L 122 210 M 144 158 L 134 210" fill="none" stroke="#dc2626" stroke-width="3"/>
+  <rect x="116" y="206" width="24" height="24" rx="4" fill="#38bdf8" stroke="#0f386b" stroke-width="2"/>
+  <circle cx="128" cy="214" r="3" fill="#ffffff"/>
+
+  <!-- Neck -->
+  <rect x="114" y="132" width="28" height="28" rx="6" fill="#fbd38d"/>
+
+  <!-- Head -->
+  <ellipse cx="128" cy="96" rx="40" ry="46" fill="#fbd38d"/>
+
+  <!-- Youthful Student Fringe Haircut -->
+  <path d="M 86 85 C 82 42, 106 34, 128 34 C 150 34, 174 42, 170 85 C 160 52, 142 45, 128 45 C 114 45, 96 52, 86 85 Z" fill="#0f172a" stroke="#0f386b" stroke-width="3"/>
+  <!-- Front Fringe Bangs -->
+  <path d="M 94 56 Q 112 70 128 62 Q 144 70 162 56 Z" fill="#1e293b"/>
+
+  <!-- Ears -->
+  <circle cx="86" cy="98" r="7" fill="#fbd38d" stroke="#0f386b" stroke-width="2"/>
+  <circle cx="170" cy="98" r="7" fill="#fbd38d" stroke="#0f386b" stroke-width="2"/>
+
+  <!-- Eyebrows -->
+  <path d="M 98 78 Q 110 74 120 79" fill="none" stroke="#0f172a" stroke-width="3.5"/>
+  <path d="M 136 79 Q 146 74 158 78" fill="none" stroke="#0f172a" stroke-width="3.5"/>
+
+  <!-- Big Youthful Sparkly Eyes -->
+  <circle cx="110" cy="88" r="7" fill="#0f386b"/>
+  <circle cx="146" cy="88" r="7" fill="#0f386b"/>
+  <circle cx="112" cy="86" r="2.5" fill="#ffffff"/>
+  <circle cx="148" cy="86" r="2.5" fill="#ffffff"/>
+
+  <!-- Nose -->
+  <path d="M 128 88 L 125 102 L 131 102" fill="none" stroke="#d97706" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Cheeks -->
+  <ellipse cx="98" cy="102" rx="6" ry="4" fill="rgba(244, 63, 94, 0.25)"/>
+  <ellipse cx="158" cy="102" rx="6" ry="4" fill="rgba(244, 63, 94, 0.25)"/>
+
+  <!-- Cheerful Student Grin -->
+  <path d="M 108 114 Q 128 132 148 114 Z" fill="#ffffff" stroke="#0f386b" stroke-width="2.5"/>
+  <line x1="108" y1="114" x2="148" y2="114" stroke="#0f386b" stroke-width="2"/>
+</svg>

@@ -41,13 +41,22 @@ class SoundEngine {
   }
 
   startKopitiamAmbient() {
-    if (this.isMuted) return;
+    if (this.isMuted || !this.bgAudio) return;
 
-    this.bgAudio.play().then(() => {
-      this.isBgPlaying = true;
-    }).catch(err => {
-      console.log('Audio autoplay waiting for user interaction:', err);
-    });
+    try {
+      const playPromise = this.bgAudio.play();
+      if (playPromise && typeof playPromise.then === 'function') {
+        playPromise.then(() => {
+          this.isBgPlaying = true;
+        }).catch(err => {
+          console.log('Audio autoplay waiting for user interaction:', err);
+        });
+      } else {
+        this.isBgPlaying = true;
+      }
+    } catch (e) {
+      console.warn('Audio play error:', e);
+    }
   }
 
   stopKopitiamAmbient() {

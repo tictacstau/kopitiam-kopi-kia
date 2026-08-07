@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <radialGradient id="bg-grad-lee-photo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fffbeb"/>
+      <stop offset="100%" stop-color="#fde68a"/>
+    </radialGradient>
+    <pattern id="paisley-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 5 5 C 10 2, 15 8, 10 15 C 5 20, 0 10, 5 5 Z" fill="#991b1b"/>
+      <circle cx="14" cy="6" r="3" fill="#d97706"/>
+      <circle cx="6" cy="14" r="2" fill="#15803d"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Badge -->
+  <circle cx="128" cy="128" r="120" fill="url(#bg-grad-lee-photo)" stroke="#0f386b" stroke-width="6"/>
+  <circle cx="128" cy="128" r="112" fill="none" stroke="#b45309" stroke-width="3" stroke-dasharray="8 6"/>
+
+  <!-- Sleeveless Paisley Top (Red/Gold/Green Hawker Blouse) -->
+  <path d="M 68 230 C 68 174, 88 156, 128 156 C 168 156, 188 174, 188 230 Z" fill="#7f1d1d"/>
+  <path d="M 68 230 C 68 174, 88 156, 128 156 C 168 156, 188 174, 188 230 Z" fill="url(#paisley-pattern)" opacity="0.85"/>
+
+  <!-- V-Neck Black Trim -->
+  <path d="M 96 156 L 128 190 L 160 156" fill="none" stroke="#0f172a" stroke-width="6"/>
+  <circle cx="128" cy="192" r="3" fill="#ffffff"/>
+
+  <!-- Bare Arms (Sleeveless Top from Photo) -->
+  <path d="M 52 230 Q 64 185 82 170" fill="none" stroke="#ed8936" stroke-width="16" stroke-linecap="round"/>
+  <path d="M 204 230 Q 192 185 174 170" fill="none" stroke="#ed8936" stroke-width="16" stroke-linecap="round"/>
+
+  <!-- Neck -->
+  <rect x="112" y="130" width="32" height="30" rx="6" fill="#ed8936"/>
+  <path d="M 116 146 Q 128 154 140 146" fill="none" stroke="#c05621" stroke-width="2"/>
+
+  <!-- Head -->
+  <ellipse cx="128" cy="98" rx="40" ry="46" fill="#ed8936"/>
+
+  <!-- Short Dark Cropped Hair with Subtle Silver Threads (From Photo) -->
+  <path d="M 82 92 C 78 45, 102 36, 128 36 C 154 36, 178 45, 174 92 C 164 54, 146 44, 128 44 C 110 44, 92 54, 82 92 Z" fill="#1e293b" stroke="#0f386b" stroke-width="3"/>
+  <!-- Short Wavy Texture Top -->
+  <circle cx="94" cy="54" r="14" fill="#334155"/>
+  <circle cx="162" cy="54" r="14" fill="#334155"/>
+  <circle cx="128" cy="46" r="16" fill="#334155"/>
+  <path d="M 104 42 Q 112 36 120 44" fill="none" stroke="#94a3b8" stroke-width="2"/>
+
+  <!-- Ears -->
+  <circle cx="86" cy="100" r="7" fill="#ed8936" stroke="#0f386b" stroke-width="2"/>
+  <circle cx="170" cy="100" r="7" fill="#ed8936" stroke="#0f386b" stroke-width="2"/>
+
+  <!-- Soft Eyebrows -->
+  <path d="M 100 82 Q 112 76 120 82" fill="none" stroke="#1e293b" stroke-width="3"/>
+  <path d="M 136 82 Q 144 76 156 82" fill="none" stroke="#1e293b" stroke-width="3"/>
+
+  <!-- Gentle Kind Eyes (From Photo) -->
+  <path d="M 102 90 Q 110 84 118 90" fill="none" stroke="#0f386b" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 138 90 Q 146 84 154 90" fill="none" stroke="#0f386b" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="110" cy="91" r="3" fill="#0f386b"/>
+  <circle cx="146" cy="91" r="3" fill="#0f386b"/>
+
+  <!-- Subtle Laugh Lines around eyes -->
+  <path d="M 98 90 Q 94 94 98 98" fill="none" stroke="#c05621" stroke-width="1.5"/>
+  <path d="M 158 90 Q 162 94 158 98" fill="none" stroke="#c05621" stroke-width="1.5"/>
+
+  <!-- Nose -->
+  <path d="M 128 92 L 124 106 L 132 106" fill="none" stroke="#c05621" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Serene Calm Hawker Smile (From Photo) -->
+  <path d="M 110 120 Q 128 130 146 120" fill="none" stroke="#b91c1c" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

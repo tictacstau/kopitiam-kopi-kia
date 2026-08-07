@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <radialGradient id="bg-grad-lim" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fffdf5"/>
+      <stop offset="100%" stop-color="#feefc3"/>
+    </radialGradient>
+  </defs>
+  <!-- Background Badge -->
+  <circle cx="128" cy="128" r="120" fill="url(#bg-grad-lim)" stroke="#0f386b" stroke-width="6"/>
+  <circle cx="128" cy="128" r="112" fill="none" stroke="#c23b22" stroke-width="3" stroke-dasharray="8 6"/>
+
+  <!-- Body / White Singlet -->
+  <path d="M 64 230 C 64 175, 84 158, 128 158 C 172 158, 192 175, 192 230 Z" fill="#ffffff" stroke="#0f386b" stroke-width="4"/>
+  <!-- Singlet Neckline -->
+  <path d="M 94 158 Q 128 190 162 158" fill="none" stroke="#0f386b" stroke-width="4"/>
+
+  <!-- Towel around neck -->
+  <path d="M 76 170 C 70 190, 80 230, 92 230" fill="none" stroke="#e2e8f0" stroke-width="16" stroke-linecap="round"/>
+  <path d="M 76 170 C 70 190, 80 230, 92 230" fill="none" stroke="#0f386b" stroke-width="16" stroke-dasharray="2 6" stroke-linecap="round"/>
+
+  <!-- Neck -->
+  <rect x="110" y="130" width="36" height="35" rx="8" fill="#ed8936"/>
+
+  <!-- Head -->
+  <ellipse cx="128" cy="98" rx="44" ry="50" fill="#ed8936"/>
+
+  <!-- Uncle Hair (Receding silver-black hair) -->
+  <path d="M 84 95 C 80 50, 102 38, 128 38 C 154 38, 176 50, 172 95 C 166 65, 150 48, 128 48 C 106 48, 90 65, 84 95 Z" fill="#334155" stroke="#0f386b" stroke-width="3"/>
+
+  <!-- Ears -->
+  <circle cx="82" cy="100" r="9" fill="#ed8936" stroke="#0f386b" stroke-width="2"/>
+  <circle cx="174" cy="100" r="9" fill="#ed8936" stroke="#0f386b" stroke-width="2"/>
+
+  <!-- Eyebrows -->
+  <path d="M 98 80 Q 112 76 122 83" fill="none" stroke="#1e293b" stroke-width="4"/>
+  <path d="M 134 83 Q 144 76 158 80" fill="none" stroke="#1e293b" stroke-width="4"/>
+
+  <!-- Glasses -->
+  <circle cx="108" cy="92" r="14" fill="rgba(255,255,255,0.4)" stroke="#0f386b" stroke-width="3.5"/>
+  <circle cx="148" cy="92" r="14" fill="rgba(255,255,255,0.4)" stroke="#0f386b" stroke-width="3.5"/>
+  <line x1="122" y1="92" x2="134" y2="92" stroke="#0f386b" stroke-width="3.5"/>
+
+  <!-- Eyes -->
+  <circle cx="108" cy="92" r="4" fill="#0f386b"/>
+  <circle cx="148" cy="92" r="4" fill="#0f386b"/>
+
+  <!-- Nose -->
+  <path d="M 128 94 L 122 110 L 134 110" fill="none" stroke="#c05621" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- Laugh Lines -->
+  <path d="M 92 98 Q 96 106 92 114" fill="none" stroke="#c05621" stroke-width="2"/>
+  <path d="M 164 98 Q 160 106 164 114" fill="none" stroke="#c05621" stroke-width="2"/>
+
+  <!-- Friendly Hawker Uncle Smile -->
+  <path d="M 106 124 Q 128 142 150 124" fill="#c23b22" stroke="#0f386b" stroke-width="3"/>
+  <path d="M 108 124 Q 128 130 148 124" fill="#ffffff"/>
+</svg>

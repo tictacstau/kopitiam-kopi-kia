@@ -27,6 +27,8 @@ class GameEngine {
       dispenserFlavor: null
     };
 
+    this.sandboxMode = false; // Set to false for standard production gameplay timers
+
     this.queue = [];
     this.orderTimerInterval = null;
     this.orderTimeRemaining = 22;
@@ -41,12 +43,18 @@ class GameEngine {
      ========================================================================== */
   loadSaveData() {
     const defaultData = {
+      playerName: 'Master Kopi Kia',
       careerMoney: 0.00,
       unlockedLevel: 1,
       levelStars: { 1: 0 },
       streak: 0,
       upgrades: [],
-      bestShiftScore: 0.00
+      bestShiftScore: 0.00,
+      highScores: [
+        { name: 'Kopi King Seng', score: 88.50 },
+        { name: 'Aunty Lee (Kopi Queen)', score: 65.00 },
+        { name: 'Uncle Lim', score: 45.00 }
+      ]
     };
 
     try {
@@ -270,6 +278,86 @@ class GameEngine {
       const isMuted = window.soundEngine.toggleMute();
       this.elBtnSoundToggle.querySelector('.icon').textContent = isMuted ? '🔇' : '🔊';
     });
+
+    const recipeBtn = document.getElementById('btn-recipe-modal');
+    if (recipeBtn) {
+      recipeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.openRecipeModal();
+      });
+    }
+
+    if (this.elBtnMenuRecipes) {
+      this.elBtnMenuRecipes.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.openRecipeModal();
+      });
+    }
+
+    const closeBtnRecipe = document.getElementById('btn-close-modal');
+    if (closeBtnRecipe) {
+      closeBtnRecipe.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.closeRecipeModal();
+      });
+    }
+
+    if (this.elRecipeModal) {
+      this.elRecipeModal.addEventListener('click', (e) => {
+        if (e.target === this.elRecipeModal) {
+          this.closeRecipeModal();
+        }
+      });
+    }
+
+    const btnSaveName = document.getElementById('btn-save-player-name');
+    if (btnSaveName) {
+      btnSaveName.addEventListener('click', () => {
+        const input = document.getElementById('board-player-name-input');
+        if (input && input.value.trim() !== '') {
+          const newName = input.value.trim();
+          this.submitHighScore(newName, this.saveData.bestShiftScore);
+          this.renderLeaderboardList();
+          this.showToast(`✅ Hawker name saved as "${newName}"!`, true);
+        }
+      });
+    }
+
+    const btnSubmitScore = document.getElementById('btn-submit-score');
+    if (btnSubmitScore) {
+      btnSubmitScore.addEventListener('click', () => {
+        const input = document.getElementById('res-player-name-input');
+        if (input && input.value.trim() !== '') {
+          const newName = input.value.trim();
+          this.submitHighScore(newName, this.shiftScore);
+          const resBox = document.getElementById('result-leaderboard-box');
+          if (resBox) resBox.classList.add('hidden');
+          this.showToast(`🏆 Score $${this.shiftScore.toFixed(2)} submitted to Hall of Fame!`, true);
+        }
+      });
+    }
+  }
+
+  openRecipeModal() {
+    try {
+      if (window.soundEngine) {
+        window.soundEngine.init();
+        window.soundEngine.playSwooshSound();
+      }
+    } catch (e) {
+      console.warn('Sound effect suppressed:', e);
+    }
+    if (this.elRecipeModal) {
+      this.elRecipeModal.classList.remove('hidden');
+      this.elRecipeModal.style.setProperty('display', 'flex', 'important');
+    }
+  }
+
+  closeRecipeModal() {
+    if (this.elRecipeModal) {
+      this.elRecipeModal.classList.add('hidden');
+      this.elRecipeModal.style.setProperty('display', 'none', 'important');
+    }
   }
 
   updateMainMenuDisplay() {
@@ -379,12 +467,56 @@ class GameEngine {
   }
 
   openBoardModal() {
+    const nameInput = document.getElementById('board-player-name-input');
+    if (nameInput) {
+      nameInput.value = this.saveData.playerName || 'Master Kopi Kia';
+    }
+
     document.getElementById('board-high-level').textContent = `Lv ${this.saveData.unlockedLevel}`;
     document.getElementById('board-career-money').textContent = `$${this.saveData.careerMoney.toFixed(2)}`;
     document.getElementById('board-max-streak').textContent = `${this.saveData.streak}`;
-    document.getElementById('board-your-best').textContent = `$${this.saveData.bestShiftScore.toFixed(2)}`;
 
+    this.renderLeaderboardList();
     this.elBoardModal.classList.remove('hidden');
+  }
+
+  renderLeaderboardList() {
+    const listEl = document.getElementById('board-scores-list');
+    if (!listEl) return;
+
+    listEl.innerHTML = '';
+    const scores = [...(this.saveData.highScores || [])].sort((a, b) => b.score - a.score);
+
+    scores.forEach((entry, idx) => {
+      const li = document.createElement('li');
+      const isPlayer = entry.name === this.saveData.playerName;
+      li.className = isPlayer ? 'board-item active-player' : 'board-item';
+      li.innerHTML = `<span>${idx + 1}. ${entry.name} ${isPlayer ? '⭐ (You)' : ''}</span> <strong>$${entry.score.toFixed(2)}</strong>`;
+      listEl.appendChild(li);
+    });
+  }
+
+  submitHighScore(name, score) {
+    if (!name || name.trim() === '') name = 'Master Kopi Kia';
+    name = name.trim().substring(0, 20);
+    this.saveData.playerName = name;
+
+    if (!Array.isArray(this.saveData.highScores)) {
+      this.saveData.highScores = [];
+    }
+
+    const existingIdx = this.saveData.highScores.findIndex(e => e.name === name);
+    if (existingIdx !== -1) {
+      if (score > this.saveData.highScores[existingIdx].score) {
+        this.saveData.highScores[existingIdx].score = score;
+      }
+    } else {
+      this.saveData.highScores.push({ name, score });
+    }
+
+    this.saveData.highScores.sort((a, b) => b.score - a.score);
+    this.saveData.highScores = this.saveData.highScores.slice(0, 10);
+    this.saveGameData();
   }
 
   /* ==========================================================================
@@ -434,6 +566,11 @@ class GameEngine {
   startShiftTimer() {
     clearInterval(this.shiftTimerInterval);
 
+    if (this.sandboxMode) {
+      this.elShiftTimerText.textContent = '∞ Unlimited';
+      return;
+    }
+
     this.shiftTimerInterval = setInterval(() => {
       this.shiftTimeRemaining--;
       this.elShiftTimerText.textContent = `${this.shiftTimeRemaining}s`;
@@ -452,6 +589,12 @@ class GameEngine {
     const timerBonus = this.hasUpgrade('timer_boost') ? 5 : 0;
     this.orderTimeRemaining = baseTimer + timerBonus;
     
+    if (this.sandboxMode) {
+      this.elSpotlightTimer.textContent = '∞';
+      this.elSpotlightProgressBar.style.width = '100%';
+      return;
+    }
+
     this.updateOrderTimerDisplay();
 
     this.orderTimerInterval = setInterval(() => {
@@ -529,19 +672,38 @@ class GameEngine {
     this.elResShiftGoal.textContent = `$${currentLvlConfig.targetScore.toFixed(2)}`;
     this.elResCustomersCount.textContent = `${this.shiftServedCount}`;
 
+    if (this.shiftScore > 0) {
+      this.submitHighScore(this.saveData.playerName || 'Master Kopi Kia', this.shiftScore);
+      const resBox = document.getElementById('result-leaderboard-box');
+      const resNameInput = document.getElementById('res-player-name-input');
+      if (resBox && resNameInput) {
+        resNameInput.value = this.saveData.playerName || 'Master Kopi Kia';
+        resBox.classList.remove('hidden');
+      }
+    }
+
     this.elLevelResultModal.classList.remove('hidden');
   }
 
   renderQueue() {
     const activeOrder = this.queue[0];
-    this.elSpotlightAvatar.textContent = activeOrder.customerAvatar;
+    if (activeOrder.customerAvatar.includes('/')) {
+      this.elSpotlightAvatar.innerHTML = `<img src="${activeOrder.customerAvatar}" class="customer-avatar-img" alt="${activeOrder.customerName}">`;
+    } else {
+      this.elSpotlightAvatar.textContent = activeOrder.customerAvatar;
+    }
     this.elSpotlightCustomerName.textContent = `${activeOrder.customerName}:`;
     this.elSpotlightOrderName.textContent = `${activeOrder.recipe.name}!`;
 
     this.queue.forEach((ord, idx) => {
       const qCard = document.getElementById(`queue-card-${idx}`);
       if (qCard) {
-        qCard.querySelector('.queue-avatar').textContent = ord.customerAvatar;
+        const qAvatarEl = qCard.querySelector('.queue-avatar');
+        if (ord.customerAvatar.includes('/')) {
+          qAvatarEl.innerHTML = `<img src="${ord.customerAvatar}" class="customer-avatar-img" alt="${ord.customerName}">`;
+        } else {
+          qAvatarEl.textContent = ord.customerAvatar;
+        }
         qCard.querySelector('.q-name').textContent = `${ord.customerName}:`;
         qCard.querySelector('.q-drink').textContent = `${ord.recipe.name}!`;
       }
@@ -577,7 +739,11 @@ class GameEngine {
   autoEquipContainer(type = 'brew') {
     if (!this.activeMug.isEquipped) {
       this.activeMug.isEquipped = true;
-      this.activeMug.type = type;
+      let equipType = 'brew';
+      if (type === 'cans' || type === 'can') equipType = 'can';
+      else if (type === 'dispenser') equipType = 'dispenser';
+
+      this.activeMug.type = equipType;
       this.elGlassMugOverlay.classList.add('mug-active');
       window.soundEngine.playMugGrab();
     }
@@ -585,13 +751,24 @@ class GameEngine {
 
   handleGrabContainer() {
     window.soundEngine.init();
+    const isCup = this.activeTab === 'cans' || this.activeTab === 'dispenser';
+
     if (!this.activeMug.isEquipped) {
       this.autoEquipContainer(this.activeTab);
-      this.showToast('🍺 Mug Ready! Select ingredients.', true);
+      if (isCup) {
+        this.showToast('🥤 Ice Cup Ready! Select soda or dispenser.', true);
+      } else {
+        this.showToast('🍺 Mug Ready! Select ingredients.', true);
+      }
     } else {
+      const wasCup = this.activeMug.type === 'can' || this.activeMug.type === 'dispenser';
       this.resetMugState();
       window.soundEngine.playMugGrab();
-      this.showToast('🧹 Mug emptied & rinsed clean.', true);
+      if (wasCup) {
+        this.showToast('🧹 Ice Cup cleared.', true);
+      } else {
+        this.showToast('🧹 Mug emptied & rinsed clean.', true);
+      }
     }
   }
 
@@ -759,13 +936,23 @@ class GameEngine {
       else if (this.activeMug.tehCount > 0) ingredients.push('Teh');
 
       if (this.activeMug.milk === 'condensed') ingredients.push('Condensed Milk');
-      else if (this.activeMug.milk === 'evaporated') ingredients.push('Evap Milk');
+      else if (this.activeMug.milk === 'evaporated') ingredients.push('Evaporated Milk');
 
       if (this.activeMug.hasWater) ingredients.push('Hot Water');
       if (this.activeMug.sugar !== 'kosong') ingredients.push(this.activeMug.sugar.replace('_', ' ').toUpperCase());
     }
 
     if (this.activeMug.hasIce) ingredients.push('ICE');
+
+    const handleEl = document.getElementById('mug-handle');
+
+    if (this.activeMug.type === 'can' || this.activeMug.type === 'dispenser') {
+      this.elGlassBody.classList.add('plastic-cup-mode');
+      if (handleEl) handleEl.style.display = 'none';
+    } else {
+      this.elGlassBody.classList.remove('plastic-cup-mode');
+      if (handleEl) handleEl.style.display = 'block';
+    }
 
     if (ingredients.length > 0) this.elMugStatusText.textContent = ingredients.join(' + ');
     else this.elMugStatusText.textContent = 'Mug Ready! Select ingredients';
@@ -866,6 +1053,10 @@ class GameEngine {
 
     setTimeout(() => toast.remove(), 2200);
   }
+}
+
+if (typeof window !== 'undefined') {
+  window.GameEngine = GameEngine;
 }
 
 document.addEventListener('DOMContentLoaded', () => {

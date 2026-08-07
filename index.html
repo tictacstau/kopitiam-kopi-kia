@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@1,800;1,900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=18.0">
 </head>
 <body>
 
@@ -70,7 +70,7 @@
 
         <!-- Secondary 2x2 Action Grid -->
         <div class="menu-action-grid vintage-grid">
-          <button id="btn-menu-recipes" class="menu-grid-btn vintage-grid-btn">
+          <button id="btn-menu-recipes" class="menu-grid-btn vintage-grid-btn" onclick="if(window.gameEngine) window.gameEngine.openRecipeModal();">
             <span class="grid-icon">📖</span>
             <span>Recipes</span>
           </button>
@@ -98,7 +98,6 @@
     <!-- Top Navigation & Stats Header (Inside Gameplay) -->
     <header id="game-header" class="hidden">
       <div id="brand-title">
-        <button id="btn-back-menu" class="header-back-btn" title="Main Menu">🏠</button>
         <div class="header-level-badge">
           <span id="shift-level-name">Level 1</span>
         </div>
@@ -106,17 +105,17 @@
 
       <div id="game-stats">
         <div class="stat-pill money-pill">
-          <span class="stat-icon">💰</span>
+          <img src="assets/sprites/hud_money.jpg" class="stat-icon-img" alt="Money">
           <span id="score-text">$0.00</span>
         </div>
         <button id="btn-sound-toggle" class="header-icon-btn" title="Toggle Sound">
           <span class="icon">🔊</span>
         </button>
-        <button id="btn-recipe-modal" class="header-icon-btn" title="Recipe Guide">
+        <button id="btn-recipe-modal" class="header-icon-btn" title="Recipe Guide" onclick="if(window.gameEngine) window.gameEngine.openRecipeModal();">
           <span class="icon">📖</span>
         </button>
-        <button id="btn-header-ux-audit" class="header-icon-btn" title="Agentic UX Optimizer">
-          <span class="icon">⚡</span>
+        <button id="btn-back-menu" class="header-icon-btn" title="Main Menu">
+          <span class="icon">🏠</span>
         </button>
       </div>
     </header>
@@ -234,43 +233,52 @@
     <!-- Bottom Action Toolbar & Station Tabs -->
     <footer id="bottom-action-bar" class="hidden" aria-label="Action Toolbar">
       <div id="station-tab-bar">
-        <button class="station-tab active-tab" data-tab="brew">☕ BREW STALL</button>
-        <button class="station-tab" data-tab="cans">🥫 CANNED FRIDGE</button>
-        <button class="station-tab" data-tab="dispenser">🧃 DISPENSERS</button>
+        <button class="station-tab active-tab" data-tab="brew">
+          <img src="assets/sprites/tab_kopi_teh.jpg" class="tab-icon-img" alt="Kopi-Teh">
+          <span>KOPI-TEH</span>
+        </button>
+        <button class="station-tab" data-tab="cans">
+          <img src="assets/sprites/tab_canned.jpg" class="tab-icon-img" alt="Canned">
+          <span>CANNED</span>
+        </button>
+        <button class="station-tab" data-tab="dispenser">
+          <img src="assets/sprites/tab_dispenser.jpg" class="tab-icon-img" alt="Dispenser">
+          <span>DISPENSER</span>
+        </button>
       </div>
 
       <div class="station-panel" id="panel-brew">
         <div class="action-grid grid-8">
           <button id="btn-grab-mug" class="action-btn btn-cyan" data-action="grab">
-            <span class="btn-icon">🍺</span>
+            <img src="assets/sprites/sprite_glass_mug.jpg" class="sprite-icon" alt="Fresh Mug">
             <span class="btn-label">Fresh Mug</span>
           </button>
           <button id="btn-kopi" class="action-btn btn-pink" data-action="kopi">
-            <span class="btn-icon">☕</span>
+            <img src="assets/sprites/sprite_kopi_pot.jpg" class="sprite-icon" alt="Kopi Pot">
             <span class="btn-label">Kopi</span>
           </button>
           <button id="btn-teh" class="action-btn btn-green" data-action="teh">
-            <span class="btn-icon">🍵</span>
+            <img src="assets/sprites/sprite_teh_pot.jpg" class="sprite-icon" alt="Teh Pot">
             <span class="btn-label">Teh</span>
           </button>
           <button id="btn-water" class="action-btn btn-blue" data-action="water">
-            <span class="btn-icon">🔥</span>
+            <img src="assets/sprites/sprite_water_kettle.jpg" class="sprite-icon" alt="Hot Water">
             <span class="btn-label">Hot Water</span>
           </button>
           <button id="btn-condensed" class="action-btn btn-amber" data-action="condensed">
-            <span class="btn-icon">🥛</span>
+            <img src="assets/sprites/sprite_milk_tin.jpg" class="sprite-icon" alt="Condensed Milk">
             <span class="btn-label">Condensed</span>
           </button>
           <button id="btn-evap" class="action-btn btn-iceblue" data-action="evap">
-            <span class="btn-icon">🥛</span>
-            <span class="btn-label">Evap Milk</span>
+            <img src="assets/sprites/sprite_milk_tin.jpg" class="sprite-icon" alt="Evaporated Milk">
+            <span class="btn-label">Evaporated</span>
           </button>
           <button id="btn-sugar" class="action-btn btn-white" data-action="sugar">
-            <span class="btn-icon">🍬</span>
+            <img src="assets/sprites/sprite_sugar_bowl.jpg" class="sprite-icon" alt="Sugar Bowl">
             <span class="btn-label" id="label-sugar">Sugar</span>
           </button>
           <button id="btn-ice" class="action-btn btn-cyan" data-action="ice">
-            <span class="btn-icon">🧊</span>
+            <img src="assets/sprites/sprite_ice_bucket.jpg" class="sprite-icon" alt="Ice Bucket">
             <span class="btn-label" id="label-ice">Ice Bin</span>
           </button>
         </div>
@@ -279,19 +287,19 @@
       <div class="station-panel hidden" id="panel-cans">
         <div class="action-grid grid-4">
           <button id="btn-grab-cup-can" class="action-btn btn-cyan" data-action="grab_cup">
-            <span class="btn-icon">🥤</span>
+            <img src="assets/sprites/sprite_ice_cup.jpg" class="sprite-icon" alt="Ice Cup">
             <span class="btn-label">Ice Cup</span>
           </button>
-          <button id="btn-coke" class="action-btn btn-red" data-action="coke" title="Coke">
-            <span class="btn-icon"><img src="crimson_ribbon_icon.jpg" alt="Coke" class="soda-can-icon"></span>
+          <button id="btn-coke" class="action-btn btn-red" data-action="coke">
+            <img src="assets/sprites/sprite_coke_can.jpg" alt="Coke" class="sprite-icon">
             <span class="btn-label">Coke</span>
           </button>
           <button id="btn-sprite" class="action-btn btn-green" data-action="sprite">
-            <span class="btn-icon">🟢</span>
+            <img src="assets/sprites/sprite_sprite_can.jpg" class="sprite-icon" alt="Sprite">
             <span class="btn-label">Sprite</span>
           </button>
           <button id="btn-hundred" class="action-btn btn-blue" data-action="hundred">
-            <span class="btn-icon">🔵</span>
+            <img src="assets/sprites/sprite_hundred_plus.jpg" class="sprite-icon" alt="100 Plus">
             <span class="btn-label">100 Plus</span>
           </button>
         </div>
@@ -300,23 +308,23 @@
       <div class="station-panel hidden" id="panel-dispenser">
         <div class="action-grid grid-3">
           <button id="btn-grab-cup-disp" class="action-btn btn-cyan" data-action="grab_cup">
-            <span class="btn-icon">🥤</span>
+            <img src="assets/sprites/sprite_ice_cup.jpg" class="sprite-icon" alt="Ice Cup">
             <span class="btn-label">Ice Cup</span>
           </button>
           <button id="btn-bandung" class="action-btn btn-pink" data-action="bandung">
-            <span class="btn-icon">🌸</span>
+            <img src="assets/sprites/sprite_bandung_dispenser.jpg" class="sprite-icon" alt="Bandung">
             <span class="btn-label">Bandung</span>
           </button>
           <button id="btn-lime" class="action-btn btn-lime" data-action="lime">
-            <span class="btn-icon">🍋</span>
+            <img src="assets/sprites/sprite_lime_dispenser.jpg" class="sprite-icon" alt="Lime Juice">
             <span class="btn-label">Lime Juice</span>
           </button>
         </div>
       </div>
 
       <div class="serve-row">
-        <button id="btn-serve" class="action-btn btn-emerald" data-action="serve">
-          <span class="btn-icon">🛎️</span>
+        <button id="btn-serve" class="action-btn btn-amber" data-action="serve">
+          <img src="assets/sprites/sprite_serving_tray.jpg" class="tray-hero-sprite" alt="Serving Tray">
           <span class="btn-label">Serving Tray</span>
         </button>
       </div>
@@ -363,17 +371,20 @@
           <button class="close-btn btn-close-board">&times;</button>
         </div>
         <div class="modal-body">
+          <div class="player-name-card">
+            <label for="board-player-name-input"><strong>✏️ Your Hawker Name:</strong></label>
+            <div class="name-input-row">
+              <input type="text" id="board-player-name-input" placeholder="e.g. Master Kopi Kia" maxlength="20">
+              <button id="btn-save-player-name" class="btn-cyan">Save Name</button>
+            </div>
+          </div>
           <div class="board-stats-summary">
             <div class="b-stat"><span>Highest Level:</span> <strong id="board-high-level">Lv 1</strong></div>
             <div class="b-stat"><span>Career Earnings:</span> <strong id="board-career-money">$0.00</strong></div>
             <div class="b-stat"><span>Max Streak:</span> <strong id="board-max-streak">0</strong></div>
           </div>
-          <h3 class="board-sub-title">Recent High Score Shifts</h3>
-          <ul class="board-list" id="board-scores-list">
-            <li><span>1. Master Kopi Kia</span> <strong>$88.50</strong></li>
-            <li><span>2. Uncle Ah Seng</span> <strong>$45.00</strong></li>
-            <li><span>3. You (Best Shift)</span> <strong id="board-your-best">$0.00</strong></li>
-          </ul>
+          <h3 class="board-sub-title">Top Kopitiam Baristas</h3>
+          <ol class="board-list" id="board-scores-list"></ol>
         </div>
       </div>
     </div>
@@ -422,6 +433,14 @@
           <div class="r-row"><span>Customers Served:</span> <strong id="res-customers-count">0</strong></div>
         </div>
 
+        <div id="result-leaderboard-box" class="leaderboard-entry-box hidden">
+          <p class="leaderboard-title">🏆 New Hall of Fame High Score!</p>
+          <div class="name-input-row">
+            <input type="text" id="res-player-name-input" placeholder="Enter your Hawker Name" maxlength="20">
+            <button id="btn-submit-score" class="btn-cyan">Submit Score</button>
+          </div>
+        </div>
+
         <div class="result-btn-row">
           <button id="btn-retry-level" class="result-btn secondary-btn">🔄 Retry Shift</button>
           <button id="btn-next-level" class="result-btn primary-result-btn">▶️ Next Level</button>
@@ -429,43 +448,43 @@
       </div>
     </div>
 
-    <!-- Recipe Cheat Sheet Modal -->
-    <div id="recipe-modal" class="modal-overlay hidden" aria-hidden="true">
-      <div class="modal-card glass-card">
-        <div class="modal-header">
-          <h2>📖 Kopitiam Complete Recipe Guide</h2>
-          <button id="btn-close-modal" class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <ul class="recipe-list">
-            <li><strong>Kopi:</strong> Kopi + Condensed Milk + Hot Water</li>
-            <li><strong>Kopi-O:</strong> Kopi + Sugar + Hot Water (No Milk)</li>
-            <li><strong>Kopi-C:</strong> Kopi + Evap Milk + Sugar + Hot Water</li>
-            <li><strong>Kopi-C Siew Dai:</strong> Kopi + Evap Milk + Less Sugar + Hot Water</li>
-            <li><strong>Kopi Kosong:</strong> Kopi + Hot Water (No Milk, No Sugar)</li>
-            <li><strong>Kopi Peng:</strong> Kopi + Condensed Milk + Hot Water + Ice</li>
-            <li><strong>Teh:</strong> Teh + Condensed Milk + Hot Water</li>
-            <li><strong>Teh-O:</strong> Teh + Sugar + Hot Water (No Milk)</li>
-            <li><strong>Teh-C:</strong> Teh + Evap Milk + Sugar + Hot Water</li>
-            <li><strong>Teh Peng:</strong> Teh + Condensed Milk + Hot Water + Ice</li>
-            <li><strong>Yuan Yang:</strong> Kopi + Teh + Condensed Milk + Hot Water</li>
-            <li><strong>Iced Coke / Sprite / 100 Plus:</strong> Ice Cup + Ice + Chosen Can</li>
-            <li><strong>Iced Bandung:</strong> Ice Cup + Ice + Bandung Syrup Dispenser</li>
-            <li><strong>Iced Lime Juice:</strong> Ice Cup + Ice + Lime Juice Dispenser</li>
-          </ul>
-        </div>
+  </main>
+
+  <!-- Recipe Cheat Sheet Modal (At Body Level for Guaranteed Z-Index Top Overlay) -->
+  <div id="recipe-modal" class="modal-overlay hidden" aria-hidden="true">
+    <div class="modal-card glass-card">
+      <div class="modal-header">
+        <h2>📖 Kopitiam Complete Recipe Guide</h2>
+        <button id="btn-close-modal" class="close-btn btn-close-recipe" onclick="if(window.gameEngine) window.gameEngine.closeRecipeModal();">&times;</button>
+      </div>
+      <div class="modal-body">
+        <ul class="recipe-list">
+          <li><strong>Kopi:</strong> Kopi + Condensed Milk + Hot Water</li>
+          <li><strong>Kopi-O:</strong> Kopi + Sugar + Hot Water (No Milk)</li>
+          <li><strong>Kopi-C:</strong> Kopi + Evaporated Milk + Sugar + Hot Water</li>
+          <li><strong>Kopi-C Siew Dai:</strong> Kopi + Evaporated Milk + Less Sugar + Hot Water</li>
+          <li><strong>Kopi Kosong:</strong> Kopi + Hot Water (No Milk, No Sugar)</li>
+          <li><strong>Kopi Peng:</strong> Kopi + Condensed Milk + Hot Water + Ice</li>
+          <li><strong>Teh:</strong> Teh + Condensed Milk + Hot Water</li>
+          <li><strong>Teh-O:</strong> Teh + Sugar + Hot Water (No Milk)</li>
+          <li><strong>Teh-C:</strong> Teh + Evaporated Milk + Sugar + Hot Water</li>
+          <li><strong>Teh Peng:</strong> Teh + Condensed Milk + Hot Water + Ice</li>
+          <li><strong>Yuan Yang:</strong> Kopi + Teh + Condensed Milk + Hot Water</li>
+          <li><strong>Iced Coke / Sprite / 100 Plus:</strong> Ice Cup + Ice + Chosen Can</li>
+          <li><strong>Iced Bandung:</strong> Ice Cup + Ice + Bandung Syrup Dispenser</li>
+          <li><strong>Iced Lime Juice:</strong> Ice Cup + Ice + Lime Juice Dispenser</li>
+        </ul>
       </div>
     </div>
-
-  </main>
+  </div>
 
   <!-- JavaScript Modules & 3D WebGL Engine -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="js/audio.js"></script>
-  <script src="js/recipes.js"></script>
-  <script src="js/game.js"></script>
-  <script src="js/ux_agent.js"></script>
-  <script src="js/three_mug.js"></script>
+  <script src="js/audio.js?v=18.0"></script>
+  <script src="js/recipes.js?v=18.0"></script>
+  <script src="js/game.js?v=18.0"></script>
+  <script src="js/ux_agent.js?v=18.0"></script>
+  <script src="js/three_mug.js?v=18.0"></script>
 
 </body>
 </html>
