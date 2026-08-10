@@ -543,28 +543,55 @@
 
   <!-- Recipe Cheat Sheet Modal (At Body Level for Guaranteed Z-Index Top Overlay) -->
   <div id="recipe-modal" class="modal-overlay hidden" aria-hidden="true">
-    <div class="modal-card glass-card">
+    <div class="modal-card glass-card recipe-guide-card">
       <div class="modal-header">
         <h2><svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg> Kopitiam Complete Recipe Guide</h2>
         <button id="btn-close-modal" class="close-btn btn-close-recipe" onclick="if(window.gameEngine) window.gameEngine.closeRecipeModal();">&times;</button>
       </div>
-      <div class="modal-body">
-        <ul class="recipe-list">
-          <li><strong>Kopi:</strong> Kopi + Condensed Milk + Hot Water</li>
-          <li><strong>Kopi-O:</strong> Kopi + Sugar + Hot Water (No Milk)</li>
-          <li><strong>Kopi-C:</strong> Kopi + Evaporated Milk + Sugar + Hot Water</li>
-          <li><strong>Kopi-C Siew Dai:</strong> Kopi + Evaporated Milk + Less Sugar + Hot Water</li>
-          <li><strong>Kopi Kosong:</strong> Kopi + Hot Water (No Milk, No Sugar)</li>
-          <li><strong>Kopi Peng:</strong> Kopi + Condensed Milk + Hot Water + Ice</li>
-          <li><strong>Teh:</strong> Teh + Condensed Milk + Hot Water</li>
-          <li><strong>Teh-O:</strong> Teh + Sugar + Hot Water (No Milk)</li>
-          <li><strong>Teh-C:</strong> Teh + Evaporated Milk + Sugar + Hot Water</li>
-          <li><strong>Teh Peng:</strong> Teh + Condensed Milk + Hot Water + Ice</li>
-          <li><strong>Yuan Yang:</strong> Kopi + Teh + Condensed Milk + Hot Water</li>
-          <li><strong>Iced Coke / Sprite / 100 Plus:</strong> Ice Cup + Ice + Chosen Can</li>
-          <li><strong>Iced Bandung:</strong> Ice Cup + Ice + Bandung Syrup Dispenser</li>
-          <li><strong>Iced Lime Juice:</strong> Ice Cup + Ice + Lime Juice Dispenser</li>
-        </ul>
+      <div class="modal-body recipe-guide-body">
+        
+        <!-- Category 1: Kopi -->
+        <div class="recipe-category">
+          <h3 class="recipe-cat-title"><svg class="svg-icon" viewBox="0 0 24 24" style="color:#7c2d12;"><path fill="currentColor" d="M2 19h18v2H2v-2zm2-4h14v-8H4v8zm14-10H2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-2h2c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-2zm2 5h-2V7h2v3z"/></svg> Kopi</h3>
+          <div class="recipe-cards-group">
+            <div class="recipe-card-item"><strong>Kopi:</strong> Kopi + Condensed Milk + Hot Water</div>
+            <div class="recipe-card-item"><strong>Kopi-O:</strong> Kopi + Sugar + Hot Water</div>
+            <div class="recipe-card-item"><strong>Kopi-C:</strong> Kopi + Evaporated Milk + Sugar + Hot Water</div>
+            <div class="recipe-card-item"><strong>Kopi-C Siew Dai:</strong> Kopi + Evaporated Milk + Less Sugar + Hot Water</div>
+            <div class="recipe-card-item"><strong>Kopi Kosong:</strong> Kopi + Hot Water</div>
+            <div class="recipe-card-item"><strong>Kopi Peng:</strong> Kopi + Condensed Milk + Hot Water + Ice</div>
+          </div>
+        </div>
+
+        <!-- Category 2: Teh -->
+        <div class="recipe-category">
+          <h3 class="recipe-cat-title"><svg class="svg-icon" viewBox="0 0 24 24" style="color:#ea580c;"><path fill="currentColor" d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM2 20h20v2H2v-2z"/></svg> Teh</h3>
+          <div class="recipe-cards-group">
+            <div class="recipe-card-item"><strong>Teh:</strong> Teh + Condensed Milk + Hot Water</div>
+            <div class="recipe-card-item"><strong>Teh-O:</strong> Teh + Sugar + Hot Water</div>
+            <div class="recipe-card-item"><strong>Teh-C:</strong> Teh + Evaporated Milk + Sugar + Hot Water</div>
+            <div class="recipe-card-item"><strong>Teh Peng:</strong> Teh + Condensed Milk + Hot Water + Ice</div>
+            <div class="recipe-card-item"><strong>Yuan Yang:</strong> Kopi + Teh + Condensed Milk + Hot Water</div>
+          </div>
+        </div>
+
+        <!-- Category 3: Soda -->
+        <div class="recipe-category">
+          <h3 class="recipe-cat-title"><svg class="svg-icon" viewBox="0 0 24 24" style="color:#0284c7;"><path fill="currentColor" d="M12 2c-1.1 0-2 .9-2 2v2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-2V4c0-1.1-.9-2-2-2zm-4 6h8v12H8V8z"/></svg> Soda</h3>
+          <div class="recipe-cards-group">
+            <div class="recipe-card-item"><strong>Iced Coke / Sprite / 100 Plus:</strong> Ice Cup + Ice + Chosen Can</div>
+          </div>
+        </div>
+
+        <!-- Category 4: Dispenser -->
+        <div class="recipe-category">
+          <h3 class="recipe-cat-title"><svg class="svg-icon" viewBox="0 0 24 24" style="color:#16a34a;"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H9V5h6v2z"/></svg> Dispenser</h3>
+          <div class="recipe-cards-group">
+            <div class="recipe-card-item"><strong>Iced Bandung:</strong> Ice Cup + Ice + Bandung Dispenser</div>
+            <div class="recipe-card-item"><strong>Iced Lime Juice:</strong> Ice Cup + Ice + Lime Juice Dispenser</div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
