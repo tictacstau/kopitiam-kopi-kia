@@ -286,8 +286,11 @@ class GameEngine {
     this.elBtnNextLevel.addEventListener('click', () => {
       window.soundEngine.playMenuClick();
       this.elLevelResultModal.classList.add('hidden');
-      if (this.currentLevelIndex < CAMPAIGN_LEVELS.length - 1) {
-        this.startLevelShift(this.currentLevelIndex + 1);
+      const currentLvlConfig = CAMPAIGN_LEVELS[this.currentLevelIndex];
+      const isVictory = this.shiftScore >= currentLvlConfig.targetScore;
+
+      if (isVictory && this.currentLevelIndex < CAMPAIGN_LEVELS.length - 1) {
+        this.triggerLevelStartSequence(this.currentLevelIndex + 1);
       } else {
         this.openSagaMap();
       }
@@ -870,6 +873,25 @@ class GameEngine {
     this.elResShiftScore.textContent = `$${this.shiftScore.toFixed(2)}`;
     this.elResShiftGoal.textContent = `$${currentLvlConfig.targetScore.toFixed(2)}`;
     this.elResCustomersCount.textContent = `${this.shiftServedCount}`;
+
+    if (isVictory) {
+      this.elBtnRetryLevel.className = 'result-btn secondary-btn';
+      this.elBtnRetryLevel.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg> <span>Retry Shift</span>';
+
+      this.elBtnNextLevel.className = 'result-btn primary-result-btn';
+      if (this.currentLevelIndex < CAMPAIGN_LEVELS.length - 1) {
+        this.elBtnNextLevel.innerHTML = '<span>Next Level</span> <svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>';
+      } else {
+        this.elBtnNextLevel.innerHTML = '<span>Saga Map</span> <svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>';
+      }
+    } else {
+      // Failed Shift: Primary button is Retry Shift, Secondary button is Saga Map
+      this.elBtnRetryLevel.className = 'result-btn primary-result-btn';
+      this.elBtnRetryLevel.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg> <span>Retry Shift</span>';
+
+      this.elBtnNextLevel.className = 'result-btn secondary-btn';
+      this.elBtnNextLevel.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg> <span>Saga Map</span>';
+    }
 
     if (this.shiftScore > 0) {
       this.submitHighScore(this.saveData.playerName || 'Master Kopi Kia', this.shiftScore);
