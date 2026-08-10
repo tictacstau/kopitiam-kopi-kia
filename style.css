@@ -1102,19 +1102,24 @@ body {
   display: flex;
   gap: 8px;
   margin-top: 6px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .name-input-row input {
   flex: 1;
+  min-width: 0;
   padding: 8px 12px;
   border: 2px solid var(--nanyang-blue);
   border-radius: 10px;
   font-weight: 700;
   font-size: 0.9rem;
   outline: none;
+  box-sizing: border-box;
 }
 
 .name-input-row button {
+  flex-shrink: 0;
   padding: 8px 16px;
   border-radius: 10px;
   font-weight: 900;
