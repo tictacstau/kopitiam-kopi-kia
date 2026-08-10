@@ -343,8 +343,8 @@
 
       <div class="serve-row">
         <button id="btn-serve" class="action-btn btn-amber" data-action="serve">
-          <img src="assets/sprites/sprite_serving_tray.jpg" class="tray-hero-sprite" alt="Serving Tray">
-          <span class="btn-label">Serving Tray</span>
+          <img src="assets/sprites/sprite_serving_tray.jpg" class="tray-hero-sprite" alt="Serve Order">
+          <span class="btn-label">Serve Order</span>
         </button>
       </div>
     </footer>
@@ -386,7 +386,7 @@
     <div id="board-modal" class="modal-overlay hidden" aria-hidden="true">
       <div class="modal-card glass-card">
         <div class="modal-header">
-          <h2><svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v2c0 2.76 2.24 5 5 5h.81c.88 1.58 2.39 2.74 4.19 3.08V19H9v2h6v-2h-3.8v-3.92c1.8-.34 3.31-1.5 4.19-3.08H16c2.76 0 5-2.24 5-5V5c0-1.1-.9-2-2-2z"/></svg> Kopitiam Hall of Fame</h2>
+          <h2><svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v2c0 2.76 2.24 5 5 5h.81c.88 1.58 2.39 2.74 4.19 3.08V19H9v2h6v2h-3.8v-3.92c1.8-.34 3.31-1.5 4.19-3.08H16c2.76 0 5-2.24 5-5V5c0-1.1-.9-2-2-2z"/></svg> Kopitiam Hall of Fame</h2>
           <button class="close-btn btn-close-board">&times;</button>
         </div>
         <div class="modal-body">
@@ -399,23 +399,34 @@
           </div>
           <div class="board-stats-summary">
             <div class="b-stat"><span>Highest Level:</span> <strong id="board-high-level">Lv 1</strong></div>
-            <div class="b-stat"><span>Career Earnings:</span> <strong id="board-career-money">$0.00</strong></div>
-            <div class="b-stat"><span>Max Streak:</span> <strong id="board-max-streak">0</strong></div>
+            <div class="b-stat"><span>Best Shift Earnings:</span> <strong id="board-high-score">$0.00</strong></div>
           </div>
-          <h3 class="board-sub-title">Top Kopitiam Baristas</h3>
-          <ol class="board-list" id="board-scores-list"></ol>
+          <div class="leaderboard-table-container">
+            <table class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Hawker Name</th>
+                  <th>Best Shift</th>
+                </tr>
+              </thead>
+              <tbody id="board-table-body">
+                <tr><td colspan="3" class="empty-board">Loading Hall of Fame...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- HOW TO MODAL -->
+    <!-- HOW TO PLAY TUTORIAL MODAL -->
     <div id="howto-modal" class="modal-overlay hidden" aria-hidden="true">
       <div class="modal-card glass-card">
         <div class="modal-header">
-          <h2>❓ How to Play Kopitiam Kopi Kia</h2>
+          <h2>❓ How to Play Kopi Kia</h2>
           <button class="close-btn btn-close-howto">&times;</button>
         </div>
-        <div class="modal-body howto-body">
+        <div class="modal-body">
           <div class="step-box">
             <h4>1. Check Active Customer Spotlight Order</h4>
             <p>Look at the top-right card to see customer order (e.g. <code>Kopi-C Siew Dai</code>).</p>
@@ -426,7 +437,7 @@
           </div>
           <div class="step-box">
             <h4>3. Serve & Earn Cash!</h4>
-            <p>Tap <strong>Serving Tray</strong> to collect payout. Beat the target goal to earn 3 Stars ⭐ ⭐ ⭐!</p>
+            <p>Tap <strong>Serve Order</strong> to collect payout. Beat the target goal to earn 3 Stars ⭐ ⭐ ⭐!</p>
           </div>
         </div>
       </div>
