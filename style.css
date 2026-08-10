@@ -413,18 +413,29 @@ body {
 .header-icon-btn {
   background: #ffffff;
   border: 2px solid var(--nanyang-blue);
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   color: var(--nanyang-blue);
-  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: auto !important;
   z-index: 1000 !important;
+}
+
+.header-icon-btn:hover {
+  background: #f1f5f9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 56, 107, 0.22);
+}
+
+.header-icon-btn .svg-icon {
+  width: 18px;
+  height: 18px;
 }
 
 .header-icon-btn * {
