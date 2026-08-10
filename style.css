@@ -315,11 +315,25 @@ body {
 }
 
 .vintage-footer {
-  margin-top: 4px;
+  margin-top: 6px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.copyright-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.92);
+  border: 2px solid var(--nanyang-blue);
+  padding: 6px 16px;
+  border-radius: 14px;
+  color: var(--nanyang-blue);
   font-size: 0.7rem;
-  color: var(--text-dark);
   font-weight: 800;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  letter-spacing: 0.2px;
 }
 
 /* ==========================================================================
