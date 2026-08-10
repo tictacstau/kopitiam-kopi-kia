@@ -1,0 +1,21 @@
+{
+  "name": "Kopi Kia",
+  "short_name": "Kopi Kia",
+  "description": "Singapore Hawker Coffee Simulation Game",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fdfbf7",
+  "theme_color": "#0f386b",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

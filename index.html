@@ -3,11 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kopitiam Kopi Kia | Singapore Hawker Coffee Simulation Game</title>
+  <title>Kopi Kia | Singapore Hawker Coffee Simulation Game</title>
   <meta name="description" content="Master the art of Singapore hawker coffee brewing! Serve Kopi, Teh, Siew Dai, Yuan Yang & iced sodas in this authentic 1950s Nanyang vintage Kopitiam game. Play free at kopitiam.lol!">
-  <meta name="keywords" content="Kopitiam, Kopi Kia, Singapore Hawker Game, Kopi-C, Teh-O, Nanyang Coffee, Indie Game, kopitiam.lol">
+  <meta name="keywords" content="Kopi Kia, Kopitiam, Singapore Hawker Game, Kopi-C, Teh-O, Nanyang Coffee, Indie Game, kopitiam.lol">
 
-  <!-- Favicon & Mobile Touch Icons -->
+  <!-- Favicon, iOS App Title & PWA Web Manifest -->
+  <meta name="apple-mobile-web-app-title" content="Kopi Kia">
+  <meta name="application-name" content="Kopi Kia">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json?v=27.0">
+
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=20.0">
   <link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=20.0">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=20.0">
@@ -15,7 +21,7 @@
   <!-- Open Graph / Facebook / LinkedIn / WhatsApp / Telegram Social Previews -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://kopitiam.lol/">
-  <meta property="og:title" content="Kopitiam Kopi Kia | Singapore Hawker Coffee Simulation Game">
+  <meta property="og:title" content="Kopi Kia | Singapore Hawker Coffee Simulation Game">
   <meta property="og:description" content="Step into the shoes of a Singapore Kopitiam barista! Serve authentic Kopi, Teh, Bandung & iced sodas. Rank on the Kopitiam Hall of Fame leaderboard at kopitiam.lol!">
   <meta property="og:image" content="https://kopitiam.lol/kopitiam_cover_art.jpg">
   <meta property="og:image:width" content="1280">
@@ -24,7 +30,7 @@
   <!-- Twitter / X Social Previews -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://kopitiam.lol/">
-  <meta property="twitter:title" content="Kopitiam Kopi Kia | Singapore Hawker Coffee Simulation Game">
+  <meta property="twitter:title" content="Kopi Kia | Singapore Hawker Coffee Simulation Game">
   <meta property="twitter:description" content="Master authentic Singapore hawker coffee brewing! Serve Kopi, Teh & sodas in this retro 1950s Nanyang Kopitiam simulation game. Play free at kopitiam.lol!">
   <meta property="twitter:image" content="https://kopitiam.lol/kopitiam_cover_art.jpg">
 
@@ -36,7 +42,7 @@
 <body>
 
   <!-- Main Mobile Viewport Wrapper -->
-  <main id="mobile-viewport" aria-label="Kopitiam Kopi Kia Game Viewport">
+  <main id="mobile-viewport" aria-label="Kopi Kia Game Viewport">
     
     <!-- Game Background Photo -->
     <div id="game-background" style="background-image: url('clean_background.jpg');"></div>
@@ -57,7 +63,6 @@
         <!-- Vintage Nanyang Title Logo -->
         <div class="menu-brand-title vintage-brand-title">
           <h1 class="vintage-poster-logo">
-            <span class="nanyang-header">KOPITIAM</span>
             <span class="chinese-calligraphy">隨意咖啡店</span>
             <span class="kopikia-header">KOPI KIA</span>
           </h1>
@@ -72,41 +77,41 @@
         <!-- Player Stats Bar -->
         <div class="player-stats-bar vintage-stats-bar">
           <div class="menu-stat-pill vintage-stat-pill">
-            <span class="stat-icon">⭐</span>
+            <span class="stat-icon"><svg class="svg-icon icon-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.5l3.09 6.26 6.91 1-5 4.87 1.18 6.88L12 17.27l-6.18 3.25L7 13.63 2 8.76l6.91-1L12 1.5z"/></svg></span>
             <span id="menu-player-level">Lv 1</span>
           </div>
           <div class="menu-stat-pill vintage-stat-pill">
-            <span class="stat-icon">💰</span>
+            <span class="stat-icon"><svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
             <span id="menu-player-money">$0.00</span>
           </div>
           <div class="menu-stat-pill vintage-stat-pill">
-            <span class="stat-icon">🔥</span>
+            <span class="stat-icon"><svg class="svg-icon" viewBox="0 0 24 24" style="color: #f97316;"><path fill="currentColor" d="M13.5 0.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8c0-5.52-4.48-10.02-6.5-13.33zM12 20c-3.31 0-6-2.69-6-6 0-1.53.58-3.04 1.54-4.21 1.02 1.62 3.01 2.5 4.96 2.5 2.98 0 5.26-2.18 5.48-5.06C19.22 9.61 20 11.74 20 14c0 3.31-2.69 6-6 6z"/></svg></span>
             <span id="menu-player-streak">0</span>
           </div>
         </div>
 
         <!-- Primary Call to Action Button -->
         <button id="btn-start-campaign" class="primary-cta-btn vintage-cta-btn">
-          <span class="btn-icon">☕</span>
+          <span class="btn-icon"><svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M2 19h18v2H2v-2zm2-4h14v-8H4v8zm14-10H2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-2h2c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-2zm2 5h-2V7h2v3z"/></svg></span>
           <span class="cta-text">Start Campaign</span>
         </button>
 
         <!-- Secondary 2x2 Action Grid -->
         <div class="menu-action-grid vintage-grid">
           <button id="btn-menu-recipes" class="menu-grid-btn vintage-grid-btn" onclick="if(window.gameEngine) window.gameEngine.openRecipeModal();">
-            <span class="grid-icon">📖</span>
+            <span class="grid-icon"><svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg></span>
             <span>Recipes</span>
           </button>
           <button id="btn-menu-board" class="menu-grid-btn vintage-grid-btn">
-            <span class="grid-icon">🏆</span>
+            <span class="grid-icon"><svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v2c0 2.76 2.24 5 5 5h.81c.88 1.58 2.39 2.74 4.19 3.08V19H9v2h6v-2h-3.8v-3.92c1.8-.34 3.31-1.5 4.19-3.08H16c2.76 0 5-2.24 5-5V5c0-1.1-.9-2-2-2z"/></svg></span>
             <span>Board</span>
           </button>
           <button id="btn-menu-shop" class="menu-grid-btn vintage-grid-btn">
-            <span class="grid-icon">🛒</span>
+            <span class="grid-icon"><svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg></span>
             <span>Shop</span>
           </button>
           <button id="btn-menu-howto" class="menu-grid-btn vintage-grid-btn">
-            <span class="grid-icon">❓</span>
+            <span class="grid-icon"><svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg></span>
             <span>How To</span>
           </button>
         </div>
@@ -360,7 +365,7 @@
     <div id="saga-map-modal" class="modal-overlay hidden" aria-hidden="true">
       <div class="modal-card glass-card map-card">
         <div class="modal-header">
-          <h2>🗺️ Campaign Saga Path</h2>
+          <h2><svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg> Campaign Saga Path</h2>
           <button class="close-btn btn-close-saga">&times;</button>
         </div>
         <div class="modal-body">
@@ -373,7 +378,7 @@
     <div id="shop-modal" class="modal-overlay hidden" aria-hidden="true">
       <div class="modal-card glass-card shop-card-container">
         <div class="modal-header">
-          <h2>🛒 Kopitiam Equipment Shop</h2>
+          <h2><svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg> Kopitiam Equipment Shop</h2>
           <button class="close-btn btn-close-shop">&times;</button>
         </div>
         <div class="modal-body">
@@ -390,12 +395,12 @@
     <div id="board-modal" class="modal-overlay hidden" aria-hidden="true">
       <div class="modal-card glass-card">
         <div class="modal-header">
-          <h2>🏆 Kopitiam Hall of Fame</h2>
+          <h2><svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v2c0 2.76 2.24 5 5 5h.81c.88 1.58 2.39 2.74 4.19 3.08V19H9v2h6v-2h-3.8v-3.92c1.8-.34 3.31-1.5 4.19-3.08H16c2.76 0 5-2.24 5-5V5c0-1.1-.9-2-2-2z"/></svg> Kopitiam Hall of Fame</h2>
           <button class="close-btn btn-close-board">&times;</button>
         </div>
         <div class="modal-body">
           <div class="player-name-card">
-            <label for="board-player-name-input"><strong>✏️ Your Hawker Name:</strong></label>
+            <label for="board-player-name-input"><strong>Your Hawker Name:</strong></label>
             <div class="name-input-row">
               <input type="text" id="board-player-name-input" placeholder="e.g. Master Kopi Kia" maxlength="20">
               <button id="btn-save-player-name" class="btn-cyan">Save Name</button>
@@ -440,14 +445,14 @@
     <div id="level-result-modal" class="modal-overlay hidden" aria-hidden="true">
       <div class="modal-card glass-card result-card">
         <div class="result-header">
-          <h2 id="result-title">🎉 Shift Complete!</h2>
+          <h2 id="result-title">Shift Complete!</h2>
           <p id="result-level-name">Level 1: Tiong Bahru Corner</p>
         </div>
 
         <div class="stars-display-row" id="result-stars-row">
-          <span class="star-big">⭐</span>
-          <span class="star-big">⭐</span>
-          <span class="star-big">⭐</span>
+          <span class="star-big"><svg class="svg-icon icon-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.5l3.09 6.26 6.91 1-5 4.87 1.18 6.88L12 17.27l-6.18 3.25L7 13.63 2 8.76l6.91-1L12 1.5z"/></svg></span>
+          <span class="star-big"><svg class="svg-icon icon-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.5l3.09 6.26 6.91 1-5 4.87 1.18 6.88L12 17.27l-6.18 3.25L7 13.63 2 8.76l6.91-1L12 1.5z"/></svg></span>
+          <span class="star-big"><svg class="svg-icon icon-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.5l3.09 6.26 6.91 1-5 4.87 1.18 6.88L12 17.27l-6.18 3.25L7 13.63 2 8.76l6.91-1L12 1.5z"/></svg></span>
         </div>
 
         <div class="result-breakdown">
@@ -457,7 +462,7 @@
         </div>
 
         <div id="result-leaderboard-box" class="leaderboard-entry-box hidden">
-          <p class="leaderboard-title">🏆 New Hall of Fame High Score!</p>
+          <p class="leaderboard-title">New Hall of Fame High Score!</p>
           <div class="name-input-row">
             <input type="text" id="res-player-name-input" placeholder="Enter your Hawker Name" maxlength="20">
             <button id="btn-submit-score" class="btn-cyan">Submit Score</button>
@@ -465,8 +470,14 @@
         </div>
 
         <div class="result-btn-row">
-          <button id="btn-retry-level" class="result-btn secondary-btn">🔄 Retry Shift</button>
-          <button id="btn-next-level" class="result-btn primary-result-btn">▶️ Next Level</button>
+          <button id="btn-retry-level" class="result-btn secondary-btn">
+            <svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+            <span>Retry Shift</span>
+          </button>
+          <button id="btn-next-level" class="result-btn primary-result-btn">
+            <span>Next Level</span>
+            <svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+          </button>
         </div>
       </div>
     </div>
@@ -486,7 +497,6 @@
       <div class="splash-cover-content">
         <div class="menu-brand-title vintage-brand-title splash-brand-badge">
           <h1 class="vintage-poster-logo">
-            <span class="nanyang-header">KOPITIAM</span>
             <span class="chinese-calligraphy">隨意咖啡店</span>
             <span class="kopikia-header">KOPI KIA</span>
           </h1>
@@ -496,11 +506,44 @@
     </div>
   </div>
 
+  <!-- STORY DIALOGUE OVERLAY MODAL -->
+  <div id="story-dialogue-modal" class="modal-overlay hidden" aria-hidden="true">
+    <div class="modal-card glass-card story-modal-card">
+      <div class="story-header">
+        <span class="story-chapter-tag" id="story-chapter-title">CHAPTER 1: TIONG BAHRU CORNER</span>
+        <button class="close-btn btn-close-story">&times;</button>
+      </div>
+      <div class="story-body">
+        <div class="story-character-row">
+          <img id="story-avatar-img" src="assets/sprites/char_uncle_lim.svg" class="story-avatar-sprite" alt="Character Avatar">
+          <div class="story-bubble">
+            <h4 id="story-speaker-name">Uncle Lim (Hawker Mentor)</h4>
+            <p id="story-speech-text">"Oi Kopi Kia! Welcome to Tiong Bahru! Mdm Tan is here already. She wants her Kopi-C Siew Dai fast. Don't embarrass Uncle ah!"</p>
+          </div>
+        </div>
+        <div id="story-unlock-box" class="story-unlock-badge">
+          <span id="story-unlock-text">☕ STARTING EQUIPMENT: Kopi & Teh Stall</span>
+        </div>
+      </div>
+      <div class="story-footer">
+        <button id="btn-start-story-shift" class="btn-story-primary">▶ START SHIFT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3-2-1 SHIFT COUNTDOWN OVERLAY -->
+  <div id="countdown-overlay" class="countdown-overlay hidden">
+    <div class="countdown-content">
+      <div id="countdown-number" class="countdown-num">3</div>
+      <div id="countdown-label" class="countdown-text">GET READY!</div>
+    </div>
+  </div>
+
   <!-- Recipe Cheat Sheet Modal (At Body Level for Guaranteed Z-Index Top Overlay) -->
   <div id="recipe-modal" class="modal-overlay hidden" aria-hidden="true">
     <div class="modal-card glass-card">
       <div class="modal-header">
-        <h2>📖 Kopitiam Complete Recipe Guide</h2>
+        <h2><svg class="svg-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg> Kopitiam Complete Recipe Guide</h2>
         <button id="btn-close-modal" class="close-btn btn-close-recipe" onclick="if(window.gameEngine) window.gameEngine.closeRecipeModal();">&times;</button>
       </div>
       <div class="modal-body">
@@ -526,10 +569,10 @@
 
   <!-- JavaScript Modules & 3D WebGL Engine -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="js/audio.js?v=27.0"></script>
-  <script src="js/recipes.js?v=27.0"></script>
-  <script src="js/game.js?v=27.0"></script>
-  <script src="js/three_mug.js?v=27.0"></script>
+  <script src="js/audio.js?v=28.0"></script>
+  <script src="js/recipes.js?v=28.0"></script>
+  <script src="js/game.js?v=28.0"></script>
+  <script src="js/three_mug.js?v=28.0"></script>
 
 </body>
 </html>

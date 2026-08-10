@@ -27,7 +27,9 @@ class GameEngine {
       dispenserFlavor: null
     };
 
-    this.sandboxMode = false; // Set to false for standard production gameplay timers
+    // Secret Developer Sandbox Mode via URL query parameter (e.g. ?sandbox=true or ?dev=1)
+    const urlParams = (typeof window !== 'undefined' && window.location) ? new URLSearchParams(window.location.search) : null;
+    this.sandboxMode = urlParams ? (urlParams.get('sandbox') === 'true' || urlParams.get('dev') === '1') : false;
 
     this.queue = [];
     this.orderTimerInterval = null;
@@ -52,6 +54,14 @@ class GameEngine {
         studioStep.classList.add('hidden');
         coverStep.classList.remove('hidden');
         coverStep.classList.add('splash-fade-in');
+
+        // Start Kopitiam ambient sound as soon as "TAP ANYWHERE TO START" screen appears
+        try {
+          if (window.soundEngine) {
+            window.soundEngine.init();
+            window.soundEngine.startKopitiamAmbient();
+          }
+        } catch (err) {}
       }, 500);
     }, 1800);
 
@@ -61,6 +71,7 @@ class GameEngine {
       try {
         if (window.soundEngine) {
           window.soundEngine.init();
+          window.soundEngine.startKopitiamAmbient();
           window.soundEngine.playSwooshSound();
         }
       } catch (err) {}
@@ -375,6 +386,114 @@ class GameEngine {
         }
       });
     }
+
+    const btnStartStory = document.getElementById('btn-start-story-shift');
+    if (btnStartStory) {
+      btnStartStory.addEventListener('click', () => {
+        if (this.currentStoryAudio) {
+          this.currentStoryAudio.pause();
+          this.currentStoryAudio = null;
+        }
+        const storyModal = document.getElementById('story-dialogue-modal');
+        if (storyModal) storyModal.classList.add('hidden');
+        this.runShiftCountdown(() => this.startLevelShift(this.pendingLevelIdx || 0));
+      });
+    }
+
+    const btnCloseStory = document.querySelector('.btn-close-story');
+    if (btnCloseStory) {
+      btnCloseStory.addEventListener('click', () => {
+        if (this.currentStoryAudio) {
+          this.currentStoryAudio.pause();
+          this.currentStoryAudio = null;
+        }
+        const storyModal = document.getElementById('story-dialogue-modal');
+        if (storyModal) storyModal.classList.add('hidden');
+      });
+    }
+  }
+
+  triggerLevelStartSequence(levelIdx) {
+    this.pendingLevelIdx = levelIdx;
+    const script = (window.STORY_SCRIPTS || {})[levelIdx + 1];
+    if (script) {
+      this.openStoryDialogueModal(script);
+    } else {
+      this.runShiftCountdown(() => this.startLevelShift(levelIdx));
+    }
+  }
+
+  openStoryDialogueModal(script) {
+    const storyModal = document.getElementById('story-dialogue-modal');
+    if (!storyModal) return;
+
+    document.getElementById('story-chapter-title').textContent = script.chapterTitle;
+    document.getElementById('story-avatar-img').src = script.avatar;
+    document.getElementById('story-speaker-name').textContent = script.characterName;
+    document.getElementById('story-speech-text').textContent = `"${script.dialogue}"`;
+
+    const unlockBox = document.getElementById('story-unlock-box');
+    const unlockText = document.getElementById('story-unlock-text');
+    if (script.unlockNotice) {
+      unlockText.textContent = script.unlockNotice;
+      unlockBox.classList.remove('hidden');
+    } else {
+      unlockBox.classList.add('hidden');
+    }
+
+    storyModal.classList.remove('hidden');
+
+    if (script.audio) {
+      try {
+        if (this.currentStoryAudio) {
+          this.currentStoryAudio.pause();
+          this.currentStoryAudio = null;
+        }
+        this.currentStoryAudio = new Audio(script.audio);
+        this.currentStoryAudio.play().catch(e => console.warn('Voiceover playback guard:', e));
+      } catch (e) {
+        console.warn('Voiceover audio error:', e);
+      }
+    }
+  }
+
+  runShiftCountdown(onComplete) {
+    const overlay = document.getElementById('countdown-overlay');
+    const numEl = document.getElementById('countdown-number');
+    const labelEl = document.getElementById('countdown-label');
+    if (!overlay || !numEl || !labelEl) {
+      if (onComplete) onComplete();
+      return;
+    }
+
+    overlay.classList.remove('hidden');
+    let count = 3;
+    numEl.textContent = `${count}`;
+    labelEl.textContent = 'GET READY!';
+
+    try {
+      if (window.soundEngine) window.soundEngine.playSwooshSound();
+    } catch (e) {}
+
+    const interval = setInterval(() => {
+      count--;
+      if (count > 0) {
+        numEl.textContent = `${count}`;
+        try {
+          if (window.soundEngine) window.soundEngine.playSwooshSound();
+        } catch (e) {}
+      } else if (count === 0) {
+        numEl.textContent = '☕';
+        labelEl.textContent = 'START BREWING!';
+        try {
+          if (window.soundEngine) window.soundEngine.playVictoryFanfare();
+        } catch (e) {}
+      } else {
+        clearInterval(interval);
+        overlay.classList.add('hidden');
+        if (onComplete) onComplete();
+      }
+    }, 750);
   }
 
   openRecipeModal() {
@@ -403,6 +522,10 @@ class GameEngine {
     this.elMenuLevel.textContent = `Lv ${this.saveData.unlockedLevel}`;
     this.elMenuMoney.textContent = `$${this.saveData.careerMoney.toFixed(2)}`;
     this.elMenuStreak.textContent = `${this.saveData.streak}`;
+
+    if (this.sandboxMode) {
+      setTimeout(() => this.showToast('Dev Sandbox Mode Active', true), 600);
+    }
   }
 
   exitToMainMenu() {
@@ -434,23 +557,25 @@ class GameEngine {
       nodeCard.className = `saga-node-card ${isUnlocked ? 'node-unlocked' : 'node-locked'}`;
 
       let starsHtml = '';
+      const starSvg = '<svg class="svg-icon icon-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.5l3.09 6.26 6.91 1-5 4.87 1.18 6.88L12 17.27l-6.18 3.25L7 13.63 2 8.76l6.91-1L12 1.5z"/></svg>';
       for (let s = 1; s <= 3; s++) {
-        starsHtml += s <= starsEarned ? '⭐' : '☆';
+        starsHtml += s <= starsEarned ? starSvg : `<span style="opacity:0.35;">${starSvg}</span>`;
       }
+      const lockSvg = '<svg class="svg-icon" viewBox="0 0 24 24" style="color: #64748b;"><path fill="currentColor" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>';
 
       nodeCard.innerHTML = `
         <div class="node-info">
           <h4>Level ${lvl.level}: ${lvl.name}</h4>
           <p>Target Goal: $${lvl.targetScore.toFixed(2)} (${lvl.shiftSeconds}s)</p>
         </div>
-        <div class="star-row">${isUnlocked ? starsHtml : '🔒'}</div>
+        <div class="star-row">${isUnlocked ? starsHtml : lockSvg}</div>
       `;
 
       if (isUnlocked) {
         nodeCard.addEventListener('click', () => {
           window.soundEngine.playMenuClick();
           this.elSagaMapModal.classList.add('hidden');
-          this.startLevelShift(idx);
+          this.triggerLevelStartSequence(idx);
         });
       }
 
@@ -596,6 +721,35 @@ class GameEngine {
       OrderManager.getRandomOrder(currentLvlConfig.level)
     ];
 
+    // Station Unlocks based on Level Progression
+    const tabCanned = document.querySelector('.tab-btn[data-station="canned"]');
+    const tabDispenser = document.querySelector('.tab-btn[data-station="dispenser"]');
+    const levelNum = currentLvlConfig.level;
+
+    if (tabCanned) {
+      if (levelNum >= 2) {
+        tabCanned.classList.remove('tab-locked');
+        tabCanned.style.opacity = '1';
+        tabCanned.style.pointerEvents = 'auto';
+      } else {
+        tabCanned.classList.add('tab-locked');
+        tabCanned.style.opacity = '0.4';
+        tabCanned.style.pointerEvents = 'none';
+      }
+    }
+
+    if (tabDispenser) {
+      if (levelNum >= 3) {
+        tabDispenser.classList.remove('tab-locked');
+        tabDispenser.style.opacity = '1';
+        tabDispenser.style.pointerEvents = 'auto';
+      } else {
+        tabDispenser.classList.add('tab-locked');
+        tabDispenser.style.opacity = '0.4';
+        tabDispenser.style.pointerEvents = 'none';
+      }
+    }
+
     this.resetMugState();
     this.renderQueue();
     this.startShiftTimer();
@@ -698,12 +852,18 @@ class GameEngine {
 
     this.saveGameData();
 
-    this.elResultTitle.textContent = isVictory ? '🎉 Shift Victory!' : '💔 Shift Ended!';
+    this.elResultTitle.innerHTML = isVictory
+      ? '<svg class="svg-icon icon-title-badge icon-victory-badge" viewBox="0 0 24 24"><path fill="currentColor" d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0011 15.9V19H7v2h10v-2h-4v-3.1c2.17-.44 3.91-2.03 4.39-4.94C19.8 10.63 21 8.55 21 6V5c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg> <span>Shift Complete!</span>'
+      : '<svg class="svg-icon icon-title-badge icon-break-badge" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> <span>Shift Ended!</span>';
+    
     this.elResultLevelName.textContent = `Level ${currentLvlConfig.level}: ${currentLvlConfig.name}`;
     
     let starsHtml = '';
+    const starSvg = '<svg class="svg-icon icon-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.5l3.09 6.26 6.91 1-5 4.87 1.18 6.88L12 17.27l-6.18 3.25L7 13.63 2 8.76l6.91-1L12 1.5z"/></svg>';
     for (let s = 1; s <= 3; s++) {
-      starsHtml += s <= starsEarned ? '<span class="star-big">⭐</span>' : '<span class="star-big" style="opacity: 0.3;">☆</span>';
+      starsHtml += s <= starsEarned
+        ? `<span class="star-big">${starSvg}</span>`
+        : `<span class="star-big star-empty">${starSvg}</span>`;
     }
     this.elResultStarsRow.innerHTML = starsHtml;
 
@@ -1085,9 +1245,16 @@ class GameEngine {
       this.elToastContainer.removeChild(this.elToastContainer.firstChild);
     }
 
+    const cleanMsg = message.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
+
     const toast = document.createElement('div');
     toast.className = `toast ${isSuccess ? 'toast-success' : ''}`;
-    toast.textContent = message;
+
+    const iconSvg = isSuccess
+      ? '<svg class="svg-icon" viewBox="0 0 24 24" style="color:#059669; margin-right: 6px;"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>'
+      : '<svg class="svg-icon" viewBox="0 0 24 24" style="color:#dc2626; margin-right: 6px;"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>';
+
+    toast.innerHTML = `${iconSvg}<span>${cleanMsg}</span>`;
     this.elToastContainer.appendChild(toast);
 
     setTimeout(() => toast.remove(), 2200);

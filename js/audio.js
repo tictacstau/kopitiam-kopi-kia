@@ -9,7 +9,7 @@ class SoundEngine {
     this.isMuted = false;
 
     // Custom Background Ambient Audio Track
-    this.bgAudio = new Audio('audio/kopitiam_ambient.mp3');
+    this.bgAudio = new Audio('assets/audio/kopitiam_ambient.mp3');
     this.bgAudio.loop = true;
     this.bgAudio.volume = 0.35;
     this.isBgPlaying = false;
@@ -41,7 +41,13 @@ class SoundEngine {
   }
 
   startKopitiamAmbient() {
-    if (this.isMuted || !this.bgAudio) return;
+    if (this.isMuted) return;
+
+    if (!this.bgAudio) {
+      this.bgAudio = new Audio('assets/audio/kopitiam_ambient.mp3');
+      this.bgAudio.loop = true;
+      this.bgAudio.volume = 0.35;
+    }
 
     try {
       const playPromise = this.bgAudio.play();
@@ -49,13 +55,11 @@ class SoundEngine {
         playPromise.then(() => {
           this.isBgPlaying = true;
         }).catch(err => {
-          console.log('Audio autoplay waiting for user interaction:', err);
+          console.warn('Ambient audio play blocked:', err);
         });
-      } else {
-        this.isBgPlaying = true;
       }
     } catch (e) {
-      console.warn('Audio play error:', e);
+      console.warn('Ambient audio error:', e);
     }
   }
 

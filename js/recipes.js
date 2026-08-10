@@ -152,9 +152,37 @@ class OrderManager {
   }
 }
 
+const STORY_SCRIPTS = {
+  1: {
+    chapterTitle: 'CHAPTER 1: TIONG BAHRU CORNER',
+    characterName: 'Uncle Lim (Hawker Mentor)',
+    avatar: 'assets/sprites/char_uncle_lim.svg',
+    dialogue: 'Oi Kopi Kia! Welcome to Tiong Bahru! Mdm Tan is here already. She wants her Kopi-C Siew Dai fast. Don\'t embarrass Uncle ah!',
+    audio: 'assets/audio/uncle_lim_intro.mp3',
+    unlockNotice: '☕ STARTING EQUIPMENT: Kopi & Teh Stall'
+  },
+  2: {
+    chapterTitle: 'CHAPTER 2: MAXWELL MARKET',
+    characterName: 'Aunty Lee (Kopitiam Regular)',
+    avatar: 'assets/sprites/char_aunty_lee.svg',
+    dialogue: 'Wah, weather so hot today! I unlocked the CANNED FRIDGE for you. Now you can serve iced Coke, Sprite and 100 Plus!',
+    audio: 'assets/audio/aunty_lee_intro.mp3',
+    unlockNotice: '🔓 UNLOCKED: Canned Drinks Station'
+  },
+  3: {
+    chapterTitle: 'CHAPTER 3: CHINATOWN COMPLEX',
+    characterName: 'Brother Ah Seng',
+    avatar: 'assets/sprites/char_ah_seng.svg',
+    dialogue: 'Bro, lunch crowd coming in fast! We unlocked the DISPENSER TANKS. Get ready to pour cold Bandung and Lime Juice!',
+    audio: 'assets/audio/ah_seng_intro.mp3',
+    unlockNotice: '🔓 UNLOCKED: Bandung & Lime Juice Dispensers'
+  }
+};
+
 if (typeof window !== 'undefined') {
   window.DRINK_RECIPES = DRINK_RECIPES;
   window.CUSTOMERS = CUSTOMERS;
   window.CAMPAIGN_LEVELS = CAMPAIGN_LEVELS;
+  window.STORY_SCRIPTS = STORY_SCRIPTS;
   window.OrderManager = OrderManager;
 }
