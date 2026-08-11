@@ -38,10 +38,10 @@ const CUSTOMERS = [
 ];
 
 const CAMPAIGN_LEVELS = [
-  { level: 1, name: 'Tiong Bahru Corner', targetScore: 6.00, shiftSeconds: 45, starThresholds: [6.00, 10.00, 15.00] },
-  { level: 2, name: 'Maxwell Food Center', targetScore: 10.00, shiftSeconds: 45, starThresholds: [10.00, 15.00, 22.00] },
+  { level: 1, name: 'Tiong Bahru Food Centre', targetScore: 6.00, shiftSeconds: 45, starThresholds: [6.00, 10.00, 15.00] },
+  { level: 2, name: 'Maxwell Food Centre', targetScore: 10.00, shiftSeconds: 45, starThresholds: [10.00, 15.00, 22.00] },
   { level: 3, name: 'Old Airport Road', targetScore: 15.00, shiftSeconds: 50, starThresholds: [15.00, 22.00, 30.00] },
-  { level: 4, name: 'Amoy Street Food Center', targetScore: 20.00, shiftSeconds: 50, starThresholds: [20.00, 28.00, 38.00] },
+  { level: 4, name: 'Amoy Street Food Centre', targetScore: 20.00, shiftSeconds: 50, starThresholds: [20.00, 28.00, 38.00] },
   { level: 5, name: 'Chinatown Complex', targetScore: 25.00, shiftSeconds: 55, starThresholds: [25.00, 35.00, 45.00] },
   { level: 6, name: 'Lau Pa Sat Financial Hub', targetScore: 30.00, shiftSeconds: 55, starThresholds: [30.00, 42.00, 55.00] },
   { level: 7, name: 'Tekka Market Little India', targetScore: 35.00, shiftSeconds: 60, starThresholds: [35.00, 48.00, 62.00] },
