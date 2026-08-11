@@ -641,27 +641,43 @@ class GameEngine {
       nameInput.value = this.saveData.playerName || 'Master Kopi Kia';
     }
 
-    document.getElementById('board-high-level').textContent = `Lv ${this.saveData.unlockedLevel}`;
-    document.getElementById('board-career-money').textContent = `$${this.saveData.careerMoney.toFixed(2)}`;
-    document.getElementById('board-max-streak').textContent = `${this.saveData.streak}`;
+    const highLevelEl = document.getElementById('board-high-level');
+    if (highLevelEl) {
+      highLevelEl.textContent = `Lv ${this.saveData.unlockedLevel || 1}`;
+    }
+
+    const highScoreEl = document.getElementById('board-high-score');
+    if (highScoreEl) {
+      const maxScore = (Array.isArray(this.saveData.highScores) && this.saveData.highScores.length > 0)
+        ? Math.max(...this.saveData.highScores.map(s => s.score || 0))
+        : 0;
+      highScoreEl.textContent = `$${maxScore.toFixed(2)}`;
+    }
 
     this.renderLeaderboardList();
-    this.elBoardModal.classList.remove('hidden');
+    if (this.elBoardModal) {
+      this.elBoardModal.classList.remove('hidden');
+    }
   }
 
   renderLeaderboardList() {
-    const listEl = document.getElementById('board-scores-list');
-    if (!listEl) return;
+    const tbody = document.getElementById('board-table-body');
+    if (!tbody) return;
 
-    listEl.innerHTML = '';
+    tbody.innerHTML = '';
     const scores = [...(this.saveData.highScores || [])].sort((a, b) => b.score - a.score);
 
+    if (scores.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" class="empty-board">No high scores yet! Complete a shift to rank.</td></tr>';
+      return;
+    }
+
     scores.forEach((entry, idx) => {
-      const li = document.createElement('li');
+      const tr = document.createElement('tr');
       const isPlayer = entry.name === this.saveData.playerName;
-      li.className = isPlayer ? 'board-item active-player' : 'board-item';
-      li.innerHTML = `<span>${idx + 1}. ${entry.name} ${isPlayer ? '⭐ (You)' : ''}</span> <strong>$${entry.score.toFixed(2)}</strong>`;
-      listEl.appendChild(li);
+      if (isPlayer) tr.className = 'active-player-row';
+      tr.innerHTML = `<td>#${idx + 1}</td><td>${entry.name} ${isPlayer ? '⭐' : ''}</td><td><strong>$${(entry.score || 0).toFixed(2)}</strong></td>`;
+      tbody.appendChild(tr);
     });
   }
 
