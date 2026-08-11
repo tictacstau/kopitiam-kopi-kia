@@ -1,5 +1,11 @@
 {
   "appId": "lol.kopitiam.kopikia",
   "appName": "Kopi Kia",
-  "webDir": "www"
+  "webDir": "www",
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": true,
+      "style": "DARK"
+    }
+  }
 }
