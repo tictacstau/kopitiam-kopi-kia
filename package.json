@@ -15,7 +15,7 @@
     "playwright-core": "^1.62.1"
   },
   "scripts": {
-    "build": "rm -rf www && mkdir -p www && cp -R index.html style.css js assets manifest.json favicon.png apple-touch-icon.png kopitiam_cover_art.jpg www/",
+    "build": "rm -rf www && mkdir -p www && cp -R index.html style.css js assets manifest.json favicon.png apple-touch-icon.png kopitiam_cover_art.jpg clean_background.jpg www/",
     "sync": "npm run build && npx cap sync ios",
     "open:ios": "npm run sync && npx cap open ios"
   },
