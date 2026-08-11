@@ -154,7 +154,7 @@ class OrderManager {
 
 const STORY_SCRIPTS = {
   1: {
-    chapterTitle: 'CHAPTER 1: TIONG BAHRU CORNER',
+    chapterTitle: 'CHAPTER 1: TIONG BAHRU FOOD CENTRE',
     characterName: 'Uncle Lim (Hawker Mentor)',
     avatar: 'assets/sprites/char_uncle_lim.svg',
     dialogue: 'Oi Kopi Kia! Welcome to Tiong Bahru! Mdm Tan is here already. She wants her Kopi-C Siew Dai fast. Don\'t embarrass Uncle ah!',
@@ -162,7 +162,7 @@ const STORY_SCRIPTS = {
     unlockNotice: '☕ STARTING EQUIPMENT: Kopi & Teh Stall'
   },
   2: {
-    chapterTitle: 'CHAPTER 2: MAXWELL MARKET',
+    chapterTitle: 'CHAPTER 2: MAXWELL FOOD CENTRE',
     characterName: 'Aunty Lee (Kopitiam Regular)',
     avatar: 'assets/sprites/char_aunty_lee.svg',
     dialogue: 'Wah, weather so hot today! I unlocked the CANNED FRIDGE for you. Now you can serve iced Coke, Sprite and 100 Plus!',
@@ -170,12 +170,61 @@ const STORY_SCRIPTS = {
     unlockNotice: '🔓 UNLOCKED: Canned Drinks Station'
   },
   3: {
-    chapterTitle: 'CHAPTER 3: CHINATOWN COMPLEX',
+    chapterTitle: 'CHAPTER 3: OLD AIRPORT ROAD',
     characterName: 'Brother Ah Seng',
     avatar: 'assets/sprites/char_ah_seng.svg',
     dialogue: 'Bro, lunch crowd coming in fast! We unlocked the DISPENSER TANKS. Get ready to pour cold Bandung and Lime Juice!',
     audio: 'assets/audio/ah_seng_intro.mp3',
     unlockNotice: '🔓 UNLOCKED: Bandung & Lime Juice Dispensers'
+  },
+  4: {
+    chapterTitle: 'CHAPTER 4: AMOY STREET FOOD CENTRE',
+    characterName: 'Student Kenneth',
+    avatar: 'assets/sprites/char_student_kenneth.svg',
+    dialogue: 'CBD office workers are rushing in for their afternoon perk-up! Keep your speed high to earn 3 Stars!',
+    unlockNotice: '⚡ PRO TIP: Prepare orders fast to boost tips!'
+  },
+  5: {
+    chapterTitle: 'CHAPTER 5: CHINATOWN COMPLEX',
+    characterName: 'Mdm Tan (Regular Customer)',
+    avatar: 'assets/sprites/char_mdm_tan.svg',
+    dialogue: 'You are doing great, Kopi Kia! Chinatown crowd loves Yuan Yang and Teh-C. Keep up the good work!',
+    unlockNotice: '🌟 EXPANDED MENU: Full Kopitiam Drink Menu'
+  },
+  6: {
+    chapterTitle: 'CHAPTER 6: LAU PA SAT FINANCIAL HUB',
+    characterName: 'Uncle Lim (Hawker Mentor)',
+    avatar: 'assets/sprites/char_uncle_lim.svg',
+    dialogue: 'Lau Pa Sat is tough! Financial traders want their kopi fast. Upgrade your equipment in the Shop if you need a boost!',
+    unlockNotice: '🛒 SHOP ADVICE: Upgrade Express Strainer in Equipment Shop!'
+  },
+  7: {
+    chapterTitle: 'CHAPTER 7: TEKKA MARKET LITTLE INDIA',
+    characterName: 'Aunty Lee (Kopitiam Regular)',
+    avatar: 'assets/sprites/char_aunty_lee.svg',
+    dialogue: 'Tekka Market is buzzing today! Mix your iced sodas and hot beverages smoothly to hit the earnings goal!',
+    unlockNotice: '🔥 HIGH SPEED CHALLENGE: Fast Customer Spawns'
+  },
+  8: {
+    chapterTitle: 'CHAPTER 8: GEYLANG SERAI MARKET',
+    characterName: 'Brother Ah Seng',
+    avatar: 'assets/sprites/char_ah_seng.svg',
+    dialogue: 'Festival crowd is here! Ice cups and Bandung dispensers are running non-stop. Show them true Kopitiam mastery!',
+    unlockNotice: '🧃 DISPENSER RUSH: High Demand on Cold Drinks'
+  },
+  9: {
+    chapterTitle: 'CHAPTER 9: ADAM ROAD FOOD CENTRE',
+    characterName: 'Student Kenneth',
+    avatar: 'assets/sprites/char_student_kenneth.svg',
+    dialogue: 'Almost at the top! Adam Road foodies demand exact recipes. Double check your ingredients before serving!',
+    unlockNotice: '🎯 ACCURACY MATTERS: Serve exact orders for max payout!'
+  },
+  10: {
+    chapterTitle: 'CHAPTER 10: CHANGI VILLAGE KOPITIAM',
+    characterName: 'Uncle Lim (Hawker Mentor)',
+    avatar: 'assets/sprites/char_uncle_lim.svg',
+    dialogue: 'This is the Grand Finale! Master Kopi Kia title is within your grasp. Serve the legendary shift and seal your spot in the Hall of Fame!',
+    unlockNotice: '🏆 GRAND FINALE: Master Kopi Kia Championship Shift!'
   }
 };
 

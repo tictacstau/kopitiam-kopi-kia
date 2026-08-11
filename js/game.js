@@ -433,7 +433,14 @@ class GameEngine {
     if (!storyModal) return;
 
     document.getElementById('story-chapter-title').textContent = script.chapterTitle;
-    document.getElementById('story-avatar-img').src = script.avatar;
+    const avatarImg = document.getElementById('story-avatar-img');
+    if (avatarImg) {
+      avatarImg.onerror = () => {
+        avatarImg.onerror = null;
+        avatarImg.src = 'assets/sprites/char_uncle_lim.svg';
+      };
+      avatarImg.src = script.avatar || 'assets/sprites/char_uncle_lim.svg';
+    }
     document.getElementById('story-speaker-name').textContent = script.characterName;
     document.getElementById('story-speech-text').textContent = `"${script.dialogue}"`;
 
@@ -927,7 +934,7 @@ class GameEngine {
   renderQueue() {
     const activeOrder = this.queue[0];
     if (activeOrder.customerAvatar.includes('/')) {
-      this.elSpotlightAvatar.innerHTML = `<img src="${activeOrder.customerAvatar}" class="customer-avatar-img" alt="${activeOrder.customerName}">`;
+      this.elSpotlightAvatar.innerHTML = `<img src="${activeOrder.customerAvatar}" class="customer-avatar-img" alt="${activeOrder.customerName}" onerror="this.onerror=null;this.src='assets/sprites/char_uncle_lim.svg';">`;
     } else {
       this.elSpotlightAvatar.textContent = activeOrder.customerAvatar;
     }
@@ -939,7 +946,7 @@ class GameEngine {
       if (qCard) {
         const qAvatarEl = qCard.querySelector('.queue-avatar');
         if (ord.customerAvatar.includes('/')) {
-          qAvatarEl.innerHTML = `<img src="${ord.customerAvatar}" class="customer-avatar-img" alt="${ord.customerName}">`;
+          qAvatarEl.innerHTML = `<img src="${ord.customerAvatar}" class="customer-avatar-img" alt="${ord.customerName}" onerror="this.onerror=null;this.src='assets/sprites/char_uncle_lim.svg';">`;
         } else {
           qAvatarEl.textContent = ord.customerAvatar;
         }
