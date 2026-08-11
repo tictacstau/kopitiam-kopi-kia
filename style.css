@@ -888,7 +888,7 @@ body {
 #bottom-action-bar {
   position: relative;
   z-index: 30;
-  padding: 10px 12px 14px 12px;
+  padding: 8px 12px calc(16px + env(safe-area-inset-bottom, 0px)) 12px;
   background: rgba(253, 251, 247, 0.96);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
@@ -896,7 +896,7 @@ body {
   border-radius: 20px 20px 0 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.15);
 }
 
@@ -919,29 +919,33 @@ body {
   padding: 6px 4px;
   border-radius: 8px;
   cursor: pointer;
-  white-space: nowrap;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
-}
-
-.tab-icon-img {
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
-  object-fit: cover;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  transition: all 0.15s ease;
 }
 
 .station-tab.active-tab {
   background: var(--nanyang-blue);
   color: #ffffff;
-  border-color: var(--nanyang-blue);
-  box-shadow: 0 0 12px rgba(15, 56, 107, 0.3);
+  border-color: var(--nanyang-darkblue);
+  box-shadow: 0 2px 8px rgba(15, 56, 107, 0.25);
 }
 
-.action-grid { display: grid; gap: 6px; }
+.tab-icon-img {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.action-grid {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+}
+
 .grid-8 { grid-template-columns: repeat(4, 1fr); }
 .grid-4 { grid-template-columns: repeat(4, 1fr); }
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
@@ -950,7 +954,7 @@ body {
 
 #btn-serve {
   width: 100%;
-  min-height: 78px;
+  min-height: 64px;
   background: linear-gradient(180deg, #ffffff 0%, #fdfbf7 100%);
   border: 2px solid var(--nanyang-blue);
 }
@@ -963,11 +967,11 @@ body {
 
 .tray-hero-sprite {
   width: 100%;
-  max-width: 220px;
-  height: clamp(44px, 6vh, 54px);
+  max-width: 200px;
+  height: clamp(32px, 5vh, 42px);
   object-fit: contain;
   mix-blend-mode: multiply;
-  margin: 2px 0;
+  margin: 1px 0;
 }
 
 .action-btn {
@@ -976,12 +980,12 @@ body {
   background: linear-gradient(180deg, #ffffff 0%, #fdfbf7 100%);
   border: 2px solid var(--nanyang-blue);
   border-radius: 14px;
-  padding: 6px 4px 5px 4px;
+  padding: 4px 4px 4px 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  min-height: 74px;
+  min-height: 64px;
   cursor: pointer;
   outline: none;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
