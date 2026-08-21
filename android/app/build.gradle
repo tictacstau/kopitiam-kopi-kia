@@ -1,5 +1,16 @@
 apply plugin: 'com.android.application'
 
+// Release signing. Values come from keystore.properties at the android/ root,
+// which is gitignored and never committed. CI writes it from repository
+// secrets. When the file is absent (fresh clone, debug builds) the release
+// signing config is simply not attached, so debug builds still work.
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+def hasReleaseKeystore = keystorePropertiesFile.exists()
+
 android {
     namespace = "lol.kopitiam.kopikia"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -7,8 +18,8 @@ android {
         applicationId "lol.kopitiam.kopikia"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode project.hasProperty('appVersionCode') ? project.appVersionCode.toInteger() : 1
+        versionName project.hasProperty('appVersionName') ? project.appVersionName : "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,8 +27,27 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            if (hasReleaseKeystore) {
+                // rootProject.file so a relative path resolves from android/, where
+                // keystore.properties lives. Absolute paths pass through unchanged.
+                storeFile rootProject.file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
+        }
+    }
     buildTypes {
         release {
+            if (hasReleaseKeystore) {
+                signingConfig signingConfigs.release
+            }
+            // Left off deliberately: Capacitor and its plugins resolve classes
+            // reflectively, and R8 shrinking is a known source of runtime
+            // breakage there. The payload is web assets, so the savings
+            // would be marginal anyway.
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

@@ -1,0 +1,80 @@
+name: Build Android release AAB
+
+# Produces the signed Android App Bundle that Google Play requires for
+# new apps. Run it from the Actions tab and give it a version.
+#
+# Requires four repository secrets (Settings > Secrets and variables > Actions):
+#   ANDROID_KEYSTORE_BASE64   - upload keystore, base64 encoded
+#   ANDROID_KEYSTORE_PASSWORD - keystore password
+#   ANDROID_KEY_ALIAS         - key alias inside the keystore
+#   ANDROID_KEY_PASSWORD      - password for that key
+on:
+  workflow_dispatch:
+    inputs:
+      versionName:
+        description: 'User-visible version, e.g. 1.0.0'
+        required: true
+        default: '1.0.0'
+      versionCode:
+        description: 'Integer build number. Must be higher than every previous Play upload.'
+        required: true
+        default: '1'
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - run: npm ci
+
+      - name: Build web assets and sync into the Android project
+        run: npm run sync:android
+
+      - name: Restore signing key from secrets
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_B64" ]; then
+            echo "::error::ANDROID_KEYSTORE_BASE64 is not set. See docs/android-play-release.md."
+            exit 1
+          fi
+          echo "$KEYSTORE_B64" | base64 -d > android/upload-keystore.jks
+          # Written at runtime only; keystore.properties and *.jks are gitignored.
+          {
+            echo "storeFile=upload-keystore.jks"
+            echo "storePassword=$STORE_PASSWORD"
+            echo "keyAlias=$KEY_ALIAS"
+            echo "keyPassword=$KEY_PASSWORD"
+          } > android/keystore.properties
+
+      - name: Assemble signed AAB
+        working-directory: android
+        run: |
+          ./gradlew --no-daemon bundleRelease \
+            -PappVersionName='${{ github.event.inputs.versionName }}' \
+            -PappVersionCode='${{ github.event.inputs.versionCode }}'
+
+      - name: Remove signing material from the runner
+        if: always()
+        run: rm -f android/upload-keystore.jks android/keystore.properties
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kopi-kia-release-aab-v${{ github.event.inputs.versionName }}
+          path: android/app/build/outputs/bundle/release/*.aab
+          if-no-files-found: error
