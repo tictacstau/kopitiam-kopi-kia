@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^8.4.2",
     "playwright": "^1.62.1"
   },
@@ -8,6 +9,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@capacitor/android": "^8.5.0",
     "@capacitor/core": "^8.5.0",
     "@capacitor/haptics": "^8.0.2",
     "@capacitor/ios": "^8.5.0",
@@ -17,7 +19,11 @@
   "scripts": {
     "build": "mkdir -p www && cp -R index.html privacy.html privacy style.css js assets manifest.json favicon.png apple-touch-icon.png kopitiam_cover_art.jpg clean_background.jpg www 2>/dev/null || true",
     "sync": "npm run build && npx cap sync ios",
-    "open:ios": "npm run sync && npx cap open ios"
+    "open:ios": "npm run sync && npx cap open ios",
+    "sync:ios": "npm run build && npx cap sync ios",
+    "sync:android": "npm run build && npx cap sync android",
+    "open:android": "npm run sync:android && npx cap open android",
+    "apk:debug": "npm run sync:android && cd android && ./gradlew assembleDebug"
   },
   "repository": {
     "type": "git",

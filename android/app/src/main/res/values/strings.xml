@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Kopi Kia</string>
+    <string name="title_activity_main">Kopi Kia</string>
+    <string name="package_name">lol.kopitiam.kopikia</string>
+    <string name="custom_url_scheme">lol.kopitiam.kopikia</string>
+</resources>

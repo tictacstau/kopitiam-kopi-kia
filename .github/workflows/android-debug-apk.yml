@@ -1,0 +1,49 @@
+name: Build Android debug APK
+
+# Produces a sideloadable debug APK. Run it from the Actions tab
+# ("Run workflow") on any branch, or let it run automatically on main.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Verify Android SDK is present on the runner
+        run: |
+          SDK="${ANDROID_HOME:-$ANDROID_SDK_ROOT}"
+          if [ -z "$SDK" ] || [ ! -d "$SDK" ]; then
+            echo "::error::No Android SDK on this runner. Add the android-actions/setup-android action."
+            exit 1
+          fi
+          echo "Android SDK: $SDK"
+
+      - run: npm ci
+
+      - name: Build web assets and sync into the Android project
+        run: npm run sync:android
+
+      - name: Assemble debug APK
+        working-directory: android
+        run: ./gradlew --no-daemon assembleDebug
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kopi-kia-debug-apk
+          path: android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
