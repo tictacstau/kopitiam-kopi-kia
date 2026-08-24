@@ -1,0 +1,55 @@
+{
+  "note": "Edit this file to update the public roadmap. Statuses: live | building | planned. The site rebuilds from this on every deploy.",
+  "updated": "2026-08-24",
+  "sections": [
+    {
+      "id": "live",
+      "status": "live",
+      "title": "Playable Now",
+      "blurb": "Shipped, tested and running in production at kopitiam.lol.",
+      "items": [
+        { "title": "10-level hawker campaign", "detail": "Tiong Bahru to Changi Village — ten real Singapore hawker centres, each with its own earnings target, shift length and three-star thresholds." },
+        { "title": "16 authentic drinks", "detail": "Kopi, Kopi-O, Kopi-C, Kopi Kosong, Siew Dai, Peng, the full Teh range, Yuan Yang, canned sodas and dispenser Bandung & lime juice." },
+        { "title": "Three working stations", "detail": "Brew bar with kopi sock and teh pot, canned drinks fridge, and the syrup dispenser — each with its own tab and toolbar." },
+        { "title": "Real-time 3D glass mug", "detail": "A Three.js WebGL mug renders your drink as you build it: stacked liquid layers, sloshing physics, floating ice cubes and rising steam." },
+        { "title": "Five regulars with preferences", "detail": "Mdm Tan, Uncle Lim, Aunty Lee, Brother Ah Seng and Student Kenneth each order from their own favourites, with hand-drawn vector avatars." },
+        { "title": "Story mode for all 10 chapters", "detail": "Uncle Lim walks you through every new hawker centre with a scripted dialogue beat and an equipment unlock notice." },
+        { "title": "Voiceovers for three characters", "detail": "Uncle Lim, Aunty Lee and Ah Seng have recorded intro lines that play over their story cards." },
+        { "title": "Upgrade shop", "detail": "Five career upgrades, all wired into gameplay: faster pours, coffee and iced-drink payout boosts, a longer customer timer, and the golden mug skin." },
+        { "title": "Kopitiam Hall of Fame", "detail": "Local leaderboard with a saved hawker name, best shift earnings and highest level reached." },
+        { "title": "Recipe cheat sheet", "detail": "In-game modal grouping every recipe into Kopi, Teh, Soda and Dispenser, reachable from the menu and mid-shift." },
+        { "title": "Kopitiam soundscape", "detail": "Looping hawker centre ambience plus synthesised pours, register dings, error buzzes and shop fanfares built on the Web Audio API." },
+        { "title": "Cinematic boot sequence", "detail": "Studio logo, then the vintage 9:16 Nanyang poster with tap-to-start, then a 3-2-1 shift countdown." },
+        { "title": "Installable PWA", "detail": "Web app manifest, favicons, apple-touch-icon and standalone display — add it to your home screen and it runs full screen." },
+        { "title": "iOS app shell", "detail": "Capacitor project with the full Nanyang app-icon set, launch screen, privacy policy and App Store export-compliance flags in place." },
+        { "title": "Social preview cards", "detail": "Open Graph and Twitter card metadata so the cover art renders when the game is shared on any platform." }
+      ]
+    },
+    {
+      "id": "building",
+      "status": "building",
+      "title": "In Development",
+      "blurb": "Actively being worked on — some of it half-wired in the codebase today.",
+      "items": [
+        { "title": "App Store submission", "detail": "The iOS build is assembled and the validation blockers are cleared. What is left is the store listing, screenshots and review." },
+        { "title": "Bundling Three.js locally", "detail": "The 3D mug engine still pulls Three.js from a CDN, so it needs a network round-trip on first load. Vendoring it into the bundle is what makes the 3D mug reliable offline and inside the iOS app." },
+        { "title": "Haptic feedback", "detail": "The Capacitor haptics plugin is installed but not yet called. Pours, serves and mistakes should all have their own tap." },
+        { "title": "Voiceovers for the last two regulars", "detail": "Mdm Tan and Student Kenneth are still silent — their intro lines are written but not recorded." },
+        { "title": "Online leaderboard", "detail": "Scores currently live in browser storage, so the Hall of Fame is per-device. A shared board is the next persistence layer." }
+      ]
+    },
+    {
+      "id": "planned",
+      "status": "planned",
+      "title": "On the Backlog",
+      "blurb": "Ideas with no committed date. Order changes often.",
+      "items": [
+        { "title": "Endless shift mode", "detail": "Free-play beyond level 10 with escalating queues, for score chasing rather than campaign progress." },
+        { "title": "Android build", "detail": "Capacitor already supports it; it is a matter of adding the platform and reworking the safe-area handling." },
+        { "title": "More of the kopitiam menu", "detail": "Kaya toast, half-boiled eggs and Milo Dinosaur — the other half of a real hawker breakfast order." },
+        { "title": "Golden mug in 3D", "detail": "The golden mug upgrade currently changes payouts and the 2D skin, but the WebGL mug does not gild yet." },
+        { "title": "Daily challenge", "detail": "One fixed seeded shift per day, same orders for everyone, single score submission." }
+      ]
+    }
+  ]
+}

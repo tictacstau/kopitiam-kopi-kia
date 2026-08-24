@@ -1,0 +1,15 @@
+{
+  "title": "Kopi Kia",
+  "chineseTitle": "隨意咖啡店",
+  "tagline": "Singapore Hawker Coffee Simulation",
+  "description": "Master the art of Singapore hawker coffee. Brew Kopi-O, Teh-C Siew Dai, Yuan Yang and iced Bandung against the clock across 10 real hawker centres.",
+  "url": "https://kopitiam.lol",
+  "playPath": "/play/",
+  "studio": "Tictacs Software",
+  "copyrightYear": "2026",
+  "coverImage": "/play/assets/sprites/kopitiam_cover_art.jpg",
+  "appStoreUrl": "",
+  "links": [
+    { "label": "GitHub", "url": "https://github.com/tictacstau/kopitiam-kopi-kia" }
+  ]
+}

@@ -1,3 +1,7 @@
 {
-  "outputDirectory": "www"
+  "outputDirectory": "www",
+  "redirects": [
+    { "source": "/game", "destination": "/play/", "permanent": true },
+    { "source": "/index.html", "destination": "/", "permanent": true }
+  ]
 }
