@@ -17,7 +17,8 @@
   "scripts": {
     "build": "node scripts/build-site.js",
     "sync": "npm run build && npx cap sync ios",
-    "open:ios": "npm run sync && npx cap open ios"
+    "open:ios": "npm run sync && npx cap open ios",
+    "preview": "npm run build && node scripts/build-preview.js"
   },
   "repository": {
     "type": "git",

@@ -14,6 +14,7 @@ Live at **[kopitiam.lol](https://kopitiam.lol)** — the game is at **[kopitiam.
 | `content/` | Everything the promo site reads: site config, roadmap data, blog posts, blog images. |
 | `site/static/` | The promo site's stylesheet. Copied to the site root at build time. |
 | `scripts/build-site.js` | The static site builder. Zero dependencies. |
+| `scripts/build-preview.js` | Bundles the built site into a single shareable `preview.html`. |
 | `scripts/md.js` | The markdown renderer the builder uses. |
 | `ios/` | Capacitor iOS project. |
 | `www/` | **Generated.** The deployable output. Never edit by hand; it is gitignored. |
@@ -24,6 +25,10 @@ Live at **[kopitiam.lol](https://kopitiam.lol)** — the game is at **[kopitiam.
 npm run build          # generates www/
 npx serve www          # or any static server, then open http://localhost:3000
 ```
+
+To share a look at the site without deploying it, `npm run preview` bundles every page
+into a single self-contained `preview.html` — one file, no server, opens straight from
+disk. The game is not included in that bundle; its Play buttons point at the live site.
 
 `npm run build` produces:
 
