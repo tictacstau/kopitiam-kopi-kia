@@ -579,10 +579,13 @@ ${urls}
    Game bundle
    ========================================================================== */
 
+// The game loads its art from assets/sprites/. The only root-level image that
+// ships is kopitiam_cover_art.jpg, because the game's og:image points at the
+// absolute URL /play/kopitiam_cover_art.jpg; copying the others just duplicated
+// ~1.3 MB into the bundle for nothing.
 const GAME_FILES = [
   'index.html', 'style.css', 'js', 'assets', 'manifest.json',
-  'favicon.png', 'apple-touch-icon.png',
-  'kopitiam_cover_art.jpg', 'clean_background.jpg', 'vintage_kopitiam_poster.jpg'
+  'favicon.png', 'apple-touch-icon.png', 'kopitiam_cover_art.jpg'
 ];
 
 function buildGame() {
