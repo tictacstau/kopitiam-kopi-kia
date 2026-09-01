@@ -195,7 +195,7 @@ function spell(n) {
 function features(drinkCount, levelCount) {
   return [
     { icon: '☕', title: 'Order like a local', text: `Kopi-C Siew Dai, Teh-O Kosong Peng, Yuan Yang. ${spell(drinkCount).replace(/^./, c => c.toUpperCase())} drinks in the real kopitiam shorthand, with the modifiers that actually change what lands in the cup.` },
-    { icon: '🧊', title: 'A mug rendered in 3D', text: 'A live WebGL mug sits at the centre of the screen. Liquid layers stack and slosh, ice cubes bob, steam rises off a hot pour — you can see the drink you are building.' },
+    { icon: '🧊', title: 'A mug rendered in 3D', text: 'A live WebGL mug sits at the centre of the screen. Liquid layers stack up as you pour, ice cubes bob on the surface, steam rises off a hot cup — you can see the drink you are building.' },
     { icon: '🗺️', title: `${spell(levelCount).replace(/^./, c => c.toUpperCase())} real hawker centres`, text: 'A campaign from a quiet Tiong Bahru corner stall to the Changi Village late shift, each with a tougher earnings target and a shorter clock.' },
     { icon: '👵', title: 'Regulars with opinions', text: 'Mdm Tan, Uncle Lim, Aunty Lee, Ah Seng and Kenneth each order from their own favourites — and three of them will tell you about it out loud.' },
     { icon: '⚡', title: 'Career upgrades', text: 'Bank your earnings between shifts and spend them on a faster strainer, gourmet beans, a turbo ice crusher, or the pure prestige of a golden mug.' },
@@ -588,6 +588,34 @@ const GAME_FILES = [
   'favicon.png', 'apple-touch-icon.png', 'kopitiam_cover_art.jpg'
 ];
 
+/**
+ * Drops audio the game never asks for — source masters kept in the repo
+ * alongside the web-ready file (uncle_lim_intro.aiff/.wav/.m4a next to the .mp3
+ * it actually plays). Every audio path in the source is a literal string, so
+ * scanning for references is reliable; anything added dynamically would need
+ * listing here instead.
+ */
+function pruneUnreferencedAudio() {
+  const audioDir = path.join(PLAY, 'assets', 'audio');
+  if (!fs.existsSync(audioDir)) return [];
+
+  const sources = ['index.html', 'style.css']
+    .map(f => path.join(ROOT, f))
+    .concat(fs.readdirSync(path.join(ROOT, 'js')).map(f => path.join(ROOT, 'js', f)))
+    .filter(f => fs.existsSync(f))
+    .map(f => fs.readFileSync(f, 'utf8'))
+    .join('\n');
+
+  const dropped = [];
+  for (const file of fs.readdirSync(audioDir)) {
+    if (sources.includes(`assets/audio/${file}`)) continue;
+    const bytes = fs.statSync(path.join(audioDir, file)).size;
+    fs.rmSync(path.join(audioDir, file));
+    dropped.push({ file, bytes });
+  }
+  return dropped;
+}
+
 function buildGame() {
   fs.mkdirSync(PLAY, { recursive: true });
   let copied = 0;
@@ -599,7 +627,7 @@ function buildGame() {
   copyInto(path.join(ROOT, 'privacy.html'), OUT);
   copyInto(path.join(ROOT, 'privacy'), OUT);
 
-  return copied;
+  return { copied, dropped: pruneUnreferencedAudio() };
 }
 
 /* ==========================================================================
@@ -610,7 +638,7 @@ function main() {
   rmrf(OUT);
   fs.mkdirSync(OUT, { recursive: true });
 
-  const gameFiles = buildGame();
+  const game_ = buildGame();
   const game = loadGameData();
 
   buildBlog(game);  // populates the post cache used by the landing page
@@ -622,7 +650,10 @@ function main() {
 
   const posts = loadPosts();
   console.log(`✓ built www/`);
-  console.log(`  game bundle: ${gameFiles} entries → www/play/`);
+  console.log(`  game bundle: ${game_.copied} entries → www/play/`);
+  for (const d of game_.dropped) {
+    console.log(`    skipped unreferenced ${d.file} (${(d.bytes / 1024).toFixed(0)} KB)`);
+  }
   console.log(`  pages: index, roadmap, blog index, ${posts.length} post${posts.length === 1 ? '' : 's'}`);
   console.log(`  feeds: feed.xml, sitemap.xml, robots.txt`);
 }
