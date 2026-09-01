@@ -16,6 +16,8 @@ Live at **[kopitiam.lol](https://kopitiam.lol)** — the game is at **[kopitiam.
 | `scripts/build-site.js` | The static site builder. Zero dependencies. |
 | `scripts/build-preview.js` | Bundles the built site into a single shareable `preview.html`. |
 | `scripts/md.js` | The markdown renderer the builder uses. |
+| `scripts/make-ambient-loop.sh` | Regenerates the background ambience loop from the master. |
+| `audio/` | Full-length audio masters. **Not shipped** — only `assets/audio/` is bundled. |
 | `ios/` | Capacitor iOS project. |
 | `www/` | **Generated.** The deployable output. Never edit by hand; it is gitignored. |
 
@@ -80,6 +82,26 @@ The item counts on the landing page (`15 features live, 5 in the works`) come fr
 ## How the site stays accurate
 
 The builder reads the game's own `js/recipes.js` at build time to generate the drinks menu, the level list and the counts in the prose ("sixteen drinks", "ten hawker centres"). Add a recipe or a level to the game and the site updates itself on the next build — there is no second copy of that data to forget about.
+
+## Background ambience
+
+The shipped ambience (`assets/audio/kopitiam_ambient.mp3`) is a 90-second seamless
+loop, ~880 KB. The 34-minute master it is cut from lives in `audio/` and is never
+bundled. Regenerate the loop with `./scripts/make-ambient-loop.sh` (needs ffmpeg;
+`npm i --no-save ffmpeg-static` if you don't have one) — pass a start offset in
+seconds to cut from a different part of the master.
+
+Two things keep the seam inaudible, and both are needed:
+
+- The loop is built with a 6-second crossfade, so its end flows into its start.
+- `js/audio.js` plays it through the Web Audio graph, not an `<audio loop>`
+  element. Every MP3 decodes with ~80 ms of encoder padding at the head, which an
+  element loop replays as a dropout on every pass; an `AudioBufferSourceNode` with
+  `loopStart` set past that padding does not. The padding is measured from the
+  decoded buffer at runtime, so re-encoding the file cannot break it.
+
+If Web Audio is unavailable, playback falls back to an `<audio loop>` element,
+which works but has a small seam.
 
 ## Routing notes
 

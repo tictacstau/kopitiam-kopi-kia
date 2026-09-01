@@ -3,15 +3,25 @@
  * Plays custom Kopitiam Hawker Background Ambience MP3 + Synthesized SFX & UI Fanfares
  */
 
+const AMBIENT_SRC = 'assets/audio/kopitiam_ambient.mp3';
+const AMBIENT_VOLUME = 0.35;
+
 class SoundEngine {
   constructor() {
     this.ctx = null;
     this.isMuted = false;
 
-    // Custom Background Ambient Audio Track
-    this.bgAudio = new Audio('assets/audio/kopitiam_ambient.mp3');
-    this.bgAudio.loop = true;
-    this.bgAudio.volume = 0.35;
+    // Background ambience. Played through the Web Audio graph rather than an
+    // <audio loop> element: every MP3 decodes with ~60-80ms of encoder padding
+    // at the head, which an element loop replays as an audible dropout on every
+    // pass. An AudioBufferSourceNode loops inside the decoded buffer, and
+    // loopStart skips the padding, so the seam is silent.
+    this.bgBuffer = null;
+    this.bgSource = null;
+    this.bgGain = null;
+    this.bgLoopStart = 0;
+    this.bgLoadPromise = null;
+    this.bgAudio = null;      // fallback element, created only if Web Audio fails
     this.isBgPlaying = false;
   }
 
@@ -40,31 +50,101 @@ class SoundEngine {
     return this.isMuted;
   }
 
-  startKopitiamAmbient() {
-    if (this.isMuted) return;
-
-    if (!this.bgAudio) {
-      this.bgAudio = new Audio('assets/audio/kopitiam_ambient.mp3');
-      this.bgAudio.loop = true;
-      this.bgAudio.volume = 0.35;
+  /** Finds where real audio begins, so the loop skips the MP3 encoder padding. */
+  findFirstAudibleSample(buffer) {
+    const data = buffer.getChannelData(0);
+    const limit = Math.min(data.length, Math.floor(buffer.sampleRate * 0.5));
+    for (let i = 0; i < limit; i++) {
+      if (Math.abs(data[i]) > 0.0005) return i / buffer.sampleRate;
     }
+    return 0;
+  }
 
+  loadAmbient() {
+    if (this.bgLoadPromise) return this.bgLoadPromise;
+
+    this.bgLoadPromise = fetch(AMBIENT_SRC)
+      .then(res => res.arrayBuffer())
+      .then(raw => new Promise((resolve, reject) => {
+        // Callback form, for older Safari where decodeAudioData returns no promise.
+        const decoded = this.ctx.decodeAudioData(raw, resolve, reject);
+        if (decoded && typeof decoded.then === 'function') decoded.then(resolve, reject);
+      }))
+      .then(buffer => {
+        this.bgBuffer = buffer;
+        this.bgLoopStart = this.findFirstAudibleSample(buffer);
+        return buffer;
+      });
+
+    return this.bgLoadPromise;
+  }
+
+  /** Last resort if fetch or decode is unavailable — loops with a small seam. */
+  startAmbientFallback() {
+    if (!this.bgAudio) {
+      this.bgAudio = new Audio(AMBIENT_SRC);
+      this.bgAudio.loop = true;
+      this.bgAudio.volume = AMBIENT_VOLUME;
+    }
     try {
       const playPromise = this.bgAudio.play();
       if (playPromise && typeof playPromise.then === 'function') {
-        playPromise.then(() => {
-          this.isBgPlaying = true;
-        }).catch(err => {
-          console.warn('Ambient audio play blocked:', err);
-        });
+        playPromise.then(() => { this.isBgPlaying = true; })
+          .catch(err => console.warn('Ambient audio play blocked:', err));
+      } else {
+        this.isBgPlaying = true;
       }
     } catch (e) {
       console.warn('Ambient audio error:', e);
     }
   }
 
+  startKopitiamAmbient() {
+    if (this.isMuted || this.isBgPlaying) return;
+
+    if (!this.ctx) {
+      this.startAmbientFallback();
+      return;
+    }
+
+    // Claim the slot now: init() and the splash tap can both land here before
+    // the buffer finishes decoding, which would otherwise stack two loops.
+    this.isBgPlaying = true;
+
+    this.loadAmbient().then(buffer => {
+      if (this.isMuted || !this.isBgPlaying || this.bgSource) return;
+
+      this.bgGain = this.ctx.createGain();
+      this.bgGain.gain.value = AMBIENT_VOLUME;
+      this.bgGain.connect(this.ctx.destination);
+
+      const source = this.ctx.createBufferSource();
+      source.buffer = buffer;
+      source.loop = true;
+      source.loopStart = this.bgLoopStart;
+      source.loopEnd = buffer.duration;
+      source.connect(this.bgGain);
+      source.start(0, this.bgLoopStart);
+
+      this.bgSource = source;
+    }).catch(err => {
+      console.warn('Ambient decode failed, falling back to element:', err);
+      this.isBgPlaying = false;
+      this.startAmbientFallback();
+    });
+  }
+
   stopKopitiamAmbient() {
-    this.bgAudio.pause();
+    if (this.bgSource) {
+      try { this.bgSource.stop(); } catch (e) {}
+      this.bgSource.disconnect();
+      this.bgSource = null;
+    }
+    if (this.bgGain) {
+      this.bgGain.disconnect();
+      this.bgGain = null;
+    }
+    if (this.bgAudio) this.bgAudio.pause();
     this.isBgPlaying = false;
   }
 
